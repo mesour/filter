@@ -1,0 +1,25 @@
+{
+  "name": "mesour/filter",
+  "description": "Mesour Filter component.",
+  "license": ["BSD-3-Clause","GPL-3.0"],
+  "keywords": ["filter","component"],
+  "homepage": "http://mesour.com",
+  "authors": [{
+      "name": "Matouš Němec",
+      "homepage": "http://mesour.com"
+  }],
+  "repositories": [{
+      "type": "composer",
+      "url": "http://packagist.mesour.com"
+  }],
+  "require": {
+    "php": ">=5.4.0",
+    "mesour/components": "dev-master"
+  },
+  "require-dev": {
+    "tracy/tracy": "~2.3.0"
+  },
+  "autoload": {
+    "classmap": ["src/"]
+  }
+}
