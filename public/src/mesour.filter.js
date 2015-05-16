@@ -10,6 +10,24 @@ mesour.filter = !mesour.filter ? {} : mesour.filter;
     var Filter = function() {
         var _this = this;
 
+        this.translations = {
+            months: {
+                1: 'January',
+                2: 'February',
+                3: 'March',
+                4: 'April',
+                5: 'May',
+                6: 'June',
+                7: 'July',
+                8: 'August',
+                9: 'September',
+                10: 'October',
+                11: 'November',
+                12: 'December'
+            },
+            closeAll: 'close all'
+        };
+
         this.filters = {};
 
         this.create = function() {

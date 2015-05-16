@@ -10,39 +10,6 @@ if(!mesour.filter) {
 
 mesour.filter.CustomFilter = function (dropdown) {
     var $filter_modal = dropdown.getFilter().getFilterModal();
-    var dateQuarter = function() {
-        var thisMonth = Number(mesour.core.phpDate('n'));
-        if (thisMonth <= 3) return 1;
-        if (thisMonth <= 6) return 2;
-        if (thisMonth <= 9) return 3;
-        return 4;
-    };
-    var getStartTimestampForQuarter = function(quarter, year){
-        year = !year ? phpDate('Y') : year;
-        switch(quarter) {
-            case 1:
-                return mesour.core.strtotime(year+'-01-01');
-            case 2:
-                return mesour.core.strtotime(year+'-04-01');
-            case 3:
-                return mesour.core.strtotime(year+'-07-01');
-            default:
-                return mesour.core.strtotime(year+'-10-01');
-        }
-    };
-    var getEndTimestampForQuarter = function(quarter, year){
-        year = !year ? mesour.core.phpDate('Y') : year;
-        switch(quarter) {
-            case 1:
-                return mesour.core.strtotime(year+'-03-31');
-            case 2:
-                return mesour.core.strtotime(year+'-06-30');
-            case 3:
-                return mesour.core.strtotime(year+'-09-30');
-            default:
-                return mesour.core.strtotime(year+'-12-31');
-        }
-    };
     var fixValue = function(value) {
         return value;
     };
@@ -69,39 +36,39 @@ mesour.filter.CustomFilter = function (dropdown) {
         if(firstValue) {
             var _val = fixValue(firstValue);
             if(typeof _val === 'string' && _val.split('-').length !== 3) {
-                $filter_modal.find('#grid-value-1').val(_val);
-                $filter_modal.find('#grid-value-1').removeAttr('data-date-defaultDate');
+                $filter_modal.find('.filter-value-1').val(_val);
+                $filter_modal.find('.filter-value-1').removeAttr('data-date-defaultDate');
             } else {
                 if(typeof _val === 'string' && _val.split('-').length === 3) {
                     _val = [_val];
                 }
-                $filter_modal.find('#grid-value-1').val(_val[0]);
-                $filter_modal.find('#grid-value-1').attr('data-date-defaultDate', _val[0]);
+                $filter_modal.find('.filter-value-1').val(_val[0]);
+                $filter_modal.find('.filter-value-1').attr('data-date-defaultDate', _val[0]);
             }
         } else {
-            $filter_modal.find('#grid-value-1').val(null);
+            $filter_modal.find('.filter-value-1').val(null);
         }
         if(secondValue) {
             var _val = fixValue(secondValue);
             if(typeof _val === 'string') {
-                $filter_modal.find('#grid-value-2').val(_val);
-                $filter_modal.find('#grid-value-2').removeAttr('data-date-defaultDate');
+                $filter_modal.find('.filter-value-2').val(_val);
+                $filter_modal.find('.filter-value-2').removeAttr('data-date-defaultDate');
             } else {
-                $filter_modal.find('#grid-value-2').val(_val[0]);
-                $filter_modal.find('#grid-value-2').attr('data-date-defaultDate', _val[0]);
+                $filter_modal.find('.filter-value-2').val(_val[0]);
+                $filter_modal.find('.filter-value-2').attr('data-date-defaultDate', _val[0]);
             }
         } else {
-            $filter_modal.find('#grid-value-2').val(null);
+            $filter_modal.find('.filter-value-2').val(null);
         }
         if(type1) {
-            $filter_modal.find('#grid-how-1').val(type1);
+            $filter_modal.find('.filter-how-1').val(type1);
         } else {
-            $filter_modal.find('#grid-how-1').val(null);
+            $filter_modal.find('.filter-how-1').val(null);
         }
         if(type2) {
-            $filter_modal.find('#grid-how-2').val(type2);
+            $filter_modal.find('.filter-how-2').val(type2);
         } else {
-            $filter_modal.find('#grid-how-2').val(null);
+            $filter_modal.find('.filter-how-2').val(null);
         }
         if(operator === 'or') {
             $filter_modal.find('input[name="operator"][value=or]').prop('checked', true);
@@ -110,12 +77,15 @@ mesour.filter.CustomFilter = function (dropdown) {
         }
 
         if(dropdown.getType() === 'date') {
+            if(!$.fn.bootstrapDatetimepicker) {
+                throw new Error('jQuery.fn.bootstrapDatetimepicker is required for filter type date.');
+            }
             $filter_modal.find('.input-group-addon').show();
-            $('#grid-datepicker1, #grid-datepicker2').data('DateTimePicker').destroy();
-            $('#grid-datepicker1, #grid-datepicker2').bootstrapDatetimepicker({
+            $filter_modal.find('.filter-datepicker1, .filter-datepicker2').data('DateTimePicker').destroy();
+            $filter_modal.find('.filter-datepicker1, .filter-datepicker2').bootstrapDatetimepicker({
                 pickTime: false
             });
-            $filter_modal.find('#grid-value-1, #grid-value-2').on('keydown.data-grid', function(e){
+            $filter_modal.find('.filter-value-1, .filter-value-2').on('keydown.data-grid', function(e){
                 e.preventDefault();
                 if(e.keyCode === 46 || e.keyCode === 8) {
                     $(this).val(null);
@@ -123,11 +93,11 @@ mesour.filter.CustomFilter = function (dropdown) {
             });
         } else {
             $filter_modal.find('.input-group-addon').hide();
-            $filter_modal.find('#grid-value-1, #grid-value-2').off('keydown.data-grid');
+            $filter_modal.find('.filter-value-1, .filter-value-2').off('keydown.data-grid');
         }
 
         $('.mesour-filter-modal').fadeIn(function(){
-            $filter_modal.find('#grid-value-1').focus();
+            $filter_modal.find('.filter-value-1').focus();
         });
     });
 };

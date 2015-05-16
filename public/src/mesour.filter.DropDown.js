@@ -124,7 +124,7 @@ mesour.filter.DropDown = function (element, name, filter) {
                     month_li.append('&nbsp;');
                     month_li.append('<input type="checkbox" class="checker">');
                     month_li.append('&nbsp;');
-                    month_li.append('<label>'+month[b]+'</label>');
+                    month_li.append('<label>'+mesour.filter.translations.months[month[b]]+'</label>');
                     month_ul.append(month_li);
                     var days_ul = $('<ul class="toggled-sub-ul">');
                     month_li.append(days_ul);

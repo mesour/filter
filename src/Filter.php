@@ -271,6 +271,7 @@ class Filter extends Control implements IFilter
             'data-mesour-data' => json_encode($data),
             'value' => json_encode($this->getValues()),
             'data-mesour-date' => $this->getDateFormat(),
+            'data-mesour-js-date' => Components\Helper::convertDateToJsFormat($this->getDateFormat()),
         );
         $hidden->addAttributes($attributes);
         return $hidden;
@@ -298,8 +299,6 @@ class Filter extends Control implements IFilter
         $hidden = $this->createHiddenInput($full_data);
 
         $this->onRender($this, $data);
-
-        //$this->onFilter($this);
 
         foreach ($this->getContainer() as $name => $item_instance) {
             /** @var IFilterItem $item_instance */

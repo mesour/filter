@@ -81,6 +81,8 @@ require_once SRC_DIR . 'Filter/Number.php';
 
     $filter->addTextFilter('group_name', 'Group name');
 
+    $filter->addDateFilter('timestamp', 'Last login');
+
     $filter->onRender[] = function(\Mesour\UI\Filter $_filter) {
         dump($_filter->getValues());
     };
@@ -99,20 +101,33 @@ require_once SRC_DIR . 'Filter/Number.php';
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="../docs/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../docs/css/datetimepicker.css">
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="../docs/js/jquery.min.js"></script>
 <script src="../docs/js/bootstrap.min.js"></script>
 <script src="../vendor/mesour/components/public/mesour.components.js"></script>
 <script src="../vendor/mesour/components/public/cookie.js"></script>
-<script src="../public/mesour.filter.js"></script>
+
+
+<script src="../docs/js/bootstrap.datetimepicker.js"></script>
+
+
+
+<script src="../public/src/mesour.filter.js"></script>
 <script src="../public/src/mesour.filter.Checkers.js"></script>
 <script src="../public/src/mesour.filter.CustomFilter.js"></script>
 <script src="../public/src/mesour.filter.Filter.js"></script>
 <script src="../public/src/mesour.filter.DropDown.js"></script>
+
+
+
 <script src="../docs/js/main.js"></script>
 
 <style>
+    .bootstrap-datetimepicker-widget {
+        z-index: 5000;
+    }
     .dropdown.mesour-filter-dropdown{
         position: relative;
         display: inline-block;
