@@ -1,6 +1,6 @@
 <?php
 /**
- * Mesour Selection Component
+ * Mesour Filter Component
  *
  * @license LGPL-3.0 and BSD-3-Clause
  * @copyright (c) 2015 Matous Nemec <matous.nemec@mesour.com>
@@ -14,12 +14,13 @@ use Mesour\Sources\ArraySource;
 
 /**
  * @author mesour <matous.nemec@mesour.com>
- * @package Mesour Selection Component
+ * @package Mesour Filter Component
  */
-class ArrayFilterSource extends ArraySource
+class ArrayFilterSource extends ArraySource implements IFilterSource
 {
 
-    private function customFilter($how) {
+    private function customFilter($how)
+    {
         switch ($how) {
             case 'equal_to';
                 return Condition::EQUAL;
@@ -49,7 +50,9 @@ class ArrayFilterSource extends ArraySource
                 throw new Components\Exception('Unexpected key for custom filtering.');
         }
     }
-    public function applyCustom($column_name, array $custom, $type) {
+
+    public function applyCustom($column_name, array $custom, $type)
+    {
         $values = array();
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
             $values[] = $this->customFilter($custom['how1']);
@@ -68,12 +71,16 @@ class ArrayFilterSource extends ArraySource
             $this->where($column_name, $custom['val' . ($key + 1)], $val, isset($operator) ? $operator : 'and');
         }
     }
-    public function applyCheckers($column_name, array $value, $type) {
+
+    public function applyCheckers($column_name, array $value, $type)
+    {
         foreach ($value as $val) {
             $this->where($column_name, $val, Condition::EQUAL, 'or');
         }
     }
-    public function fetchFullData($date_format = 'Y-m-d') {
+
+    public function fetchFullData($date_format = 'Y-m-d')
+    {
         $output = array();
         foreach ($this->data_arr as $data) {
             foreach ($data as $key => $val) {

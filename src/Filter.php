@@ -1,6 +1,6 @@
 <?php
 /**
- * Mesour Selection Component
+ * Mesour Filter Component
  *
  * @license LGPL-3.0 and BSD-3-Clause
  * @copyright (c) 2015 Matous Nemec <matous.nemec@mesour.com>
@@ -9,13 +9,15 @@
 namespace Mesour\UI;
 
 use Mesour\Components;
-use Mesour\Filter\FilterItem;
+use Mesour\Filter\Date;
+use Mesour\Filter\Number;
 use Mesour\Filter\Sources\ArrayFilterSource;
 use Mesour\Filter\Sources\IFilterSource;
+use Mesour\Filter\Text;
 
 /**
  * @author mesour <matous.nemec@mesour.com>
- * @package Mesour Selection Component
+ * @package Mesour Filter Component
  */
 class Filter extends Control implements IFilter
 {
@@ -24,6 +26,8 @@ class Filter extends Control implements IFilter
         RESET_BUTTON = 'reset-button',
         WRAPPER = 'wrapper',
         HIDDEN = 'hidden';
+
+    static public $maxCheckboxCount = 1000;
 
     protected $option = array();
 
@@ -46,6 +50,8 @@ class Filter extends Control implements IFilter
      * @var Components\Session\ISessionSection
      */
     private $privateSession;
+
+    public $onFilter = array();
 
     public $onRender = array();
 
@@ -98,6 +104,8 @@ class Filter extends Control implements IFilter
 
     private $is_source_used = FALSE;
 
+    private $date_format = 'Y-m-d';
+
     /**
      * @param mixed $source
      * @return $this
@@ -108,11 +116,11 @@ class Filter extends Control implements IFilter
         if ($this->is_source_used) {
             throw new Components\Exception('Cannot change source after using them.');
         }
-        if(!$source instanceof IFilterSource) {
-            if(is_array($source)) {
+        if (!$source instanceof IFilterSource) {
+            if (is_array($source)) {
                 $source = new ArrayFilterSource($source);
             } else {
-                throw new Components\InvalidArgumentException('Source must be instance of \Mesour\Source\ISource or array.');
+                throw new Components\InvalidArgumentException('Source must be instance of \Mesour\Filter\Sources\IFilterSource or array.');
             }
         }
         $this->source = $source;
@@ -120,12 +128,13 @@ class Filter extends Control implements IFilter
     }
 
     /**
+     * @param bool $need
      * @return IFilterSource
      * @throws Components\Exception
      */
-    public function getSource()
+    public function getSource($need = TRUE)
     {
-        if(!$this->source) {
+        if ($need && !$this->source) {
             throw new Components\Exception('Data source is not set.');
         }
         $this->is_source_used = TRUE;
@@ -135,12 +144,56 @@ class Filter extends Control implements IFilter
     public function handleApplyFilter(array $filterData = array())
     {
         $this->privateSession->set('values', $filterData);
+        $this->onFilter($this);
     }
 
-    public function addFilterItem($name, IFilterItem $filterItem)
+    /**
+     * @param $name
+     * @param string|null $text
+     * @return Number
+     */
+    public function addNumberFilter($name, $text = NULL)
     {
-        $this[$name] = $filterItem;
-        return $this;
+        /** @var Number $filter */
+        $filter = $this->addCustomFilter($name, new Number);
+        $filter->setText($text);
+        return $filter;
+    }
+
+    /**
+     * @param $name
+     * @param string|null $text
+     * @return Text
+     */
+    public function addTextFilter($name, $text = NULL)
+    {
+        /** @var Text $filter */
+        $filter = $this->addCustomFilter($name, new Text);
+        $filter->setText($text);
+        return $filter;
+    }
+
+    /**
+     * @param $name
+     * @param string|null $text
+     * @return Date
+     */
+    public function addDateFilter($name, $text = NULL)
+    {
+        /** @var Date $filter */
+        $filter = $this->addCustomFilter($name, new Date);
+        $filter->setText($text);
+        return $filter;
+    }
+
+    /**
+     * @param $name
+     * @param IFilterItem $filterItem
+     * @return IFilterItem
+     */
+    public function addCustomFilter($name, IFilterItem $filterItem)
+    {
+        return $this[$name] = $filterItem;
     }
 
     public function getHiddenPrototype()
@@ -192,13 +245,34 @@ class Filter extends Control implements IFilter
         echo $this->createResetButton();
     }
 
+    public function setDateFormat($date_format)
+    {
+        $this->date_format = $date_format;
+        return $this;
+    }
+
+    public function getDateFormat()
+    {
+        return $this->date_format;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->privateSession->get('values', (object)array());
+    }
+
     public function createHiddenInput($data = array())
     {
         $hidden = $this->getHiddenPrototype();
-        $hidden->addAttributes(array(
+        $attributes = array(
             'data-mesour-data' => json_encode($data),
-            'value' => json_encode($this->privateSession->get('values', array()))
-        ));
+            'value' => json_encode($this->getValues()),
+            'data-mesour-date' => $this->getDateFormat(),
+        );
+        $hidden->addAttributes($attributes);
         return $hidden;
     }
 
@@ -213,12 +287,22 @@ class Filter extends Control implements IFilter
 
         $wrapper = $this->getWrapperPrototype();
 
-        $hidden = $this->createHiddenInput($data);
+        $full_data = array();
+        $has_checkers = FALSE;
+        $source = $this->getSource(FALSE);
+        if ($source && $source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
+            $full_data = $source->fetchFullData();
+            $has_checkers = TRUE;
+        }
+
+        $hidden = $this->createHiddenInput($full_data);
 
         $this->onRender($this, $data);
 
-        foreach ($this->getContainer() as $name => $_) {
-            /** @var FilterItem $item */
+        foreach ($this->getContainer() as $name => $item_instance) {
+            /** @var IFilterItem $item_instance */
+            $item_instance->setCheckers($has_checkers);
+
             $item = $this->createItem($name, $data);
 
             $wrapper->add($item);

@@ -44,51 +44,7 @@ mesour.filter.CustomFilter = function (dropdown) {
         }
     };
     var fixValue = function(value) {
-        if(dropdown.getType() !== 'date') return value;
-        var oneDay = 60 * 60 * 24;
-        var phpDateFormat = dropdown.getFilter().getPhpDateFormat();
-        switch(value) {
-
-            case 'yesterday':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.phpTime() - oneDay)];
-            case 'today':
-                return [mesour.core.phpDate(phpDateFormat)];
-            case 'tommorow':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.phpTime() + oneDay)];
-
-            case 'last_quarter_start':
-                var quarter = dateQuarter();
-                return [mesour.core.phpDate(phpDateFormat, getStartTimestampForQuarter(quarter - 1 < 1 ? 4 : quarter-1, quarter - 1 < 1 ? mesour.core.phpDate('Y', mesour.core.strtotime('last year')) : mesour.core.phpDate('Y')) - oneDay)];
-            case 'last_quarter_end':
-                var quarter = dateQuarter();
-                return [mesour.core.phpDate(phpDateFormat, getEndTimestampForQuarter(quarter - 1 < 1 ? 4 : quarter-1, quarter - 1 < 1 ? mesour.core.phpDate('Y', mesour.core.strtotime('last year')) : mesour.core.phpDate('Y')) + oneDay)];
-            case 'this_quarter_start':
-                return [mesour.core.phpDate(phpDateFormat, getStartTimestampForQuarter(dateQuarter()) - oneDay)];
-            case 'this_quarter_end':
-                return [mesour.core.phpDate(phpDateFormat, getEndTimestampForQuarter(dateQuarter()) + oneDay)];
-            case 'next_quarter_start':
-                var quarter = dateQuarter();
-                return [mesour.core.phpDate(phpDateFormat, getStartTimestampForQuarter(quarter + 1 > 4 ? 1 : quarter+1, quarter + 1 > 4 ? mesour.core.phpDate('Y', mesour.core.strtotime('next year')) : mesour.core.phpDate('Y')) - oneDay)];
-            case 'next_quarter_end':
-                var quarter = dateQuarter();
-                return [mesour.core.phpDate(phpDateFormat, getEndTimestampForQuarter(quarter + 1 > 4 ? 1 : quarter+1, quarter + 1 > 4 ? mesour.core.phpDate('Y', mesour.core.strtotime('next year')) : mesour.core.phpDate('Y')) + oneDay)];
-
-            case 'last_year_start':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.strtotime(mesour.core.phpDate('1-1-Y', mesour.core.strtotime('last year'))) - oneDay)];
-            case 'last_year_end':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.strtotime(mesour.core.phpDate('31-12-Y', mesour.core.strtotime('last year'))) + oneDay)];
-            case 'this_year_start':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.strtotime(mesour.core.phpDate('1-1-Y')) - oneDay)];
-            case 'this_year_end':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.strtotime(mesour.core.phpDate('31-12-Y')) + oneDay)];
-            case 'next_year_start':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.strtotime(phpDate('1-1-Y', mesour.core.strtotime('next year'))) - oneDay)];
-            case 'next_year_end':
-                return [mesour.core.phpDate(phpDateFormat, mesour.core.strtotime(phpDate('31-12-Y', mesour.core.strtotime('next year'))) + oneDay)];
-
-            default:
-                return value;
-        }
+        return value;
     };
     dropdown.getElement().find('.mesour-open-modal').on('click', function(e) {
         e.preventDefault();

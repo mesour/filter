@@ -1,6 +1,6 @@
 <?php
 /**
- * Mesour Selection Component
+ * Mesour Filter Component
  *
  * @license LGPL-3.0 and BSD-3-Clause
  * @copyright (c) 2015 Matous Nemec <matous.nemec@mesour.com>
@@ -13,7 +13,7 @@ use Mesour\UI\Control;
 
 /**
  * @author mesour <matous.nemec@mesour.com>
- * @package Mesour Selection Component
+ * @package Mesour Filter Component
  */
 abstract class FilterItem extends Control
 {
@@ -46,6 +46,8 @@ abstract class FilterItem extends Control
     protected $filters = array();
 
     protected $filters_name = 'Filters';
+
+    protected $hasCheckers = FALSE;
 
     public $onRender = array();
 
@@ -105,6 +107,12 @@ abstract class FilterItem extends Control
             $this->text = ucfirst($this->getName());
         }
         return $this->text;
+    }
+
+    public function setCheckers($hasCheckers = TRUE)
+    {
+        $this->hasCheckers = $hasCheckers;
+        return $this;
     }
 
     public function getButtonPrototype()
@@ -206,10 +214,10 @@ abstract class FilterItem extends Control
             ));
 
             $submenu->add('<span>
-				<button type="button" class="btn btn-success btn-xs reset-filter" title="Reset filter" style="display: none;"><span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span></button>
-				<button type="button" class="btn btn-primary btn-xs mesour-open-modal edit-filter" title="Edit filter" style="display: none;"><span class="glyphicon glyphicon-pencil"></span></button>
-				' . $this->getTranslator()->translate($this->filters_name) . '
-			</span>');
+                                <button type="button" class="btn btn-success btn-xs reset-filter" title="Reset filter" style="display: none;"><span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span></button>
+                                <button type="button" class="btn btn-primary btn-xs mesour-open-modal edit-filter" title="Edit filter" style="display: none;"><span class="glyphicon glyphicon-pencil"></span></button>
+                                ' . $this->getTranslator()->translate($this->filters_name) . '
+                            </span>');
 
             $sub_ul = Components\Html::el('ul', array(
                 'class' => 'dropdown-menu'
@@ -222,6 +230,40 @@ abstract class FilterItem extends Control
             $submenu->add($sub_ul);
 
             $ul->add($submenu);
+        }
+
+        if ($this->hasCheckers) {
+            $ul->add($this->getListLiPrototype(array(
+                'class' => 'divider'
+            )));
+
+            $checkers_li = $this->getListLiPrototype();
+            $inline_box = Components\Html::el('div', array('class' => 'inline-box'));
+
+            $search = Components\Html::el('div', array('class' => 'search'));
+            $search->add('<input type="text" class="form-control search-input" placeholder="' . $this->getTranslator()->translate('Search...') . '">');
+
+            $checkers_li->add($inline_box);
+            $inline_box->add($search);
+
+            $box_inner = Components\Html::el('div', array('class' => 'box-inner'));
+
+            $checkers_li->add($box_inner);
+
+            $inner_ul = Components\Html::el('ul');
+            $box_inner->add($inner_ul);
+
+            $link_name = $this->createLinkName();
+            $inner_ul->add('<li class="all-select-li">
+                                <input type="checkbox" class="select-all" id="select-all-' . $link_name . '">
+                                <label for="select-all-' . $link_name . '">' . $this->getTranslator()->translate('Select all') . '</label>
+                            </li>
+                            <li class="all-select-searched-li">
+                                <input type="checkbox" class="select-all-searched" id="selected-' . $link_name . '">
+                                <label for="selected-' . $link_name . '">' . $this->getTranslator()->translate('Select all searched') . '</label>
+                            </li>');
+
+            $ul->add($checkers_li);
         }
 
         $wrapper->add($ul);

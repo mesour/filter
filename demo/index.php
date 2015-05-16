@@ -29,24 +29,32 @@ require_once SRC_DIR . 'Filter/Number.php';
     <?php
 
     $data = array(
-        array(
-            'method' => 'setName',
-            'params' => '$name',
-            'returns' => 'Mesour\Table\Column',
-            'description' => 'Set column name.',
-        ),
-        array(
-            'method' => 'setHeader',
-            'params' => '$header',
-            'returns' => 'Mesour\Table\Column',
-            'description' => 'Set header text.',
-        ),
-        array(
-            'method' => 'setCallback',
-            'params' => '$callback',
-            'returns' => 'Mesour\Table\Column',
-            'description' => 'Set render callback.',
-        )
+        array('user_id' => '1','action' => '0','group_id' => '1','name' => 'John','surname' => 'Doe','email' => 'john.doe@test.xx','last_login' => '2014-09-01 06:27:32','amount' => '1561.456542','avatar' => '/avatar/01.png','order' => '100','timestamp' => '1418255325'),
+        array('user_id' => '2','action' => '1','group_id' => '2','name' => 'Peter','surname' => 'Larson','email' => 'peter.larson@test.xx','last_login' => '2014-09-09 13:37:32','amount' => '15220.654','avatar' => '/avatar/02.png','order' => '160','timestamp' => '1418255330'),
+        array('user_id' => '3','action' => '1','group_id' => '2','name' => 'Claude','surname' => 'Graves','email' => 'claude.graves@test.xx','last_login' => '2014-09-02 14:17:32','amount' => '9876.465498','avatar' => '/avatar/03.png','order' => '180','timestamp' => '1418255311'),
+        array('user_id' => '4','action' => '0','group_id' => '3','name' => 'Stuart','surname' => 'Norman','email' => 'stuart.norman@test.xx','last_login' => '2014-09-09 18:39:18','amount' => '98766.2131','avatar' => '/avatar/04.png','order' => '120','timestamp' => '1418255328'),
+        array('user_id' => '5','action' => '1','group_id' => '1','name' => 'Kathy','surname' => 'Arnold','email' => 'kathy.arnold@test.xx','last_login' => '2014-09-07 10:24:07','amount' => '456.987','avatar' => '/avatar/05.png','order' => '140','timestamp' => '1418155313'),
+        array('user_id' => '6','action' => '0','group_id' => '3','name' => 'Jan','surname' => 'Wilson','email' => 'jan.wilson@test.xx','last_login' => '2014-09-03 13:15:22','amount' => '123','avatar' => '/avatar/06.png','order' => '150','timestamp' => '1418255318'),
+        array('user_id' => '7','action' => '0','group_id' => '1','name' => 'Alberta','surname' => 'Erickson','email' => 'alberta.erickson@test.xx','last_login' => '2014-08-06 13:37:17','amount' => '98753.654','avatar' => '/avatar/07.png','order' => '110','timestamp' => '1418255327'),
+        array('user_id' => '8','action' => '1','group_id' => '3','name' => 'Ada','surname' => 'Wells','email' => 'ada.wells@test.xx','last_login' => '2014-08-12 11:25:16','amount' => '852.3654','avatar' => '/avatar/08.png','order' => '70','timestamp' => '1418255332'),
+        array('user_id' => '9','action' => '0','group_id' => '2','name' => 'Ethel','surname' => 'Figueroa','email' => 'ethel.figueroa@test.xx','last_login' => '2014-09-05 10:23:26','amount' => '45695.986','avatar' => '/avatar/09.png','order' => '20','timestamp' => '1418255305'),
+        array('user_id' => '10','action' => '1','group_id' => '3','name' => 'Ian','surname' => 'Goodwin','email' => 'ian.goodwin@test.xx','last_login' => '2014-09-04 12:26:19','amount' => '1236.9852','avatar' => '/avatar/10.png','order' => '130','timestamp' => '1418255331'),
+        array('user_id' => '11','action' => '1','group_id' => '2','name' => 'Francis','surname' => 'Hayes','email' => 'francis.hayes@test.xx','last_login' => '2014-09-03 10:16:17','amount' => '5498.345','avatar' => '/avatar/11.png','order' => '0','timestamp' => '1418255293'),
+        array('user_id' => '12','action' => '0','group_id' => '1','name' => 'Erma','surname' => 'Burns','email' => 'erma.burns@test.xx','last_login' => '2014-07-02 15:42:15','amount' => '63287.9852','avatar' => '/avatar/12.png','order' => '60','timestamp' => '1418255316'),
+        array('user_id' => '13','action' => '1','group_id' => '3','name' => 'Kristina','surname' => 'Jenkins','email' => 'kristina.jenkins@test.xx','last_login' => '2014-08-20 14:39:43','amount' => '74523.96549','avatar' => '/avatar/13.png','order' => '40','timestamp' => '1418255334'),
+        array('user_id' => '14','action' => '0','group_id' => '3','name' => 'Virgil','surname' => 'Hunt','email' => 'virgil.hunt@test.xx','last_login' => '2014-08-12 16:09:38','amount' => '65654.6549','avatar' => '/avatar/14.png','order' => '30','timestamp' => '1418255276'),
+        array('user_id' => '15','action' => '1','group_id' => '1','name' => 'Max','surname' => 'Martin','email' => 'max.martin@test.xx','last_login' => '2014-09-01 12:14:20','amount' => '541236.5495','avatar' => '/avatar/15.png','order' => '170','timestamp' => '1418255317'),
+        array('user_id' => '16','action' => '1','group_id' => '2','name' => 'Melody','surname' => 'Manning','email' => 'melody.manning@test.xx','last_login' => '2014-09-02 12:26:20','amount' => '9871.216','avatar' => '/avatar/16.png','order' => '50','timestamp' => '1418255281'),
+        array('user_id' => '17','action' => '1','group_id' => '3','name' => 'Catherine','surname' => 'Todd','email' => 'catherine.todd@test.xx','last_login' => '2014-06-11 15:14:39','amount' => '100.2','avatar' => '/avatar/17.png','order' => '10','timestamp' => '1418255313'),
+        array('user_id' => '18','action' => '0','group_id' => '1','name' => 'Douglas','surname' => 'Stanley','email' => 'douglas.stanley@test.xx','last_login' => '2014-04-16 15:22:18','amount' => '900','avatar' => '/avatar/18.png','order' => '90','timestamp' => '1418255332'),
+        array('user_id' => '19','action' => '0','group_id' => '3','name' => 'Patti','surname' => 'Diaz','email' => 'patti.diaz@test.xx','last_login' => '2014-09-11 12:17:16','amount' => '1500','avatar' => '/avatar/19.png','order' => '80','timestamp' => '1418255275'),
+        array('user_id' => '20','action' => '0','group_id' => '3','name' => 'John','surname' => 'Petterson','email' => 'john.petterson@test.xx','last_login' => '2014-10-10 10:10:10','amount' => '2500','avatar' => '/avatar/20.png','order' => '190','timestamp' => '1418255275')
+    );
+
+    $groups = array(
+        array('id' => '2', 'name' => 'Group 2'),
+        array('id' => '1', 'name' => 'Group 1'),
+        array('id' => '3', 'name' => 'Group 3'),
     );
 
     $application = new \Mesour\UI\Application;
@@ -57,11 +65,21 @@ require_once SRC_DIR . 'Filter/Number.php';
 
     $application->addComponent($filter);
 
-    $filter->addFilterItem('name', new \Mesour\Filter\Text());
+    $source = new \Mesour\Filter\Sources\ArrayFilterSource($data, array(
+        'group' => $groups
+    ));
 
-    $filter->addFilterItem('amount', new \Mesour\Filter\Number());
+    $source->setRelated('group', 'group_id', 'name', 'group_name');
 
-    $filter->addFilterItem('datetime', new \Mesour\Filter\Date());
+    $filter->setSource($source);
+
+    $filter->addTextFilter('name', 'Name');
+
+    $filter->addNumberFilter('amount', 'Amount');
+
+    $filter->addDateFilter('last_login', 'Last login');
+
+    $filter->addTextFilter('group_name', 'Group name');
 
     $filter->render();
 
@@ -99,7 +117,7 @@ require_once SRC_DIR . 'Filter/Number.php';
     .dropdown.mesour-filter-dropdown .dropdown-menu > .dropdown-submenu > span >button{
         display: none;
     }
-    .data-grid-filter .inline-box .box-inner{
+    .mesour-filter-dropdown .box-inner{
         margin-left: 20px;
         background-color: #f5f5f5;
         border: 1px solid #ddd;
@@ -108,49 +126,49 @@ require_once SRC_DIR . 'Filter/Number.php';
         overflow: auto;
         overflow-x: hidden;
     }
-    .data-grid-filter .inline-box ul{
+    .mesour-filter-dropdown .box-inner ul{
         padding-left: 0;
         list-style-type: none;
         width: 305px;
     }
-    .data-grid-filter .inline-box ul li{
+    .mesour-filter-dropdown .box-inner ul li{
         padding-left: 10px;
         line-height: 10px;
     }
 
-    .data-grid-filter .inline-box li.all-select-li,
-    .data-grid-filter .inline-box li.all-select-searched-li{
+    .mesour-filter-dropdown .box-inner li.all-select-li,
+    .mesour-filter-dropdown .box-inner li.all-select-searched-li{
         border-bottom: 1px solid #ddd;
         padding-bottom: 3px;
     }
-    .data-grid-filter .inline-box li.all-select-searched-li{
+    .mesour-filter-dropdown .box-inner li.all-select-searched-li{
         display: none;
     }
-    .data-grid-filter .inline-box li.li-checked > label{
+    .mesour-filter-dropdown .box-inner li.li-checked > label{
         font-weight: bold;
     }
-    .data-grid-filter .inline-box label{
+    .mesour-filter-dropdown .box-inner label{
         font-weight: normal;
         font-size: 12px;
     }
-    .data-grid-filter .inline-box input{
+    .mesour-filter-dropdown .box-inner input{
         position: relative;
         top: 3px;
     }
-    .data-grid-filter .search{
+    .mesour-filter-dropdown .search{
         margin-bottom: 10px;
         margin-left: 19px;
     }
-    .data-grid-filter .search-input{
+    .mesour-filter-dropdown .search-input{
         top: 0;
         border-radius: 0;
         right: -1px;
     }
-    .data-grid-filter .with-buttons{
+    .mesour-filter-dropdown .with-buttons{
         height: 33px;
         position: relative;
     }
-    .data-grid-filter .buttons{
+    .mesour-filter-dropdown .buttons{
         position: absolute;
         right: 10px;
     }

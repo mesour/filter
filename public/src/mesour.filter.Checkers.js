@@ -11,8 +11,8 @@ if(!mesour.filter) {
 mesour.filter.Checkers = function (dropdown) {
     var allCheckedCheckbox = dropdown.getElement().find('.select-all'),
         allSearchedCheckedCheckbox = dropdown.getElement().find('.select-all-searched'),
-        checkers = dropdown.getElement().find('.inline-box ul .checker'),
-        searchInput = dropdown.getElement().find('.search-input'),
+        checkers = dropdown.getElement().find('.box-inner ul .checker'),
+        searchInput = dropdown.getElement().find('.search-input').val(null),
         checkChecked = function (all_checkers, master_checker) {
             var allChecked = true;
             all_checkers.each(function () {
@@ -61,6 +61,8 @@ mesour.filter.Checkers = function (dropdown) {
             if (!sub_sub_ul.is('*')) return;
             checkChecked(sub_sub_ul.children('ul').children('li').children('.checker'), sub_sub_ul.children('.checker'));
         };
+
+    dropdown.getElement().find('.all-select-searched-li').hide();
 
     allCheckedCheckbox.off('change.data-grid');
     allCheckedCheckbox.on('change.data-grid', allCheckboxCallback);
@@ -118,17 +120,18 @@ mesour.filter.Checkers = function (dropdown) {
             $this.removeClass('glyphicon-plus').addClass('glyphicon-minus');
         }
     });
-    searchInput.on('keyup', function () {
+    searchInput.off('keyup.filter-checkers');
+    searchInput.on('keyup.filter-checkers', function () {
         var $this = $(this),
-            value = removeDiacritics($this.val().toLowerCase()),
-            checkers = $this.closest('.search').next('.box-inner').find('.checker'),
+            value = mesour.core.removeDiacritics($this.val().toLowerCase()),
+            checkers = $this.closest('.inline-box').next('.box-inner').find('ul .checker'),
             one_hide = false;
 
         allSearchedCheckedCheckbox.closest('li').hide();
         checkers.closest('li').show();
         checkers.closest('li').each(function () {
             var $li = $(this);
-            if (removeDiacritics($li.text().toLowerCase()).indexOf(value) === -1) {
+            if (mesour.core.removeDiacritics($li.text().toLowerCase()).indexOf(value) === -1) {
                 $li.hide();
                 one_hide = true;
             }

@@ -17,6 +17,10 @@ use Mesour\Components;
 interface IFilterItem
 {
 
-
+    /**
+     * @param bool $has_checkers
+     * @return mixed
+     */
+    public function setCheckers($has_checkers = TRUE);
 
 }

@@ -48,6 +48,9 @@ mesour.filter.DropDown = function (element, name, filter) {
         if(!gridData) return;
         var values = {};
         for(var x = 0;x<gridData.length;x++) {
+            if(typeof gridData[x][name] === 'undefined') {
+                throw new Error('MesourFilterDropDownException: Column "'+name+'" does not exists in data.');
+            }
             if(!values[gridData[x][name]]) {
                 values[gridData[x][name]] = {
                     val: gridData[x][name],
@@ -78,10 +81,10 @@ mesour.filter.DropDown = function (element, name, filter) {
 
                 var isTimestamp = isNaN(values[y].val);
 
-                var timestamp = isTimestamp ? strtotime(values[y].val) : values[y].val;
-                var year = phpDate('Y', timestamp);
-                var month = phpDate('n', timestamp);
-                var day = phpDate('j', timestamp);
+                var timestamp = isTimestamp ? mesour.core.strtotime(values[y].val) : values[y].val;
+                var year = mesour.core.phpDate('Y', timestamp);
+                var month = mesour.core.phpDate('n', timestamp);
+                var day = mesour.core.phpDate('j', timestamp);
                 if(years.indexOf(year) === -1) {
                     years.push(year)
                 }
@@ -109,7 +112,7 @@ mesour.filter.DropDown = function (element, name, filter) {
                 year_li.append('<input type="checkbox" class="checker">');
                 year_li.append('&nbsp;');
                 year_li.append('<label>'+years[a]+'</label>');
-                year_li.append('<span class="close-all">(<a href="#">'+mesour.dataGrid.translates.closeAll+'</a>)</span>');
+                year_li.append('<span class="close-all">(<a href="#">Close all</a>)</span>');
                 var month_ul = $('<ul class="toggled-sub-ul">');
                 year_li.append(month_ul);
 
@@ -121,7 +124,7 @@ mesour.filter.DropDown = function (element, name, filter) {
                     month_li.append('&nbsp;');
                     month_li.append('<input type="checkbox" class="checker">');
                     month_li.append('&nbsp;');
-                    month_li.append('<label>'+mesour.dataGrid.translates.months[month[b]]+'</label>');
+                    month_li.append('<label>'+month[b]+'</label>');
                     month_ul.append(month_li);
                     var days_ul = $('<ul class="toggled-sub-ul">');
                     month_li.append(days_ul);
@@ -129,8 +132,8 @@ mesour.filter.DropDown = function (element, name, filter) {
                     months[years[a]].days[month[b]].sort(function(a, b){return a-b});
                     var days = months[years[a]].days[month[b]];
                     for(var c in days) {
-                        var this_time = strtotime(years[a]+'-'+month[b]+'-'+days[c]);
-                        var date_text = isTimestamp ? phpDate(filter.getPhpDateFormat(), this_time) : this_time;
+                        var this_time = mesour.core.strtotime(years[a]+'-'+month[b]+'-'+days[c]);
+                        var date_text = isTimestamp ? mesour.core.phpDate(filter.getPhpDateFormat(), this_time) : this_time;
                         var day_li = $('<li>');
                         day_li.append('<span class="glyphicon">&nbsp;</span>');
                         day_li.append('<input type="checkbox" class="checker" data-value="'+date_text+'">');
@@ -143,7 +146,7 @@ mesour.filter.DropDown = function (element, name, filter) {
             }
         }
         if(isAgain) {
-            customFilter = new mesour.filter.CustomFilter(_this);
+            //customFilter = new mesour.filter.CustomFilter(_this);
             checkers = new mesour.filter.Checkers(_this);
         }
     };

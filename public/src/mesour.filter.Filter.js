@@ -64,7 +64,7 @@ mesour.filter.Filter = function (filterName, element) {
     };
 
     this.getPhpDateFormat = function () {
-        return mesour.dataGrid.list[filterName].phpFilterDate;
+        return valuesInput.attr('data-mesour-date');
     };
 
     this.getValues = function (name) {

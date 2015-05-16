@@ -13,7 +13,7 @@ mesour.filter = !mesour.filter ? {} : mesour.filter;
         this.filters = {};
 
         this.create = function() {
-            $('[data-mesour-data]').each(function () {
+            $('[data-mesour-filter]').each(function () {
                 var $this = $(this),
                     name = $this.attr('data-mesour-filter');
 

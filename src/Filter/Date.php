@@ -1,6 +1,6 @@
 <?php
 /**
- * Mesour Selection Component
+ * Mesour Filter Component
  *
  * @license LGPL-3.0 and BSD-3-Clause
  * @copyright (c) 2015 Matous Nemec <matous.nemec@mesour.com>
@@ -13,7 +13,7 @@ use Mesour\UI\IFilterItem;
 
 /**
  * @author mesour <matous.nemec@mesour.com>
- * @package Mesour Selection Component
+ * @package Mesour Filter Component
  */
 class Date extends FilterItem implements IFilterItem
 {
@@ -192,6 +192,7 @@ class Date extends FilterItem implements IFilterItem
     {
         parent::__construct($name, $parent);
         $this->option = self::$defaults;
+        $this->option[self::WRAPPER]['attributes']['data-type'] = 'date';
         $one_day = 60 * 60 * 24;
         $quarter = $this->dateQuarter();
         $data = array(
