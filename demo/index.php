@@ -81,6 +81,10 @@ require_once SRC_DIR . 'Filter/Number.php';
 
     $filter->addTextFilter('group_name', 'Group name');
 
+    $filter->onRender[] = function(\Mesour\UI\Filter $_filter) {
+        dump($_filter->getValues());
+    };
+
     $filter->render();
 
     ?>

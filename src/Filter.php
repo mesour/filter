@@ -299,6 +299,8 @@ class Filter extends Control implements IFilter
 
         $this->onRender($this, $data);
 
+        //$this->onFilter($this);
+
         foreach ($this->getContainer() as $name => $item_instance) {
             /** @var IFilterItem $item_instance */
             $item_instance->setCheckers($has_checkers);
