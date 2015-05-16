@@ -10,6 +10,8 @@ namespace Mesour\UI;
 
 use Mesour\Components;
 use Mesour\Filter\FilterItem;
+use Mesour\Filter\Sources\ArrayFilterSource;
+use Mesour\Filter\Sources\IFilterSource;
 
 /**
  * @author mesour <matous.nemec@mesour.com>
@@ -24,8 +26,6 @@ class Filter extends Control implements IFilter
         HIDDEN = 'hidden';
 
     protected $option = array();
-
-    protected $data = array();
 
     /**
      * @var Components\Html
@@ -42,7 +42,12 @@ class Filter extends Control implements IFilter
      */
     protected $wrapper;
 
-    //public $onRender = array();
+    /**
+     * @var Components\Session\ISessionSection
+     */
+    private $privateSession;
+
+    public $onRender = array();
 
     static public $defaults = array(
         self::HIDDEN => array(
@@ -78,23 +83,62 @@ class Filter extends Control implements IFilter
 
     public function __construct($name = NULL, Components\IComponent $parent = NULL)
     {
-        if(is_null($name)) {
+        if (is_null($name)) {
             throw new Components\InvalidArgumentException('Component name is required.');
         }
         parent::__construct($name, $parent);
         $this->option = self::$defaults;
+        $this->privateSession = $this->getSession()->getSection($this->createLinkName());
     }
 
-    public function setData($data) {
-        $this->data = $data;
+    /**
+     * @var IFilterSource
+     */
+    private $source;
+
+    private $is_source_used = FALSE;
+
+    /**
+     * @param mixed $source
+     * @return $this
+     * @throws Components\Exception
+     */
+    public function setSource($source)
+    {
+        if ($this->is_source_used) {
+            throw new Components\Exception('Cannot change source after using them.');
+        }
+        if(!$source instanceof IFilterSource) {
+            if(is_array($source)) {
+                $source = new ArrayFilterSource($source);
+            } else {
+                throw new Components\InvalidArgumentException('Source must be instance of \Mesour\Source\ISource or array.');
+            }
+        }
+        $this->source = $source;
         return $this;
     }
 
-    public function getData() {
-        return $this->data;
+    /**
+     * @return IFilterSource
+     * @throws Components\Exception
+     */
+    public function getSource()
+    {
+        if(!$this->source) {
+            throw new Components\Exception('Data source is not set.');
+        }
+        $this->is_source_used = TRUE;
+        return $this->source;
     }
 
-    public function addFilterItem($name, IFilterItem $filterItem) {
+    public function handleApplyFilter(array $filterData = array())
+    {
+        $this->privateSession->set('values', $filterData);
+    }
+
+    public function addFilterItem($name, IFilterItem $filterItem)
+    {
         $this[$name] = $filterItem;
         return $this;
     }
@@ -128,34 +172,52 @@ class Filter extends Control implements IFilter
             : ($this->resetButton = Components\Html::el($this->option[self::RESET_BUTTON]['el'], $attributes)->setHtml($this->option[self::RESET_BUTTON]['content']));
     }
 
-    public function createItem($name, $data = array()) {
+    public function createItem($name, $data = array())
+    {
         return $this[$name]->create($data);
     }
 
-    public function renderItem($name, $data = array()) {
+    public function renderItem($name, $data = array())
+    {
         echo $this->createItem($name, $data);
     }
 
-    public function createResetButton() {
+    public function createResetButton()
+    {
         return $this->getResetButtonPrototype();
     }
 
-    public function renderResetButton() {
+    public function renderResetButton()
+    {
         echo $this->createResetButton();
     }
 
-    public function create($data = array()) {
-        parent::create();
+    public function createHiddenInput($data = array())
+    {
+        $hidden = $this->getHiddenPrototype();
+        $hidden->addAttributes(array(
+            'data-mesour-data' => json_encode($data),
+            'value' => json_encode($this->privateSession->get('values', array()))
+        ));
+        return $hidden;
+    }
 
-        $data = array_merge_recursive($this->data, $data);
+    public function renderHiddenInput($data = array())
+    {
+        echo $this->createHiddenInput();
+    }
+
+    public function create($data = array())
+    {
+        parent::create();
 
         $wrapper = $this->getWrapperPrototype();
 
-        $hidden = $this->getHiddenPrototype();
+        $hidden = $this->createHiddenInput($data);
 
-        $hidden->addAttributes(array('data-mesour-data' => json_encode($data)));
+        $this->onRender($this, $data);
 
-        foreach($this->getContainer() as $name => $_) {
+        foreach ($this->getContainer() as $name => $_) {
             /** @var FilterItem $item */
             $item = $this->createItem($name, $data);
 

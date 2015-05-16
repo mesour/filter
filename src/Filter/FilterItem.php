@@ -47,7 +47,7 @@ abstract class FilterItem extends Control
 
     protected $filters_name = 'Filters';
 
-    //public $onRender = array();
+    public $onRender = array();
 
     static public $defaults = array(
         self::BUTTON => array(
@@ -164,7 +164,7 @@ abstract class FilterItem extends Control
             }
 
             $_ul = $this->getListUlPrototype();
-            foreach($filter['type'] as $_filter) {
+            foreach ($filter['type'] as $_filter) {
                 $this->createCustomFilterItem($_ul, $_filter);
             }
             $sub_li = $this->getListLiPrototype(array(
@@ -190,6 +190,8 @@ abstract class FilterItem extends Control
 
         $button = $this->getButtonPrototype();
 
+        $this->onRender($this, $data);
+
         $button->add('<span class="glyphicon glyphicon-ok" style="display: none;"></span>');
         $button->add('&nbsp;' . $this->getText() . '&nbsp;');
         $button->add('<span class="caret"></span>');
@@ -206,7 +208,7 @@ abstract class FilterItem extends Control
             $submenu->add('<span>
 				<button type="button" class="btn btn-success btn-xs reset-filter" title="Reset filter" style="display: none;"><span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span></button>
 				<button type="button" class="btn btn-primary btn-xs mesour-open-modal edit-filter" title="Edit filter" style="display: none;"><span class="glyphicon glyphicon-pencil"></span></button>
-				'.$this->getTranslator()->translate($this->filters_name).'
+				' . $this->getTranslator()->translate($this->filters_name) . '
 			</span>');
 
             $sub_ul = Components\Html::el('ul', array(

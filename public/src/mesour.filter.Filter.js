@@ -8,8 +8,11 @@ if(!mesour.filter) {
     throw new Error('Widget mesour.filter is not created. First create mesour.filter widget.');
 }
 
-mesour.filter.applyFilter = function(filterName, href, filterData) {
-
+mesour.filter.applyFilter = function(filterName, filterData) {
+    filterData = $.parseJSON(filterData);
+    filterData = {filterData: filterData};
+    var created = mesour.core.createLink(filterName, 'applyFilter', filterData, true);
+    $.post(created[0], created[1]).complete(mesour.core.redrawCallback);
 };
 mesour.filter.Filter = function (filterName, element) {
     var _this = this;
@@ -23,7 +26,7 @@ mesour.filter.Filter = function (filterName, element) {
     var resetButton = $('.full-reset[data-filter-name="'+filterName+'"]');
 
     this.apply = function() {
-        mesour.filter.applyFilter(filterName, applyButton.attr("data-href"), valuesInput.val());
+        mesour.filter.applyFilter(filterName, valuesInput.val());
     };
 
     this.getDropdowns = function() {

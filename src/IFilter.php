@@ -17,6 +17,22 @@ use Mesour\Components;
 interface IFilter
 {
 
+    public function setSource($source);
 
+    public function getSource();
+
+    public function addFilterItem($name, IFilterItem $filterItem);
+
+    public function createItem($name, $data = array());
+
+    public function renderItem($name, $data = array());
+
+    public function createResetButton();
+
+    public function renderResetButton();
+
+    public function createHiddenInput($data = array());
+
+    public function renderHiddenInput($data = array());
 
 }

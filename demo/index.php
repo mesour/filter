@@ -49,9 +49,13 @@ require_once SRC_DIR . 'Filter/Number.php';
         )
     );
 
+    $application = new \Mesour\UI\Application;
 
+    $application->setRequest($_REQUEST);
 
     $filter = new \Mesour\UI\Filter('test');
+
+    $application->addComponent($filter);
 
     $filter->addFilterItem('name', new \Mesour\Filter\Text());
 
