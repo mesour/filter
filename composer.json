@@ -21,6 +21,7 @@
   "require-dev": {
     "tracy/tracy": "~2.3.0"
   },
+  "minimum-stability": "dev",
   "autoload": {
     "classmap": ["src/"]
   }
