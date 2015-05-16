@@ -15,10 +15,10 @@ use Mesour\UI\IFilterItem;
  * @author mesour <matous.nemec@mesour.com>
  * @package Mesour Selection Component
  */
-class Text extends FilterItem implements IFilterItem
+class Number extends FilterItem implements IFilterItem
 {
 
-    protected $filters_name = 'Text filters';
+    protected $filters_name = 'Number filters';
 
     protected $filters = array(
         array(
@@ -34,26 +34,34 @@ class Text extends FilterItem implements IFilterItem
         ),array(
             'type' => 'divider'
         ),array(
-            'name' => 'Contains',
+            'name' => 'Bigger than',
             'attributes' => array(
-                'data-type-first' => 'equal'
+                'data-type-first' => 'bigger'
             )
         ),array(
-            'name' => 'Not contains',
+            'name' => 'Bigger than or equal',
             'attributes' => array(
-                'data-type-first' => 'not_equal'
+                'data-type-first' => 'bigger',
+                'data-type-second' => 'equal_to',
+                'data-operator' => 'or'
             )
         ),array(
-            'type' => 'divider'
-        ),array(
-            'name' => 'Starts with',
+            'name' => 'Smaller than',
             'attributes' => array(
-                'data-type-first' => 'start_with'
+                'data-type-first' => 'smaller'
             )
         ),array(
-            'name' => 'Ends with',
+            'name' => 'Smaller than or equal',
             'attributes' => array(
-                'data-type-first' => 'end_with'
+                'data-type-first' => 'smaller',
+                'data-type-second' => 'equal_to',
+                'data-operator' => 'or'
+            )
+        ),array(
+            'name' => 'Between',
+            'attributes' => array(
+                'data-type-first' => 'bigger',
+                'data-type-second' => 'smaller',
             )
         ),array(
             'type' => 'divider'

@@ -14,7 +14,8 @@
   }],
   "require": {
     "php": ">=5.4.0",
-    "mesour/components": "dev-master"
+    "mesour/components": "dev-master",
+    "mesour/"
   },
   "require-dev": {
     "tracy/tracy": "~2.3.0"

@@ -137,6 +137,54 @@ class Date extends FilterItem implements IFilterItem
             )
         ), array(
             'type' => 'divider'
+        ),array(
+            'name' => 'Yesterday',
+            'attributes' => array(
+                'data-type-first' => 'equal_to',
+                'data-first-value' => '{YESTERDAY}',
+            )
+        ),array(
+            'name' => 'Today',
+            'attributes' => array(
+                'data-type-first' => 'equal_to',
+                'data-first-value' => '{TODAY}',
+            )
+        ),array(
+            'name' => 'Tomorrow',
+            'attributes' => array(
+                'data-type-first' => 'equal_to',
+                'data-first-value' => '{TOMORROW}',
+            )
+        ), array(
+            'type' => 'divider'
+        ),array(
+            'name' => 'Beginning of the year',
+            'attributes' => array(
+                'data-type-first' => 'bigger',
+                'data-first-value' => '{THIS_YEAR_FIRST}',
+            )
+        ), array(
+            'type' => 'divider'
+        ),array(
+            'name' => 'Before',
+            'attributes' => array(
+                'data-type-first' => 'smaller',
+            )
+        ),array(
+            'name' => 'After',
+            'attributes' => array(
+                'data-type-first' => 'bigger',
+            )
+        ),array(
+            'name' => 'Between',
+            'attributes' => array(
+                'data-type-first' => 'bigger',
+                'data-type-second' => 'smaller',
+            )
+        ), array(
+            'type' => 'divider'
+        ),array(
+            'name' => 'Custom filter'
         )
     );
 
@@ -147,6 +195,10 @@ class Date extends FilterItem implements IFilterItem
         $one_day = 60 * 60 * 24;
         $quarter = $this->dateQuarter();
         $data = array(
+            'YESTERDAY' => date('Y-m-d', strtotime('yesterday midnight')),
+            'TODAY' => date('Y-m-d', strtotime('today midnight')),
+            'TOMORROW' => date('Y-m-d', strtotime('tomorrow midnight')),
+            // ---
             'LAST_WEEK_FIRST' => date('Y-m-d', ($last_week_monday = strtotime('monday', strtotime('last week'))) - $one_day),
             'LAST_WEEK_SECOND' => date('Y-m-d', $last_week_monday + 7 * $one_day),
             'THIS_WEEK_FIRST' => date('Y-m-d', ($this_week_monday = strtotime("last monday midnight")) - $one_day),
@@ -182,6 +234,12 @@ class Date extends FilterItem implements IFilterItem
                         foreach ($_filter['attributes'] as $key => $value) {
                             $this->filters[$_id]['type'][$__id]['attributes'][$key] = Components\Helper::parseValue($value, $data);
                         }
+                    }
+                }
+            }elseif(!isset($filter['type'])) {
+                if (isset($filter['attributes'])) {
+                    foreach ($filter['attributes'] as $key => $value) {
+                        $this->filters[$_id]['attributes'][$key] = Components\Helper::parseValue($value, $data);
                     }
                 }
             }

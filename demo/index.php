@@ -12,6 +12,7 @@ require_once SRC_DIR . 'Filter.php';
 require_once SRC_DIR . 'Filter/FilterItem.php';
 require_once SRC_DIR . 'Filter/Text.php';
 require_once SRC_DIR . 'Filter/Date.php';
+require_once SRC_DIR . 'Filter/Number.php';
 
 
 \Mesour\UI\Control::$default_link = new \Mesour\Components\Link\Link();
@@ -27,9 +28,35 @@ require_once SRC_DIR . 'Filter/Date.php';
 
     <?php
 
+    $data = array(
+        array(
+            'method' => 'setName',
+            'params' => '$name',
+            'returns' => 'Mesour\Table\Column',
+            'description' => 'Set column name.',
+        ),
+        array(
+            'method' => 'setHeader',
+            'params' => '$header',
+            'returns' => 'Mesour\Table\Column',
+            'description' => 'Set header text.',
+        ),
+        array(
+            'method' => 'setCallback',
+            'params' => '$callback',
+            'returns' => 'Mesour\Table\Column',
+            'description' => 'Set render callback.',
+        )
+    );
+
+
+
     $filter = new \Mesour\UI\Filter('test');
 
     $filter->addFilterItem('name', new \Mesour\Filter\Text());
+
+    $filter->addFilterItem('amount', new \Mesour\Filter\Number());
+
     $filter->addFilterItem('datetime', new \Mesour\Filter\Date());
 
     $filter->render();
