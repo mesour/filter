@@ -14,7 +14,7 @@ use Mesour\Components;
  * @author mesour <matous.nemec@mesour.com>
  * @package Mesour Filter Component
  */
-interface IFilter
+interface IFilter extends Components\IComponent
 {
 
     /**
@@ -65,5 +65,7 @@ interface IFilter
     public function createHiddenInput($data = array());
 
     public function renderHiddenInput($data = array());
+
+    public function create($data = array());
 
 }

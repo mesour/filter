@@ -282,24 +282,31 @@ class Filter extends Control implements IFilter
         echo $this->createHiddenInput();
     }
 
+    public function beforeCreate($inner = FALSE) {
+        if($inner === TRUE) {
+            parent::beforeRender();
+        }
+        $full_data = array();
+        $source = $this->getSource(FALSE);
+        if ($source && $source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
+            $full_data = $source->fetchFullData();
+        }
+        return $full_data;
+    }
+
     public function create($data = array())
     {
         parent::create();
 
         $wrapper = $this->getWrapperPrototype();
 
-        $full_data = array();
-        $has_checkers = FALSE;
-        $source = $this->getSource(FALSE);
-        if ($source && $source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
-            $full_data = $source->fetchFullData();
-            $has_checkers = TRUE;
-        }
+        $full_data = $this->beforeCreate(TRUE);
 
         $hidden = $this->createHiddenInput($full_data);
 
         $this->onRender($this, $data);
 
+        $has_checkers = count($full_data) > 0;
         foreach ($this->getContainer() as $name => $item_instance) {
             /** @var IFilterItem $item_instance */
             $item_instance->setCheckers($has_checkers);
