@@ -26,51 +26,51 @@ class Number extends FilterItem implements IFilterItem
             'attributes' => array(
                 'data-type-first' => 'equal_to'
             )
-        ),array(
+        ), array(
             'name' => 'Not equal to',
             'attributes' => array(
                 'data-type-first' => 'not_equal_to'
             )
-        ),array(
+        ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Bigger than',
             'attributes' => array(
                 'data-type-first' => 'bigger'
             )
-        ),array(
+        ), array(
             'name' => 'Bigger than or equal',
             'attributes' => array(
                 'data-type-first' => 'bigger',
                 'data-type-second' => 'equal_to',
                 'data-operator' => 'or'
             )
-        ),array(
+        ), array(
             'name' => 'Smaller than',
             'attributes' => array(
                 'data-type-first' => 'smaller'
             )
-        ),array(
+        ), array(
             'name' => 'Smaller than or equal',
             'attributes' => array(
                 'data-type-first' => 'smaller',
                 'data-type-second' => 'equal_to',
                 'data-operator' => 'or'
             )
-        ),array(
+        ), array(
             'name' => 'Between',
             'attributes' => array(
                 'data-type-first' => 'bigger',
                 'data-type-second' => 'smaller',
             )
-        ),array(
+        ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Custom filter'
         ),
     );
 
-    public function __construct($name = NULL, Components\IComponent $parent = NULL)
+    public function __construct($name = NULL, Components\IContainer $parent = NULL)
     {
         parent::__construct($name, $parent);
         $this->option = self::$defaults;

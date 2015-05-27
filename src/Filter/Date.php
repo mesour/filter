@@ -137,19 +137,19 @@ class Date extends FilterItem implements IFilterItem
             )
         ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Yesterday',
             'attributes' => array(
                 'data-type-first' => 'equal_to',
                 'data-first-value' => '{YESTERDAY}',
             )
-        ),array(
+        ), array(
             'name' => 'Today',
             'attributes' => array(
                 'data-type-first' => 'equal_to',
                 'data-first-value' => '{TODAY}',
             )
-        ),array(
+        ), array(
             'name' => 'Tomorrow',
             'attributes' => array(
                 'data-type-first' => 'equal_to',
@@ -157,7 +157,7 @@ class Date extends FilterItem implements IFilterItem
             )
         ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Beginning of the year',
             'attributes' => array(
                 'data-type-first' => 'bigger',
@@ -165,17 +165,17 @@ class Date extends FilterItem implements IFilterItem
             )
         ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Before',
             'attributes' => array(
                 'data-type-first' => 'smaller',
             )
-        ),array(
+        ), array(
             'name' => 'After',
             'attributes' => array(
                 'data-type-first' => 'bigger',
             )
-        ),array(
+        ), array(
             'name' => 'Between',
             'attributes' => array(
                 'data-type-first' => 'bigger',
@@ -183,12 +183,12 @@ class Date extends FilterItem implements IFilterItem
             )
         ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Custom filter'
         )
     );
 
-    public function __construct($name = NULL, Components\IComponent $parent = NULL)
+    public function __construct($name = NULL, Components\IContainer $parent = NULL)
     {
         parent::__construct($name, $parent);
         $this->option = self::$defaults;
@@ -215,11 +215,11 @@ class Date extends FilterItem implements IFilterItem
             'NEXT_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $next_month)) + $one_day),
             // ---
             'LAST_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) - $one_day),
-            'LAST_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter-1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) + $one_day),
+            'LAST_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) + $one_day),
             'THIS_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter) - $one_day),
             'THIS_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter) + $one_day),
-            'NEXT_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter+1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) - $one_day),
-            'NEXT_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter+1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) + $one_day),
+            'NEXT_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) - $one_day),
+            'NEXT_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) + $one_day),
             // ---
             'LAST_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', ($last_year = strtotime('last year')))) - $one_day),
             'LAST_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', $last_year)) + $one_day),
@@ -237,7 +237,7 @@ class Date extends FilterItem implements IFilterItem
                         }
                     }
                 }
-            }elseif(!isset($filter['type'])) {
+            } elseif (!isset($filter['type'])) {
                 if (isset($filter['attributes'])) {
                     foreach ($filter['attributes'] as $key => $value) {
                         $this->filters[$_id]['attributes'][$key] = Components\Helper::parseValue($value, $data);

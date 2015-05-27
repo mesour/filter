@@ -87,7 +87,7 @@ class Filter extends Control implements IFilter
         )
     );
 
-    public function __construct($name = NULL, Components\IComponent $parent = NULL)
+    public function __construct($name = NULL, Components\IContainer $parent = NULL)
     {
         if (is_null($name)) {
             throw new Components\InvalidArgumentException('Component name is required.');
@@ -282,8 +282,9 @@ class Filter extends Control implements IFilter
         echo $this->createHiddenInput();
     }
 
-    public function beforeCreate($inner = FALSE) {
-        if($inner === TRUE) {
+    public function beforeCreate($inner = FALSE)
+    {
+        if ($inner === TRUE) {
             parent::beforeRender();
         }
         $full_data = array();
@@ -307,7 +308,7 @@ class Filter extends Control implements IFilter
         $this->onRender($this, $data);
 
         $has_checkers = count($full_data) > 0;
-        foreach ($this->getContainer() as $name => $item_instance) {
+        foreach ($this as $name => $item_instance) {
             /** @var IFilterItem $item_instance */
             $item_instance->setCheckers($has_checkers);
 

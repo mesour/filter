@@ -26,43 +26,43 @@ class Text extends FilterItem implements IFilterItem
             'attributes' => array(
                 'data-type-first' => 'equal_to'
             )
-        ),array(
+        ), array(
             'name' => 'Not equal to',
             'attributes' => array(
                 'data-type-first' => 'not_equal_to'
             )
-        ),array(
+        ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Contains',
             'attributes' => array(
                 'data-type-first' => 'equal'
             )
-        ),array(
+        ), array(
             'name' => 'Not contains',
             'attributes' => array(
                 'data-type-first' => 'not_equal'
             )
-        ),array(
+        ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Starts with',
             'attributes' => array(
                 'data-type-first' => 'start_with'
             )
-        ),array(
+        ), array(
             'name' => 'Ends with',
             'attributes' => array(
                 'data-type-first' => 'end_with'
             )
-        ),array(
+        ), array(
             'type' => 'divider'
-        ),array(
+        ), array(
             'name' => 'Custom filter'
         ),
     );
 
-    public function __construct($name = NULL, Components\IComponent $parent = NULL)
+    public function __construct($name = NULL, Components\IContainer $parent = NULL)
     {
         parent::__construct($name, $parent);
         $this->option = self::$defaults;
