@@ -14,7 +14,7 @@ use Mesour\Components;
  * @author mesour <matous.nemec@mesour.com>
  * @package Mesour Filter Component
  */
-interface IFilter extends Components\IComponent
+interface IFilter extends Components\IContainer
 {
 
     /**
