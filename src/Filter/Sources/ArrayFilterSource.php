@@ -70,6 +70,7 @@ class ArrayFilterSource extends ArraySource implements IFilterSource
         foreach ($values as $key => $val) {
             $this->where($column_name, $custom['val' . ($key + 1)], $val, isset($operator) ? $operator : 'and');
         }
+        return $this;
     }
 
     public function applyCheckers($column_name, array $value, $type)
@@ -77,6 +78,7 @@ class ArrayFilterSource extends ArraySource implements IFilterSource
         foreach ($value as $val) {
             $this->where($column_name, $val, Condition::EQUAL, 'or');
         }
+        return $this;
     }
 
     public function fetchFullData($date_format = 'Y-m-d')
