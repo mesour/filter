@@ -69,9 +69,47 @@ mesour.filter.Filter = function (filterName, element) {
         return valuesInput.attr('data-mesour-js-date');
     };
 
-    var modal = $('<div class="mesour-filter-modal modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <h4 class="modal-title">Custom filter</h4> </div> <div class="modal-body"> <form class="form-inline"> <p>Show rows where:</p> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-1"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker1"> <input type="text" class="form-control filter-value-1" data-date-format="'+_this.getJsDateFormat()+'" placeholder="Value"> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div> </div> <br> <div class="form-group grid-operators"> <input type="radio" name="operator" class="filter-operator-and" value="and" checked="checked"> <label>and</label> <input type="radio" name="operator" class="filter-operator-or" value="or"> <label>or</label> </div> <br> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-2"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker2"> <input type="text" class="form-control filter-value-2" data-date-format="'+_this.getJsDateFormat()+'" placeholder="Value"> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div> </div> </form> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-sm save-custom-filter">Ok</button> <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Storno</button> </div> <input type="hidden" data-name=""> </div> <!-- /.modal-content --> </div> <!-- /.modal-dialog -->');
+    var modal = $('.mesour-filter-modal.modal-dialog');
+    if(!modal.is('*')) {
+        modal = $('<div class="mesour-filter-modal modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <h4 class="modal-title">Custom filter</h4> </div> <div class="modal-body"> <form class="form-inline"> <p>Show rows where:</p> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-1"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker1"> <input type="text" class="form-control filter-value-1" data-date-format="'+_this.getJsDateFormat()+'" placeholder="Value"> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div> </div> <br> <div class="form-group grid-operators"> <input type="radio" name="operator" class="filter-operator-and" value="and" checked="checked"> <label>and</label> <input type="radio" name="operator" class="filter-operator-or" value="or"> <label>or</label> </div> <br> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-2"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker2"> <input type="text" class="form-control filter-value-2" data-date-format="'+_this.getJsDateFormat()+'" placeholder="Value"> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div> </div> </form> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-sm save-custom-filter">Ok</button> <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Storno</button> </div> <input type="hidden" data-name=""> </div> <!-- /.modal-content --> </div> <!-- /.modal-dialog -->');
 
-    $('body').append(modal);
+        $('body').append(modal);
+
+        modal.find('[aria-hidden="true"], [data-dismiss="modal"]').on('click.custom-filter', function(e) {
+            e.preventDefault();
+            $(this).closest('.modal-dialog').fadeOut();
+        });
+
+        modal.find('.save-custom-filter').on('click', function() {
+            var name = modal.find('[data-name]').val(),
+                internalValues = {
+                    how1: modal.find('.filter-how-1').val(),
+                    how2: modal.find('.filter-how-2').val(),
+                    val1: modal.find('.filter-value-1').val(),
+                    val2: modal.find('.filter-value-2').val(),
+                    operator: modal.find('input[name="operator"]:checked').val()
+                };
+            if(internalValues.how1.length === 0) {
+                alert('Please select some value in first select.');
+                modal.find('.filter-how-1').focus();return;
+            }
+            if(internalValues.val1.length === 0) {
+                alert('Please insert some value for first text input.');
+                modal.find('.filter-value-1').focus();return;
+            }
+            if(internalValues.how2.length !== 0 && internalValues.val2.length === 0) {
+                alert('Please insert some value for second input.');
+                modal.find('.filter-value-2').focus();return;
+            }
+            dropdowns[name].setValues(internalValues, 'custom');
+            dropdowns[name].setValues(dropdowns[name].getType() !== 'date' ? 'text' : 'date', 'type');
+            $(this).closest('.modal-dialog').fadeOut();
+            dropdowns[name].update();
+            dropdowns[name].save();
+            dropdowns[name].getFilter().apply();
+        });
+    }
+
 
     this.getValues = function (name) {
         var val = valuesInput.val();
@@ -206,43 +244,9 @@ mesour.filter.Filter = function (filterName, element) {
 
     _this.filterCheckers();
 
-    modal.find('[aria-hidden="true"], [data-dismiss="modal"]').on('click.custom-filter', function(e) {
-        e.preventDefault();
-        $(this).closest('.modal-dialog').fadeOut();
-    });
-
     if($.fn.bootstrapDatetimepicker) {
         $('.filter-datepicker1, .filter-datepicker2').bootstrapDatetimepicker({
             pickTime: false
         });
     }
-
-    modal.find('.save-custom-filter').on('click', function() {
-        var name = modal.find('[data-name]').val(),
-            internalValues = {
-                how1: modal.find('.filter-how-1').val(),
-                how2: modal.find('.filter-how-2').val(),
-                val1: modal.find('.filter-value-1').val(),
-                val2: modal.find('.filter-value-2').val(),
-                operator: modal.find('input[name="operator"]:checked').val()
-            };
-        if(internalValues.how1.length === 0) {
-            alert('Please select some value in first select.');
-            modal.find('.filter-how-1').focus();return;
-        }
-        if(internalValues.val1.length === 0) {
-            alert('Please insert some value for first text input.');
-            modal.find('.filter-value-1').focus();return;
-        }
-        if(internalValues.how2.length !== 0 && internalValues.val2.length === 0) {
-            alert('Please insert some value for second input.');
-            modal.find('.filter-value-2').focus();return;
-        }
-        dropdowns[name].setValues(internalValues, 'custom');
-        dropdowns[name].setValues(dropdowns[name].getType() !== 'date' ? 'text' : 'date', 'type');
-        $(this).closest('.modal-dialog').fadeOut();
-        dropdowns[name].update();
-        dropdowns[name].save();
-        dropdowns[name].getFilter().apply();
-    });
 };
