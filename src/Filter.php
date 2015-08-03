@@ -94,7 +94,16 @@ class Filter extends Control implements IFilter
         }
         parent::__construct($name, $parent);
         $this->option = self::$defaults;
+        if(!$this->privateSession) {
+            $this->privateSession = $this->getSession()->getSection($this->createLinkName());
+        }
+    }
+
+    public function attached(Components\IContainer $parent)
+    {
+        parent::attached($parent);
         $this->privateSession = $this->getSession()->getSection($this->createLinkName());
+        return $this;
     }
 
     /**
