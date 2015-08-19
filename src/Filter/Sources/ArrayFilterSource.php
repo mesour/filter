@@ -1,9 +1,10 @@
 <?php
 /**
- * Mesour Filter Component
+ * This file is part of the Mesour Filter (http://components.mesour.com/component/filter)
  *
- * @license LGPL-3.0 and BSD-3-Clause
- * @copyright (c) 2015 Matous Nemec <matous.nemec@mesour.com>
+ * Copyright (c) 2015 Matouš Němec (http://mesour.com)
+ *
+ * For full licence and copyright please view the file licence.md in root of this project
  */
 
 namespace Mesour\Filter\Sources;
@@ -12,9 +13,10 @@ use Mesour\ArrayManage\Searcher\Condition;
 use Mesour\Components;
 use Mesour\Sources\ArraySource;
 
+
+
 /**
- * @author mesour <matous.nemec@mesour.com>
- * @package Mesour Filter Component
+ * @author Matouš Němec <matous.nemec@mesour.com>
  */
 class ArrayFilterSource extends ArraySource implements IFilterSource
 {

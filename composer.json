@@ -15,11 +15,11 @@
   "require": {
     "php": ">=5.4.0",
     "mesour/components": "dev-master",
-    "mesour/array-manager": "dev-master",
     "mesour/sources": "dev-master"
   },
   "require-dev": {
-    "tracy/tracy": "~2.3.0"
+    "tracy/tracy": "~2.3.0",
+    "mesour/array-manager": "dev-master"
   },
   "minimum-stability": "dev",
   "autoload": {
