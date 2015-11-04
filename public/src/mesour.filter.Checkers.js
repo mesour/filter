@@ -154,7 +154,7 @@ mesour.filter.Checkers = function (dropdown) {
     };
 
     this.check = function(val) {
-        checkers.filter('[data-value="'+val+'"]').prop('checked', true)
+        checkers.filter('[data-value="'+dropdown.fixVariable(val)+'"]').prop('checked', true)
             .trigger('change', true);
     };
 };

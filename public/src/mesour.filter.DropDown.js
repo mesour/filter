@@ -18,6 +18,30 @@ mesour.filter.applyDropDown = function(filterName, href, filterData) {
 mesour.filter.DropDown = function (element, name, filter) {
     var _this = this;
 
+    var fixVariable = function (variable) {
+        if(variable === null) {
+            return mesour.filter.VALUE_NULL;
+        } else if (variable === true) {
+            return mesour.filter.VALUE_TRUE;
+        } else if(variable === false) {
+            return mesour.filter.VALUE_FALSE;
+        }
+        return variable;
+    };
+    this.fixVariable = function(variable) {
+        return fixVariable(variable);
+    };
+    this.translateVariable = function (variable) {
+        if(variable === null) {
+            return '<i>'+mesour.filter.translations['empty']+'</i>';
+        } else if (variable === true) {
+            return '<i>'+mesour.filter.translations['true']+'</i>';
+        } else if(variable === false) {
+            return '<i>'+mesour.filter.translations['false']+'</i>';
+        }
+        return variable;
+    };
+
     var type = element.attr('data-type');
 
     var customFilter,
@@ -51,9 +75,10 @@ mesour.filter.DropDown = function (element, name, filter) {
             if(typeof gridData[x][name] === 'undefined') {
                 throw new Error('MesourFilterDropDownException: Column "'+name+'" does not exists in data.');
             }
-            if(!values[gridData[x][name]]) {
-                values[gridData[x][name]] = {
-                    val: gridData[x][name],
+            if (!values[gridData[x][name]]) {
+                values[fixVariable(gridData[x][name])] = {
+                    val: fixVariable(gridData[x][name]),
+                    translated: _this.translateVariable(gridData[x][name]),
                     keys: [x]
                 };
             } else {
@@ -67,10 +92,10 @@ mesour.filter.DropDown = function (element, name, filter) {
                 if(!values[y].val && Number(values[y].val) !== 0) continue;
 
                 var li = $('<li>'),
-                    id = name+(typeof values[y].val.replace === 'function' ? values[y].val.replace(' ', '') : values[y].val);
+                    id = name + ((values[y].val && typeof values[y].val.replace === 'function') ? values[y].val.replace(' ', '') : values[y].val);
                 li.append('<input type="checkbox" class="checker" data-value="'+values[y].val+'" id="'+id+'">');
                 li.append('&nbsp;');
-                li.append('<label for="'+id+'">'+values[y].val+'</label>');
+                li.append('<label for="' + id + '">' + values[y].translated + '</label>');
                 ul.append(li);
             }
         } else if(type === 'date') {
@@ -167,10 +192,10 @@ mesour.filter.DropDown = function (element, name, filter) {
 
     this.getValues = function (valType) {
         var val = filter.getValues(name);
-        if(!valType) {
+        if (!valType) {
             return val;
         } else {
-            if(!val[valType]) {
+            if (!val[valType]) {
                 return {};
             } else {
                 return val[valType];
@@ -210,7 +235,7 @@ mesour.filter.DropDown = function (element, name, filter) {
                 toggle_button.find('.glyphicon-ok').show();
                 first_submenu.find('.glyphicon').closest('button').show();
             }
-            if (values.checkers && values.checkers[0]) {
+            if (values.checkers && typeof values.checkers[0] !== 'undefined') {
                 toggle_button.find('.glyphicon-ok').show();
                 for(var x = 0;x < values.checkers.length; x++) {
                     checkers.check(values.checkers[x]);

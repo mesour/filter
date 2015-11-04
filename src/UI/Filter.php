@@ -17,7 +17,6 @@ use Mesour\Filter\Sources\IFilterSource;
 use Mesour\Filter\Text;
 
 
-
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
@@ -29,9 +28,13 @@ class Filter extends Control implements IFilter
         WRAPPER = 'wrapper',
         HIDDEN = 'hidden';
 
+    const VALUE_TRUE = '-mesour-bool-1';
+    const VALUE_FALSE = '-mesour-bool-0';
+    const VALUE_NULL = '-mesour-null';
+
     static public $maxCheckboxCount = 1000;
 
-    protected $option = array();
+    protected $option = [];
 
     /**
      * @var Components\Html
@@ -53,41 +56,41 @@ class Filter extends Control implements IFilter
      */
     private $privateSession;
 
-    public $onFilter = array();
+    public $onFilter = [];
 
-    public $onRender = array();
+    public $onRender = [];
 
-    static public $defaults = array(
-        self::HIDDEN => array(
+    static public $defaults = [
+        self::HIDDEN => [
             'el' => 'input',
-            'attributes' => array(
+            'attributes' => [
                 'type' => 'hidden',
                 'value' => ''
-            )
-        ),
-        self::ITEMS => array(
+            ]
+        ],
+        self::ITEMS => [
             'el' => 'a',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'btn btn-default btn-xs select-checkbox',
-            ),
+            ],
             'content' => '&nbsp;&nbsp;&nbsp;&nbsp;',
-        ),
-        self::RESET_BUTTON => array(
+        ],
+        self::RESET_BUTTON => [
             'el' => 'a',
-            'attributes' => array(
+            'attributes' => [
                 'href' => '#',
                 'class' => 'btn btn-danger button red float-l full-reset',
                 'name' => '_reset',
-            ),
+            ],
             'content' => 'Reset',
-        ),
-        self::WRAPPER => array(
+        ],
+        self::WRAPPER => [
             'el' => 'div',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'mesour-filter',
-            ),
-        )
-    );
+            ],
+        ]
+    ];
 
     public function __construct($name = NULL, Components\IContainer $parent = NULL)
     {
@@ -96,7 +99,7 @@ class Filter extends Control implements IFilter
         }
         parent::__construct($name, $parent);
         $this->option = self::$defaults;
-        if(!$this->privateSession) {
+        if (!$this->privateSession) {
             $this->privateSession = $this->getSession()->getSection($this->createLinkName());
         }
     }
@@ -152,10 +155,34 @@ class Filter extends Control implements IFilter
         return $this->source;
     }
 
-    public function handleApplyFilter(array $filterData = array())
+    public function handleApplyFilter(array $filterData = [])
     {
-        $this->privateSession->set('values', $filterData);
+        $this->privateSession->set('values', $this->translateData($filterData));
         $this->onFilter($this);
+    }
+
+    private function translateData($filterData)
+    {
+        foreach ($filterData as $name => $item) {
+            if (isset($item['checkers'])) {
+                foreach ($item['checkers'] as $key => $value) {
+                    $filterData[$name]['checkers'][$key] = $this->fixCheckerValue($value);
+                }
+            }
+        }
+        return $filterData;
+    }
+
+    private function fixCheckerValue($val)
+    {
+        if ($val === self::VALUE_FALSE) {
+            return FALSE;
+        } else if ($val === self::VALUE_TRUE) {
+            return TRUE;
+        } else if ($val === self::VALUE_NULL) {
+            return NULL;
+        }
+        return $val;
     }
 
     /**
@@ -210,9 +237,9 @@ class Filter extends Control implements IFilter
     public function getHiddenPrototype()
     {
         $attributes = $this->option[self::HIDDEN]['attributes'];
-        $attributes = array_merge($attributes, array(
+        $attributes = array_merge($attributes, [
             'data-mesour-filter' => $this->createLinkName(),
-        ));
+        ]);
         return $this->hidden
             ? $this->hidden
             : ($this->hidden = Components\Html::el($this->option[self::HIDDEN]['el'], $attributes));
@@ -228,20 +255,20 @@ class Filter extends Control implements IFilter
     public function getResetButtonPrototype()
     {
         $attributes = $this->option[self::RESET_BUTTON]['attributes'];
-        $attributes = array_merge($attributes, array(
+        $attributes = array_merge($attributes, [
             'data-filter-name' => $this->createLinkName(),
-        ));
+        ]);
         return $this->resetButton
             ? $this->resetButton
             : ($this->resetButton = Components\Html::el($this->option[self::RESET_BUTTON]['el'], $attributes)->setHtml($this->option[self::RESET_BUTTON]['content']));
     }
 
-    public function createItem($name, $data = array())
+    public function createItem($name, $data = [])
     {
         return $this[$name]->create($data);
     }
 
-    public function renderItem($name, $data = array())
+    public function renderItem($name, $data = [])
     {
         echo $this->createItem($name, $data);
     }
@@ -272,23 +299,23 @@ class Filter extends Control implements IFilter
      */
     public function getValues()
     {
-        return $this->privateSession->get('values', (object)array());
+        return $this->privateSession->get('values', (object)[]);
     }
 
-    public function createHiddenInput($data = array())
+    public function createHiddenInput($data = [])
     {
         $hidden = $this->getHiddenPrototype();
-        $attributes = array(
+        $attributes = [
             'data-mesour-data' => json_encode($data),
             'value' => json_encode($this->getValues()),
             'data-mesour-date' => $this->getDateFormat(),
             'data-mesour-js-date' => Components\Helper::convertDateToJsFormat($this->getDateFormat()),
-        );
+        ];
         $hidden->addAttributes($attributes);
         return $hidden;
     }
 
-    public function renderHiddenInput($data = array())
+    public function renderHiddenInput($data = [])
     {
         echo $this->createHiddenInput();
     }
@@ -298,7 +325,7 @@ class Filter extends Control implements IFilter
         if ($inner === TRUE) {
             parent::beforeRender();
         }
-        $full_data = array();
+        $full_data = [];
         $source = $this->getSource(FALSE);
         if ($source && $source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
             $full_data = $source->fetchFullData();
@@ -306,7 +333,7 @@ class Filter extends Control implements IFilter
         return $full_data;
     }
 
-    public function create($data = array())
+    public function create($data = [])
     {
         parent::create();
 
