@@ -92,7 +92,7 @@ class ArrayFilterSource extends ArraySource implements IFilterSource
                     $data[$key] = $val->format($date_format);
                 }
             }
-            $output[] = $data;
+            $output[] = $this->makeArrayHash($data);
         }
         return $output;
     }

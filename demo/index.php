@@ -8,13 +8,13 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 \Tracy\Debugger::enable(\Tracy\Debugger::DEVELOPMENT, __DIR__ . '/log');
 
-require_once SRC_DIR . 'UI/IFilter.php';
-require_once SRC_DIR . 'UI/IFilterItem.php';
-require_once SRC_DIR . 'UI/Filter.php';
-require_once SRC_DIR . 'Filter/FilterItem.php';
-require_once SRC_DIR . 'Filter/Text.php';
-require_once SRC_DIR . 'Filter/Date.php';
-require_once SRC_DIR . 'Filter/Number.php';
+require_once SRC_DIR . 'Mesour/UI/IFilter.php';
+require_once SRC_DIR . 'Mesour/UI/IFilterItem.php';
+require_once SRC_DIR . 'Mesour/UI/Filter.php';
+require_once SRC_DIR . 'Mesour/Filter/FilterItem.php';
+require_once SRC_DIR . 'Mesour/Filter/Text.php';
+require_once SRC_DIR . 'Mesour/Filter/Date.php';
+require_once SRC_DIR . 'Mesour/Filter/Number.php';
 
 ?>
 
