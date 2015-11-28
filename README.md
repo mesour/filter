@@ -7,8 +7,6 @@
 
 - With [Composer](https://getcomposer.org)
 
-        "require": {
-            "mesour/filter": "dev-master"
-        }
+        composer require mesour/filter
 
 - Or download source from [GitHub](https://github.com/mesour/Filter/releases)
