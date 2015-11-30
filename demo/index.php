@@ -23,6 +23,9 @@ require_once SRC_DIR . 'Mesour/Filter/Number.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/IFilterSource.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/ArrayFilterSource.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/DoctrineFilterSource.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/NetteDBFilterSource.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/SQLHelper.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
 ?>
 
@@ -83,15 +86,13 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DoctrineFilterSource.php';
         'group_name' => 'gr.name',
     ]);
 
-    $source = new \Mesour\Filter\Sources\ArrayFilterSource($data, array(
-        'groups' => $groups
-    ));
+    $entityManager->getConfiguration()->addCustomDatetimeFunction('DATE', 'Mesour\Filter\Sources\DateFunction');
 
     $source->setRelated('groups', 'group_id', 'name', 'group_name', 'id');
 
     $filter->setSource($source);
 
-    $filter->addTextFilter('name', 'Name');
+    //$filter->addTextFilter('name', 'Name');
 
     $filter->addNumberFilter('amount', 'Amount');
 
@@ -99,7 +100,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DoctrineFilterSource.php';
 
     $filter->addTextFilter('group_name', 'Group name');
 
-    $filter->addTextFilter('bool', 'Bool value');
+    //$filter->addTextFilter('bool', 'Bool value');
 
     $filter->addDateFilter('timestamp', 'Last login');
 
@@ -118,7 +119,9 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DoctrineFilterSource.php';
 
     $filter->render();
 
-    dump($source->fetchAll());
+
+    //dump($source->fetchAll());
+
 
     ?>
 </div>

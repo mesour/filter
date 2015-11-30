@@ -100,12 +100,18 @@ mesour.filter.DropDown = function (element, name, filter) {
             }
         } else if(type === 'date') {
             var years = [],
-                months = {};
+                months = {},
+                special = {};
             for(var y in values) {
                 if(!values[y].val) continue;
 
                 var isTimestamp = isNaN(values[y].val);
 
+                if(values[y].val) {
+                    if(values[y].val === mesour.filter.VALUE_NULL || values[y].val === mesour.filter.VALUE_TRUE || values[y].val === mesour.filter.VALUE_FALSE) {
+                        special[values[y]] = values[y];
+                    }
+                }
                 var timestamp = isTimestamp ? mesour.core.strtotime(values[y].val) : values[y].val;
                 var year = mesour.core.phpDate('Y', timestamp);
                 var month = mesour.core.phpDate('n', timestamp);
@@ -130,7 +136,21 @@ mesour.filter.DropDown = function (element, name, filter) {
             }
             years.sort(function(a, b){return b-a});
             var ul = element.find('.box-inner').find('ul');
+            for(var i in special) {
+                if(!special.hasOwnProperty(i)) {
+                    continue;
+                }
+                var li = $('<li>'),
+                    id = name + ((special[i].val && typeof special[i].val.replace === 'function') ? special[i].val.replace(' ', '') : special[i].val);
+                li.append('<input type="checkbox" class="checker" data-value="'+special[i].val+'" id="'+id+'">');
+                li.append('&nbsp;');
+                li.append('<label for="' + id + '">' + special[i].translated + '</label>');
+                ul.append(li);
+            }
             for(var a in years) {
+                if(!years.hasOwnProperty(a)) {
+                    continue;
+                }
                 var year_li = $('<li>');
                 year_li.append('<span class="glyphicon glyphicon-plus toggle-sub-ul"></span>');
                 year_li.append('&nbsp;');

@@ -11,18 +11,18 @@ namespace Mesour\Filter\Sources;
 
 use Mesour\Components;
 use Mesour\Sources\DoctrineSource;
+use Mesour\Sources\NetteDbSource;
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-class DoctrineFilterSource extends DoctrineSource implements IFilterSource
+class NetteDBFilterSource extends NetteDbSource implements IFilterSource
 {
 
     public function applyCustom($columnName, array $custom, $type)
     {
-        $values = array();
-        $columnName = $this->prefixColumn($columnName);
+        $values = [];
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
             $values[] = SQLHelper::createWherePairs($columnName, $custom['how1'], $custom['val1'], $type);
         }
@@ -31,34 +31,33 @@ class DoctrineFilterSource extends DoctrineSource implements IFilterSource
         }
         if (count($values) === 2) {
             if ($custom['operator'] === 'and') {
-                $operator = 'and';
+                $operator = 'AND';
             } else {
-                $operator = 'or';
+                $operator = 'OR';
             }
-            $parameters = array('(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', [$values[0][1], $values[1][1]]);
+            $parameters = ['(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', $values[0][1], $values[1][1]];
         } else {
-            $parameters = array($values[0][0], $values[0][1]);
+            $parameters = [$values[0][0], $values[0][1]];
         }
-        call_user_func_array(array($this, 'where'), $parameters);
+        call_user_func_array([$this, 'where'], $parameters);
         return $this;
     }
 
     public function applyCheckers($columnName, array $value, $type)
     {
-        $parameters = SQLHelper::createWhereForCheckers($this->prefixColumn($columnName), $value, $type, TRUE);
+        $columnName = $this->getRealColumnName($columnName);
+        $parameters = SQLHelper::createWhereForCheckers($columnName, $value, $type);
+
         call_user_func_array([$this, 'where'], $parameters);
         return $this;
     }
 
     public function fetchFullData($date_format = 'Y-m-d')
     {
-        $allData = $this->fixResult($this->cloneQueryBuilder(TRUE)
-            ->setMaxResults(null)
-            ->setFirstResult(null)
-            ->getQuery()->getArrayResult());
         $output = [];
-        foreach ($allData as $data) {
-            $current_data = (array)$data;
+        $selection = $this->getSelection(FALSE, FALSE);
+        foreach ($selection as $data) {
+            $current_data = $data->toArray();
             foreach ($current_data as $key => $val) {
                 if ($val instanceof \DateTime) {
                     $current_data[$key] = $val->format($date_format);

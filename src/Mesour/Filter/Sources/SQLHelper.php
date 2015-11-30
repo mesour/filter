@@ -22,7 +22,7 @@ class SQLHelper
 
     static public function createWherePairs($columnName, $how, $value, $type)
     {
-        $output = array();
+        $output = [];
         $columnName = $type === 'date' ? ('DATE(' . $columnName . ')') : $columnName;
         switch ($how) {
             case 'equal_to';
@@ -77,6 +77,75 @@ class SQLHelper
                 throw new Components\InvalidArgumentException('Unexpected key for custom filtering.');
         }
         return $output;
+    }
+
+    static public function createWhereForCheckers($columnName, array $value, $type, $isDoctrine = FALSE)
+    {
+        $fixedValues = [];
+        $hasNull = FALSE;
+        foreach ($value as $val) {
+            if (is_null($val)) {
+                $hasNull = TRUE;
+            } else {
+                $fixedValues[] = $val;
+            }
+        }
+        $fixedValues = array_unique($fixedValues);
+        $paramName = self::fixParameterName($columnName) . '_source';
+
+        if ($type === 'date') {
+            $is_timestamp = TRUE;
+            foreach ($value as $val) {
+                if (!is_numeric($val)) {
+                    $is_timestamp = FALSE;
+                    break;
+                }
+            }
+
+            if ($is_timestamp) {
+                $where = '(';
+                $i = 1;
+                foreach ($value as $val) {
+                    $where .= '(' . $columnName . ' >= ' . (int)$val . ' AND ' . $columnName . ' <= ' . ((int)$val + 86398) . ')';
+                    if ($i < count($value)) {
+                        $where .= ' OR ';
+                    }
+                    $i++;
+                }
+                $where .= ')';
+                return [$where];
+            } else {
+                if ($isDoctrine) {
+                    $parameters = [$paramName => $fixedValues];
+                    if ($hasNull) {
+                        $columnName = '(DATE(' . $columnName . ') IN (:' . $paramName . ') OR ' . $columnName . ' IS NULL)';
+                        return [$columnName, $parameters];
+                    } else {
+                        return ['DATE(' . $columnName . ') IN (:' . $paramName . ')', [$paramName => $fixedValues]];
+                    }
+                }
+                return ['DATE(' . $columnName . ')', $value];
+            }
+        } else {
+            if ($isDoctrine) {
+                $parameters = [$paramName => $fixedValues];
+                if ($hasNull) {
+                    $columnName = '(' . $columnName . ' IN :' . $paramName . ' OR ' . $columnName . ' IS NULL)';
+                    return [$columnName, $parameters];
+                } else {
+                    return [$columnName . ' IN (:' . $paramName . ')', [$paramName => $fixedValues]];
+                }
+            }
+            if ($hasNull) {
+                $columnName = '(' . $columnName . ' IN ? OR ' . $columnName . ' IS NULL)';
+            }
+            return [$columnName, $fixedValues];
+        }
+    }
+
+    static private function fixParameterName($columnName)
+    {
+        return str_replace(['.', '-'], '', $columnName);
     }
 
 }
