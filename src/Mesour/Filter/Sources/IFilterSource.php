@@ -22,8 +22,8 @@ interface IFilterSource extends ISource
 
     public function fetchFullData();
 
-    public function applyCheckers($column_name, array $value, $type);
+    public function applyCheckers($columnName, array $value, $type);
 
-    public function applyCustom($column_name, array $custom, $type);
+    public function applyCustom($columnName, array $custom, $type);
 
 }

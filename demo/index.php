@@ -3,6 +3,11 @@
 define('SRC_DIR', __DIR__ . '/../src/');
 
 require_once __DIR__ . '/../vendor/autoload.php';
+define('DISABLE_AUTOLOAD', TRUE);
+/** @var \Doctrine\ORM\EntityManager $entityManager */
+$entityManager = require_once __DIR__ . '/../vendor/mesour/sources/demo/bootstrap.php';
+require_once __DIR__ . '/../vendor/mesour/sources/tests/Entity/Groups.php';
+require_once __DIR__ . '/../vendor/mesour/sources/tests/Entity/User.php';
 
 @mkdir(__DIR__ . '/log');
 
@@ -15,6 +20,9 @@ require_once SRC_DIR . 'Mesour/Filter/FilterItem.php';
 require_once SRC_DIR . 'Mesour/Filter/Text.php';
 require_once SRC_DIR . 'Mesour/Filter/Date.php';
 require_once SRC_DIR . 'Mesour/Filter/Number.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/IFilterSource.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/ArrayFilterSource.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/DoctrineFilterSource.php';
 
 ?>
 
@@ -64,11 +72,22 @@ require_once SRC_DIR . 'Mesour/Filter/Number.php';
 
     $application->addComponent($filter);
 
+    $qb = $entityManager->createQueryBuilder()
+        ->select('u')
+        ->from('user', 'u');
+
+    $source = new \Mesour\Filter\Sources\DoctrineFilterSource($qb, [
+        'user_id' => 'u.userId',
+        'group_id' => 'u.groups',
+        'last_login' => 'u.lastLogin',
+        'group_name' => 'gr.name',
+    ]);
+
     $source = new \Mesour\Filter\Sources\ArrayFilterSource($data, array(
-        'group' => $groups
+        'groups' => $groups
     ));
 
-    $source->setRelated('group', 'group_id', 'name', 'group_name');
+    $source->setRelated('groups', 'group_id', 'name', 'group_name', 'id');
 
     $filter->setSource($source);
 
@@ -99,7 +118,7 @@ require_once SRC_DIR . 'Mesour/Filter/Number.php';
 
     $filter->render();
 
-    //dump($source->fetchAll());
+    dump($source->fetchAll());
 
     ?>
 </div>

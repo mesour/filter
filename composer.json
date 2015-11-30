@@ -15,9 +15,15 @@
   },
   "require-dev": {
     "tracy/tracy": "~2.3.0",
-    "mesour/array-manager": "dev-master"
+    "mesour/array-manager": "dev-master",
+    "doctrine/orm": "^2.5"
   },
   "minimum-stability": "dev",
+  "suggest": {
+    "mesour/array-manager": "to use DataSource for Array",
+    "nette/database": "to use DataSource for Nette Database",
+    "doctrine/orm": "to use DataSource for Doctrine"
+  },
   "autoload": {
     "classmap": ["src/"]
   }
