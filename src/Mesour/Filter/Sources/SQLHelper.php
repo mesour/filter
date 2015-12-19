@@ -9,9 +9,7 @@
 
 namespace Mesour\Filter\Sources;
 
-use Mesour\ArrayManage\Searcher\Condition;
-use Mesour\Components;
-use Mesour\Sources\DoctrineSource;
+use Mesour;
 
 
 /**
@@ -74,7 +72,7 @@ class SQLHelper
                 $output[] = '%' . $value . '%';
                 break;
             default:
-                throw new Components\InvalidArgumentException('Unexpected key for custom filtering.');
+                throw new Mesour\InvalidArgumentException('Unexpected key for custom filtering.');
         }
         return $output;
     }

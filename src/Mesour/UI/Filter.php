@@ -9,18 +9,17 @@
 
 namespace Mesour\UI;
 
-use Mesour\Components;
-use Mesour\Filter\Date;
-use Mesour\Filter\Number;
-use Mesour\Filter\Sources\ArrayFilterSource;
-use Mesour\Filter\Sources\IFilterSource;
-use Mesour\Filter\Text;
+use Mesour;
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
+ *
+ * @method null onFilter(Filter $filter)
+ * @method null onRender(Filter $filter)
+ * @method Mesour\Filter\IFilterItem current()
  */
-class Filter extends Control implements IFilter
+class Filter extends Mesour\Components\Control\AttributesControl implements Mesour\Filter\IFilter
 {
 
     const ITEMS = 'items',
@@ -34,33 +33,23 @@ class Filter extends Control implements IFilter
 
     static public $maxCheckboxCount = 1000;
 
-    protected $option = [];
-
-    /**
-     * @var Components\Html
-     */
+    /** @var Mesour\Components\Utils\Html */
     protected $hidden;
 
-    /**
-     * @var Components\Html
-     */
+    /** @var Mesour\Components\Utils\Html */
     protected $resetButton;
 
-    /**
-     * @var Components\Html
-     */
+    /** @var Mesour\Components\Utils\Html */
     protected $wrapper;
 
-    /**
-     * @var Components\Session\ISessionSection
-     */
+    /** @var Mesour\Components\Session\ISessionSection */
     private $privateSession;
 
     public $onFilter = [];
 
     public $onRender = [];
 
-    static public $defaults = [
+    public $defaults = [
         self::HIDDEN => [
             'el' => 'input',
             'attributes' => [
@@ -92,27 +81,32 @@ class Filter extends Control implements IFilter
         ]
     ];
 
-    public function __construct($name = NULL, Components\IContainer $parent = NULL)
+    public function __construct($name = NULL, Mesour\Components\ComponentModel\IContainer $parent = NULL)
     {
         if (is_null($name)) {
-            throw new Components\InvalidArgumentException('Component name is required.');
+            throw new Mesour\InvalidArgumentException('Component name is required.');
         }
         parent::__construct($name, $parent);
-        $this->option = self::$defaults;
-        if (!$this->privateSession) {
-            $this->privateSession = $this->getSession()->getSection($this->createLinkName());
-        }
+
+        $this->startPrivateSession();
+
+        $this->setHtmlElement(
+            Mesour\Components\Utils\Html::el(
+                $this->getOption(self::WRAPPER, 'el'),
+                $this->getOption(self::WRAPPER, 'attributes')
+            )
+        );
     }
 
-    public function attached(Components\IContainer $parent)
+    public function attached(Mesour\Components\ComponentModel\IContainer $parent)
     {
         parent::attached($parent);
-        $this->privateSession = $this->getSession()->getSection($this->createLinkName());
+        $this->startPrivateSession(TRUE);
         return $this;
     }
 
     /**
-     * @var IFilterSource
+     * @var Mesour\Filter\Sources\IFilterSource
      */
     private $source;
 
@@ -123,18 +117,19 @@ class Filter extends Control implements IFilter
     /**
      * @param mixed $source
      * @return $this
-     * @throws Components\Exception
+     * @throws Mesour\InvalidStateException
+     * @throws Mesour\InvalidArgumentException
      */
     public function setSource($source)
     {
         if ($this->is_source_used) {
-            throw new Components\Exception('Cannot change source after using them.');
+            throw new Mesour\InvalidStateException('Cannot change source after using them.');
         }
-        if (!$source instanceof IFilterSource) {
+        if (!$source instanceof Mesour\Filter\Sources\IFilterSource) {
             if (is_array($source)) {
-                $source = new ArrayFilterSource($source);
+                $source = new Mesour\Filter\Sources\ArrayFilterSource($source);
             } else {
-                throw new Components\InvalidArgumentException('Source must be instance of \Mesour\Filter\Sources\IFilterSource or array.');
+                throw new Mesour\InvalidArgumentException('Source must be instance of \Mesour\Filter\Sources\IFilterSource or array.');
             }
         }
         $this->source = $source;
@@ -143,13 +138,13 @@ class Filter extends Control implements IFilter
 
     /**
      * @param bool $need
-     * @return IFilterSource
-     * @throws Components\Exception
+     * @return Mesour\Filter\Sources\IFilterSource
+     * @throws Mesour\InvalidStateException
      */
     public function getSource($need = TRUE)
     {
         if ($need && !$this->source) {
-            throw new Components\Exception('Data source is not set.');
+            throw new Mesour\InvalidStateException('Data source is not set.');
         }
         $this->is_source_used = TRUE;
         return $this->source;
@@ -188,12 +183,12 @@ class Filter extends Control implements IFilter
     /**
      * @param $name
      * @param string|null $text
-     * @return Number
+     * @return Mesour\Filter\Number
      */
     public function addNumberFilter($name, $text = NULL)
     {
-        /** @var Number $filter */
-        $filter = $this->addCustomFilter($name, new Number);
+        /** @var Mesour\Filter\Number $filter */
+        $filter = $this->addCustomFilter($name, new Mesour\Filter\Number);
         $filter->setText($text);
         return $filter;
     }
@@ -201,12 +196,12 @@ class Filter extends Control implements IFilter
     /**
      * @param $name
      * @param string|null $text
-     * @return Text
+     * @return Mesour\Filter\Text
      */
     public function addTextFilter($name, $text = NULL)
     {
-        /** @var Text $filter */
-        $filter = $this->addCustomFilter($name, new Text);
+        /** @var Mesour\Filter\Text $filter */
+        $filter = $this->addCustomFilter($name, new Mesour\Filter\Text);
         $filter->setText($text);
         return $filter;
     }
@@ -214,58 +209,58 @@ class Filter extends Control implements IFilter
     /**
      * @param $name
      * @param string|null $text
-     * @return Date
+     * @return Mesour\Filter\Date
      */
     public function addDateFilter($name, $text = NULL)
     {
-        /** @var Date $filter */
-        $filter = $this->addCustomFilter($name, new Date);
+        /** @var Mesour\Filter\Date $filter */
+        $filter = $this->addCustomFilter($name, new Mesour\Filter\Date);
         $filter->setText($text);
         return $filter;
     }
 
     /**
      * @param $name
-     * @param IFilterItem $filterItem
-     * @return IFilterItem
+     * @param Mesour\Filter\IFilterItem $filterItem
+     * @return Mesour\Filter\IFilterItem
      */
-    public function addCustomFilter($name, IFilterItem $filterItem)
+    public function addCustomFilter($name, Mesour\Filter\IFilterItem $filterItem)
     {
         return $this[$name] = $filterItem;
     }
 
     public function getHiddenPrototype()
     {
-        $attributes = $this->option[self::HIDDEN]['attributes'];
+        $attributes = $this->getOption(self::HIDDEN, 'attributes');
         $attributes = array_merge($attributes, [
             'data-mesour-filter' => $this->createLinkName(),
         ]);
         return $this->hidden
             ? $this->hidden
-            : ($this->hidden = Components\Html::el($this->option[self::HIDDEN]['el'], $attributes));
+            : ($this->hidden = Mesour\Components\Utils\Html::el($this->getOption(self::HIDDEN, 'el'), $attributes));
     }
 
     public function getWrapperPrototype()
     {
-        return $this->wrapper
-            ? $this->wrapper
-            : ($this->wrapper = Components\Html::el($this->option[self::WRAPPER]['el'], $this->option[self::WRAPPER]['attributes']));
+        return $this->getHtmlElement();
     }
 
     public function getResetButtonPrototype()
     {
-        $attributes = $this->option[self::RESET_BUTTON]['attributes'];
+        $attributes = $this->getOption(self::RESET_BUTTON, 'attributes');
         $attributes = array_merge($attributes, [
             'data-filter-name' => $this->createLinkName(),
         ]);
         return $this->resetButton
             ? $this->resetButton
-            : ($this->resetButton = Components\Html::el($this->option[self::RESET_BUTTON]['el'], $attributes)->setHtml($this->option[self::RESET_BUTTON]['content']));
+            : ($this->resetButton = Mesour\Components\Utils\Html::el($this->getOption(self::RESET_BUTTON, 'el'), $attributes)
+                ->setHtml($this->getOption(self::RESET_BUTTON, 'content')));
     }
 
     public function createItem($name, $data = [])
     {
-        return $this[$name]->create($data);
+        $this[$name]->setOption('data', $data);
+        return $this[$name]->create();
     }
 
     public function renderItem($name, $data = [])
@@ -309,7 +304,7 @@ class Filter extends Control implements IFilter
             'data-mesour-data' => json_encode($data),
             'value' => json_encode($this->getValues()),
             'data-mesour-date' => $this->getDateFormat(),
-            'data-mesour-js-date' => Components\Helper::convertDateToJsFormat($this->getDateFormat()),
+            'data-mesour-js-date' => Mesour\Components\Utils\Helpers::convertDateToJsFormat($this->getDateFormat()),
         ];
         $hidden->addAttributes($attributes);
         return $hidden;
@@ -333,24 +328,24 @@ class Filter extends Control implements IFilter
         return $full_data;
     }
 
-    public function create($data = [])
+    public function create()
     {
         parent::create();
 
         $wrapper = $this->getWrapperPrototype();
 
-        $full_data = $this->beforeCreate(TRUE);
+        $fullData = $this->beforeCreate(TRUE);
 
-        $hidden = $this->createHiddenInput($full_data);
+        $hidden = $this->createHiddenInput($fullData);
 
-        $this->onRender($this, $data);
+        $this->onRender($this);
 
-        $has_checkers = count($full_data) > 0;
-        foreach ($this as $name => $item_instance) {
-            /** @var IFilterItem $item_instance */
-            $item_instance->setCheckers($has_checkers);
+        $hasCheckers = count($fullData) > 0;
+        foreach ($this as $name => $itemInstance) {
+            /** @var Mesour\Filter\IFilterItem $itemInstance */
+            $itemInstance->setCheckers($hasCheckers);
 
-            $item = $this->createItem($name, $data);
+            $item = $this->createItem($name);
 
             $wrapper->add($item);
         }
@@ -360,6 +355,13 @@ class Filter extends Control implements IFilter
         $wrapper->add($hidden);
 
         return $wrapper;
+    }
+
+    private function startPrivateSession($force = FALSE)
+    {
+        if ($force || !$this->privateSession) {
+            $this->privateSession = $this->getSession()->getSection($this->createLinkName());
+        }
     }
 
 }

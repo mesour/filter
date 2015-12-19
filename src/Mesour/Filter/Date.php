@@ -9,9 +9,7 @@
 
 namespace Mesour\Filter;
 
-use Mesour\Components;
-use Mesour\UI\IFilterItem;
-
+use Mesour;
 
 
 /**
@@ -22,182 +20,185 @@ class Date extends FilterItem implements IFilterItem
 
     protected $filters_name = 'Date filters';
 
-    protected $filters = array(
-        array(
+    protected $filters = [
+        [
             'name' => 'Equal to',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'equal_to'
-            )
-        ), array(
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Time period',
-            'type' => array(
-                array(
+            'type' => [
+                [
                     'name' => 'Last week',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{LAST_WEEK_FIRST}',
                         'data-second-value' => '{LAST_WEEK_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'This week',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{THIS_WEEK_FIRST}',
                         'data-second-value' => '{THIS_WEEK_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'Next week',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{NEXT_WEEK_FIRST}',
                         'data-second-value' => '{NEXT_WEEK_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'type' => 'divider'
-                ), array(
+                ], [
                     'name' => 'Last month',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{LAST_MONTH_FIRST}',
                         'data-second-value' => '{LAST_MONTH_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'This month',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{THIS_MONTH_FIRST}',
                         'data-second-value' => '{THIS_MONTH_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'Next month',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{NEXT_MONTH_FIRST}',
                         'data-second-value' => '{NEXT_MONTH_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'type' => 'divider'
-                ), array(
+                ], [
                     'name' => 'Last quarter',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{LAST_QUARTER_FIRST}',
                         'data-second-value' => '{LAST_QUARTER_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'This quarter',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{THIS_QUARTER_FIRST}',
                         'data-second-value' => '{THIS_QUARTER_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'Next quarter',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{NEXT_QUARTER_FIRST}',
                         'data-second-value' => '{NEXT_QUARTER_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'type' => 'divider'
-                ), array(
+                ], [
                     'name' => 'Last year',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{LAST_YEAR_FIRST}',
                         'data-second-value' => '{LAST_YEAR_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'This year',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{THIS_YEAR_FIRST}',
                         'data-second-value' => '{THIS_YEAR_SECOND}',
-                    )
-                ), array(
+                    ]
+                ], [
                     'name' => 'Next year',
-                    'attributes' => array(
+                    'attributes' => [
                         'data-type-first' => 'bigger',
                         'data-type-second' => 'smaller',
                         'data-first-value' => '{NEXT_YEAR_FIRST}',
                         'data-second-value' => '{NEXT_YEAR_SECOND}',
-                    )
-                )
-            )
-        ), array(
+                    ]
+                ]
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Yesterday',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'equal_to',
                 'data-first-value' => '{YESTERDAY}',
-            )
-        ), array(
+            ]
+        ], [
             'name' => 'Today',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'equal_to',
                 'data-first-value' => '{TODAY}',
-            )
-        ), array(
+            ]
+        ], [
             'name' => 'Tomorrow',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'equal_to',
                 'data-first-value' => '{TOMORROW}',
-            )
-        ), array(
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Beginning of the year',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'bigger',
                 'data-first-value' => '{THIS_YEAR_FIRST}',
-            )
-        ), array(
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Before',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'smaller',
-            )
-        ), array(
+            ]
+        ], [
             'name' => 'After',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'bigger',
-            )
-        ), array(
+            ]
+        ], [
             'name' => 'Between',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'bigger',
                 'data-type-second' => 'smaller',
-            )
-        ), array(
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Custom filter'
-        )
-    );
+        ]
+    ];
 
-    public function __construct($name = NULL, Components\IContainer $parent = NULL)
+    public function __construct($name = NULL, Mesour\Components\ComponentModel\IContainer $parent = NULL)
     {
         parent::__construct($name, $parent);
-        $this->option = self::$defaults;
-        $this->option[self::WRAPPER]['attributes']['data-type'] = 'date';
+
+        $attributes = $this->getOption(self::WRAPPER, 'attributes');
+        $attributes['data-type'] = 'date';
+        $this->setOption(self::WRAPPER, $attributes, 'attributes');
+
         $one_day = 60 * 60 * 24;
         $quarter = $this->dateQuarter();
-        $data = array(
+        $data = [
             'YESTERDAY' => date('Y-m-d', strtotime('yesterday midnight')),
             'TODAY' => date('Y-m-d', strtotime('today midnight')),
             'TOMORROW' => date('Y-m-d', strtotime('tomorrow midnight')),
@@ -229,20 +230,20 @@ class Date extends FilterItem implements IFilterItem
             'THIS_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y')) + $one_day),
             'NEXT_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', strtotime('next year'))) - $one_day),
             'NEXT_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', strtotime('next year'))) + $one_day),
-        );
+        ];
         foreach ($this->filters as $_id => $filter) {
             if (isset($filter['type']) && is_array($filter['type'])) {
                 foreach ($filter['type'] as $__id => $_filter) {
                     if (isset($_filter['attributes'])) {
                         foreach ($_filter['attributes'] as $key => $value) {
-                            $this->filters[$_id]['type'][$__id]['attributes'][$key] = Components\Helper::parseValue($value, $data);
+                            $this->filters[$_id]['type'][$__id]['attributes'][$key] = Mesour\Components\Utils\Helpers::parseValue($value, $data);
                         }
                     }
                 }
             } elseif (!isset($filter['type'])) {
                 if (isset($filter['attributes'])) {
                     foreach ($filter['attributes'] as $key => $value) {
-                        $this->filters[$_id]['attributes'][$key] = Components\Helper::parseValue($value, $data);
+                        $this->filters[$_id]['attributes'][$key] = Mesour\Components\Utils\Helpers::parseValue($value, $data);
                     }
                 }
             }

@@ -9,15 +9,14 @@
 
 namespace Mesour\Filter\Sources;
 
-use Mesour\Components;
-use Mesour\Sources\ISource;
+use Mesour;
 
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-interface IFilterSource extends ISource
+interface IFilterSource extends Mesour\Sources\ISource
 {
 
     public function fetchFullData();

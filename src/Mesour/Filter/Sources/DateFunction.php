@@ -20,6 +20,7 @@ use Doctrine\ORM\Query\Parser;
  */
 class DateFunction extends FunctionNode
 {
+
     private $arg;
 
     public function getSql(SqlWalker $sqlWalker)
@@ -36,4 +37,5 @@ class DateFunction extends FunctionNode
 
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
+
 }

@@ -9,19 +9,18 @@
 
 namespace Mesour\Filter\Sources;
 
-use Mesour\Components;
-use Mesour\Sources\DoctrineSource;
+use Mesour;
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-class DoctrineFilterSource extends DoctrineSource implements IFilterSource
+class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFilterSource
 {
 
     public function applyCustom($columnName, array $custom, $type)
     {
-        $values = array();
+        $values = [];
         $columnName = $this->prefixColumn($columnName);
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
             $values[] = SQLHelper::createWherePairs($columnName, $custom['how1'], $custom['val1'], $type);
@@ -35,11 +34,11 @@ class DoctrineFilterSource extends DoctrineSource implements IFilterSource
             } else {
                 $operator = 'or';
             }
-            $parameters = array('(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', [$values[0][1], $values[1][1]]);
+            $parameters = ['(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', [$values[0][1], $values[1][1]]];
         } else {
-            $parameters = array($values[0][0], $values[0][1]);
+            $parameters = [$values[0][0], $values[0][1]];
         }
-        call_user_func_array(array($this, 'where'), $parameters);
+        call_user_func_array([$this, 'where'], $parameters);
         return $this;
     }
 

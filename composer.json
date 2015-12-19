@@ -18,7 +18,6 @@
     "mesour/array-manager": "dev-master",
     "doctrine/orm": "^2.5"
   },
-  "minimum-stability": "dev",
   "suggest": {
     "mesour/array-manager": "to use DataSource for Array",
     "nette/database": "to use DataSource for Nette Database",

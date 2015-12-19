@@ -9,8 +9,7 @@
 
 namespace Mesour\Filter;
 
-use Mesour\Components;
-use Mesour\UI\IFilterItem;
+use Mesour;
 
 
 
@@ -71,11 +70,5 @@ class Number extends FilterItem implements IFilterItem
             'name' => 'Custom filter'
         ),
     );
-
-    public function __construct($name = NULL, Components\IContainer $parent = NULL)
-    {
-        parent::__construct($name, $parent);
-        $this->option = self::$defaults;
-    }
 
 }

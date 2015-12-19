@@ -9,15 +9,14 @@
 
 namespace Mesour\Filter\Sources;
 
-use Mesour\Components;
-use Mesour\Sources\DoctrineSource;
-use Mesour\Sources\NetteDbSource;
+use Mesour;
+use Nette;
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-class NetteDBFilterSource extends NetteDbSource implements IFilterSource
+class NetteDBFilterSource extends Mesour\Sources\NetteDbSource implements IFilterSource
 {
 
     public function applyCustom($columnName, array $custom, $type)
@@ -57,6 +56,7 @@ class NetteDBFilterSource extends NetteDbSource implements IFilterSource
         $output = [];
         $selection = $this->getSelection(FALSE, FALSE);
         foreach ($selection as $data) {
+            /** @var Nette\Database\ActiveRow */
             $current_data = $data->toArray();
             foreach ($current_data as $key => $val) {
                 if ($val instanceof \DateTime) {

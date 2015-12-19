@@ -9,15 +9,15 @@
 
 namespace Mesour\Filter;
 
-use Mesour\Components;
-use Mesour\UI\Control;
-
+use Mesour;
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
+ *
+ * @method null onRender(FilterItem $filterItem)
  */
-abstract class FilterItem extends Control
+abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 {
 
     const WRAPPER = 'wrapper',
@@ -26,75 +26,78 @@ abstract class FilterItem extends Control
         FILTERS_ITEM = 'filters-item',
         BUTTON = 'button';
 
-    protected $option = array();
-
-    /**
-     * @var Components\Html
-     */
+    /** @var Mesour\Components\Utils\Html */
     protected $button;
 
-    /**
-     * @var Components\Html
-     */
+    /** @var Mesour\Components\Utils\Html */
     protected $wrapper;
 
-    /**
-     * @var Components\Html
-     */
+    /** @var Mesour\Components\Utils\Html */
     protected $list_ul;
 
     protected $text;
 
-    protected $filters = array();
+    protected $filters = [];
 
     protected $filters_name = 'Filters';
 
     protected $hasCheckers = FALSE;
 
-    public $onRender = array();
+    public $onRender = [];
 
-    static public $defaults = array(
-        self::BUTTON => array(
+    protected $defaults = [
+        self::BUTTON => [
             'el' => 'button',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'btn btn-default dropdown-toggle',
                 'type' => 'button'
-            )
-        ),
-        self::LIST_UL => array(
+            ]
+        ],
+        self::LIST_UL => [
             'el' => 'ul',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'dropdown-menu',
                 'role' => 'menu'
-            )
-        ),
-        self::LIST_LI => array(
+            ]
+        ],
+        self::LIST_LI => [
             'el' => 'li',
-            'attributes' => array(
+            'attributes' => [
                 'role' => 'presentation'
-            )
-        ),
-        self::WRAPPER => array(
+            ]
+        ],
+        self::WRAPPER => [
             'el' => 'div',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'dropdown filter-dropdown mesour-filter-dropdown',
-            ),
-        ),
-        self::FILTERS_ITEM => array(
+            ],
+        ],
+        self::FILTERS_ITEM => [
             'el' => 'a',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'mesour-open-modal',
                 'role' => 'menuitem',
                 'tabindex' => '-1',
                 'href' => '#',
-            ),
-        )
-    );
+            ],
+        ]
+    ];
 
-    public function __construct($name = NULL, Components\IContainer $parent = NULL)
+    public function attached(Mesour\Components\ComponentModel\IContainer $parent)
     {
-        parent::__construct($name, $parent);
-        $this->option = self::$defaults;
+        parent::attached($parent);
+
+        $attributes = $this->getOption(self::WRAPPER, 'attributes');
+        $attributes = array_merge($attributes, [
+            'data-filter' => $this->getName(),
+            'data-filter-name' => $this->getParent()->createLinkName(),
+        ]);
+        $this->setHtmlElement(
+            Mesour\Components\Utils\Html::el(
+                $this->getOption(self::WRAPPER, 'el'),
+                $attributes
+            )
+        );
     }
 
     public function setText($text)
@@ -119,80 +122,81 @@ abstract class FilterItem extends Control
 
     public function getButtonPrototype()
     {
-        $attributes = $this->option[self::BUTTON]['attributes'];
         return $this->button
             ? $this->button
-            : ($this->button = Components\Html::el($this->option[self::BUTTON]['el'], $attributes));
+            : ($this->button = Mesour\Components\Utils\Html::el(
+                $this->getOption(self::BUTTON, 'el'),
+                $this->getOption(self::BUTTON, 'attributes')
+            ));
     }
 
     public function getWrapperPrototype()
     {
-        $attributes = $this->option[self::WRAPPER]['attributes'];
-        $attributes = array_merge($attributes, array(
-            'data-filter' => $this->getName(),
-            'data-filter-name' => $this->getParent()->createLinkName(),
-        ));
-        return $this->wrapper
-            ? $this->wrapper
-            : ($this->wrapper = Components\Html::el($this->option[self::WRAPPER]['el'], $attributes));
+        return $this->getHtmlElement();
     }
 
-    protected function getListUlPrototype(array $user_attributes = array())
+    protected function getListUlPrototype(array $user_attributes = [])
     {
-        $attributes = $this->option[self::LIST_UL]['attributes'];
+        $attributes = $this->getOption(self::LIST_UL, 'attributes');
         $attributes = array_merge($attributes, $user_attributes);
-        return Components\Html::el($this->option[self::LIST_UL]['el'], $attributes);
+        return Mesour\Components\Utils\Html::el($this->getOption(self::LIST_UL, 'el'), $attributes);
     }
 
-    protected function getListLiPrototype(array $user_attributes = array())
+    protected function getListLiPrototype(array $userAttributes = [])
     {
-        return Components\Html::el($this->option[self::LIST_LI]['el'], array_merge($this->option[self::LIST_LI]['attributes'], $user_attributes));
+        return Mesour\Components\Utils\Html::el(
+            $this->getOption(self::LIST_LI, 'el'),
+            array_merge($this->getOption(self::LIST_LI, 'attributes'), $userAttributes)
+        );
     }
 
-    protected function getFiltersItemPrototype(array $user_attributes = array())
+    protected function getFiltersItemPrototype(array $userAttributes = [])
     {
-        return Components\Html::el($this->option[self::FILTERS_ITEM]['el'], array_merge($this->option[self::FILTERS_ITEM]['attributes'], $user_attributes));
+        return Mesour\Components\Utils\Html::el(
+            $this->getOption(self::FILTERS_ITEM, 'el'),
+            array_merge($this->getOption(self::FILTERS_ITEM, 'attributes'), $userAttributes)
+        );
     }
 
-    protected function createCustomFilterItem(Components\Html & $sub_ul, $filter)
+    protected function createCustomFilterItem(Mesour\Components\Utils\Html & $sub_ul, $filter)
     {
         if (!isset($filter['type'])) {
             if (!isset($filter['name'])) {
-                throw new Components\InvalidArgumentException('Key name is required in filter items.');
+                throw new Mesour\InvalidArgumentException('Key name is required in filter items.');
             }
 
             $sub_li = $this->getListLiPrototype();
 
-            $filter_item = $this->getFiltersItemPrototype(isset($filter['attributes']) ? $filter['attributes'] : array());
+            $filter_item = $this->getFiltersItemPrototype(isset($filter['attributes']) ? $filter['attributes'] : []);
 
             $filter_item->setText($this->getTranslator()->translate($filter['name']));
 
             $sub_li->add($filter_item);
         } elseif (is_array($filter['type'])) {
             if (!isset($filter['name'])) {
-                throw new Components\InvalidArgumentException('Key name is required in filter items.');
+                throw new Mesour\InvalidArgumentException('Key name is required in filter items.');
             }
 
             $_ul = $this->getListUlPrototype();
             foreach ($filter['type'] as $_filter) {
                 $this->createCustomFilterItem($_ul, $_filter);
             }
-            $sub_li = $this->getListLiPrototype(array(
+            $sub_li = $this->getListLiPrototype([
                 'class' => 'dropdown-submenu'
-            ));
+            ]);
             $sub_li->add('<span tabindex="-1">' . $this->getTranslator()->translate($filter['name']) . '</span>');
             $sub_li->add($_ul);
         } elseif ($filter['type'] === 'divider') {
-            $sub_li = $this->getListLiPrototype(array(
+            $sub_li = $this->getListLiPrototype([
                 'class' => 'divider'
-            ));
+            ]);
         } else {
-            throw new Components\InvalidArgumentException('Unknown type ' . $filter['type'] . ' possible are only array, "divider" or NULL.');
+            throw new Mesour\InvalidArgumentException('Unknown type ' . $filter['type'] . ' possible are only array, "divider" or NULL.');
         }
         $sub_ul->add($sub_li);
     }
 
-    public function create($data = array())
+    public function create()
     {
         parent::create();
 
@@ -200,7 +204,7 @@ abstract class FilterItem extends Control
 
         $button = $this->getButtonPrototype();
 
-        $this->onRender($this, $data);
+        $this->onRender($this);
 
         $button->add('<span class="glyphicon glyphicon-ok" style="display: none;"></span>');
         $button->add('&nbsp;' . $this->getText() . '&nbsp;');
@@ -211,48 +215,48 @@ abstract class FilterItem extends Control
         $ul = $this->getListUlPrototype();
 
         if (count($this->filters) > 0) {
-            $submenu = $this->getListLiPrototype(array(
+            $subMenu = $this->getListLiPrototype([
                 'class' => 'dropdown-submenu'
-            ));
+            ]);
 
-            $submenu->add('<span>
+            $subMenu->add('<span>
                                 <button type="button" class="btn btn-success btn-xs reset-filter" title="Reset filter" style="display: none;"><span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span></button>
                                 <button type="button" class="btn btn-primary btn-xs mesour-open-modal edit-filter" title="Edit filter" style="display: none;"><span class="glyphicon glyphicon-pencil"></span></button>
                                 ' . $this->getTranslator()->translate($this->filters_name) . '
                             </span>');
 
-            $sub_ul = Components\Html::el('ul', array(
+            $sub_ul = Mesour\Components\Utils\Html::el('ul', [
                 'class' => 'dropdown-menu'
-            ));
+            ]);
 
             foreach ($this->filters as $filter) {
                 $this->createCustomFilterItem($sub_ul, $filter);
             }
 
-            $submenu->add($sub_ul);
+            $subMenu->add($sub_ul);
 
-            $ul->add($submenu);
+            $ul->add($subMenu);
         }
 
         if ($this->hasCheckers) {
-            $ul->add($this->getListLiPrototype(array(
+            $ul->add($this->getListLiPrototype([
                 'class' => 'divider'
-            )));
+            ]));
 
             $checkers_li = $this->getListLiPrototype();
-            $inline_box = Components\Html::el('div', array('class' => 'inline-box'));
+            $inline_box = Mesour\Components\Utils\Html::el('div', ['class' => 'inline-box']);
 
-            $search = Components\Html::el('div', array('class' => 'search'));
+            $search = Mesour\Components\Utils\Html::el('div', ['class' => 'search']);
             $search->add('<input type="text" class="form-control search-input" placeholder="' . $this->getTranslator()->translate('Search...') . '">');
 
             $checkers_li->add($inline_box);
             $inline_box->add($search);
 
-            $box_inner = Components\Html::el('div', array('class' => 'box-inner'));
+            $box_inner = Mesour\Components\Utils\Html::el('div', ['class' => 'box-inner']);
 
             $checkers_li->add($box_inner);
 
-            $inner_ul = Components\Html::el('ul');
+            $inner_ul = Mesour\Components\Utils\Html::el('ul');
             $box_inner->add($inner_ul);
 
             $link_name = $this->createLinkName();

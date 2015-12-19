@@ -9,16 +9,14 @@
 
 namespace Mesour\Filter\Sources;
 
+use Mesour;
 use Mesour\ArrayManage\Searcher\Condition;
-use Mesour\Components;
-use Mesour\Sources\ArraySource;
-
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-class ArrayFilterSource extends ArraySource implements IFilterSource
+class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSource
 {
 
     private function customFilter($how)
@@ -49,13 +47,13 @@ class ArrayFilterSource extends ArraySource implements IFilterSource
             case 'not_equal';
                 return Condition::NOT_CONTAINS;
             default:
-                throw new Components\Exception('Unexpected key for custom filtering.');
+                throw new Mesour\UnexpectedValueException('Unexpected key for custom filtering.');
         }
     }
 
     public function applyCustom($column_name, array $custom, $type)
     {
-        $values = array();
+        $values = [];
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
             $values[] = $this->customFilter($custom['how1']);
         }
@@ -85,7 +83,7 @@ class ArrayFilterSource extends ArraySource implements IFilterSource
 
     public function fetchFullData($date_format = 'Y-m-d')
     {
-        $output = array();
+        $output = [];
         foreach ($this->data_arr as $data) {
             foreach ($data as $key => $val) {
                 if ($val instanceof \DateTime) {

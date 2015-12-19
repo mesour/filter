@@ -7,16 +7,15 @@
  * For full licence and copyright please view the file licence.md in root of this project
  */
 
-namespace Mesour\UI;
+namespace Mesour\Filter;
 
-use Mesour\Components;
-
+use Mesour;
 
 
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-interface IFilterItem
+interface IFilterItem extends Mesour\Components\Control\IAttributesControl
 {
 
     /**
