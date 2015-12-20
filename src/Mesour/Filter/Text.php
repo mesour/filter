@@ -12,7 +12,6 @@ namespace Mesour\Filter;
 use Mesour;
 
 
-
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
@@ -21,46 +20,46 @@ class Text extends FilterItem implements IFilterItem
 
     protected $filters_name = 'Text filters';
 
-    protected $filters = array(
-        array(
+    protected $filters = [
+        [
             'name' => 'Equal to',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'equal_to'
-            )
-        ), array(
+            ]
+        ], [
             'name' => 'Not equal to',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'not_equal_to'
-            )
-        ), array(
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Contains',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'equal'
-            )
-        ), array(
+            ]
+        ], [
             'name' => 'Not contains',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'not_equal'
-            )
-        ), array(
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Starts with',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'start_with'
-            )
-        ), array(
+            ]
+        ], [
             'name' => 'Ends with',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'end_with'
-            )
-        ), array(
+            ]
+        ], [
             'type' => 'divider'
-        ), array(
+        ], [
             'name' => 'Custom filter'
-        ),
-    );
+        ],
+    ];
 
 }

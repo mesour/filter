@@ -257,15 +257,15 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
                 ->setHtml($this->getOption(self::RESET_BUTTON, 'content')));
     }
 
-    public function createItem($name, $data = [])
+    public function getItem($name, $data = [])
     {
         $this[$name]->setOption('data', $data);
-        return $this[$name]->create();
+        return $this[$name];
     }
 
     public function renderItem($name, $data = [])
     {
-        echo $this->createItem($name, $data);
+        return $this->getItem($name, $data)->create();
     }
 
     public function createResetButton()
@@ -345,7 +345,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
             /** @var Mesour\Filter\IFilterItem $itemInstance */
             $itemInstance->setCheckers($hasCheckers);
 
-            $item = $this->createItem($name);
+            $item = $this->getItem($name)->create();
 
             $wrapper->add($item);
         }

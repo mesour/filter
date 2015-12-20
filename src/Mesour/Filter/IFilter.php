@@ -30,21 +30,21 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
     /**
      * @param $name
      * @param string|null $text
-     * @return \Mesour\Filter\Number
+     * @return Mesour\Filter\Number
      */
     public function addNumberFilter($name, $text = NULL);
 
     /**
      * @param $name
      * @param string|null $text
-     * @return \Mesour\Filter\Text
+     * @return Mesour\Filter\Text
      */
     public function addTextFilter($name, $text = NULL);
 
     /**
      * @param $name
      * @param string|null $text
-     * @return \Mesour\Filter\Date
+     * @return Mesour\Filter\Date
      */
     public function addDateFilter($name, $text = NULL);
 
@@ -55,10 +55,23 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
      */
     public function addCustomFilter($name, IFilterItem $filterItem);
 
-    public function createItem($name, $data = []);
+    /**
+     * @param $name
+     * @param array $data
+     * @return IFilterItem
+     */
+    public function getItem($name, $data = []);
 
+    /**
+     * @param $name
+     * @param array $data
+     * @return Mesour\Components\Utils\Html
+     */
     public function renderItem($name, $data = []);
 
+    /**
+     * @return Mesour\Components\Utils\Html
+     */
     public function createResetButton();
 
     public function renderResetButton();

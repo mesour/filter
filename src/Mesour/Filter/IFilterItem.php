@@ -24,4 +24,16 @@ interface IFilterItem extends Mesour\Components\Control\IAttributesControl
      */
     public function setCheckers($has_checkers = TRUE);
 
+    public function setText($text);
+
+    /**
+     * @return string
+     */
+    public function getText();
+
+    /**
+     * @return Mesour\Components\Utils\Html
+     */
+    public function getButtonPrototype();
+
 }

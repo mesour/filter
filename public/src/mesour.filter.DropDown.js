@@ -249,14 +249,17 @@ mesour.filter.DropDown = function (element, name, filter) {
             first_submenu = menu.children('.dropdown-submenu');
         toggle_button.find('.glyphicon-ok').hide();
         first_submenu.find('.glyphicon').closest('button').hide();
+        element.removeClass('active-item').removeClass('active-checkers');
 
         if (values) {
             if (values.custom && values.custom.operator) {
                 toggle_button.find('.glyphicon-ok').show();
+                element.addClass('active-item');
                 first_submenu.find('.glyphicon').closest('button').show();
             }
             if (values.checkers && typeof values.checkers[0] !== 'undefined') {
                 toggle_button.find('.glyphicon-ok').show();
+                element.addClass('active-checkers');
                 for(var x = 0;x < values.checkers.length; x++) {
                     checkers.check(values.checkers[x]);
                 }
