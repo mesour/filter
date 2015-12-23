@@ -29,24 +29,27 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
 
     /**
      * @param $name
-     * @param string|null $text
+     * @param null $text
+     * @param array $valueTranslates
      * @return Mesour\Filter\Number
      */
-    public function addNumberFilter($name, $text = NULL);
+    public function addNumberFilter($name, $text = NULL, array $valueTranslates = []);
 
     /**
      * @param $name
      * @param string|null $text
+     * @param array $valueTranslates
      * @return Mesour\Filter\Text
      */
-    public function addTextFilter($name, $text = NULL);
+    public function addTextFilter($name, $text = NULL, array $valueTranslates = []);
 
     /**
      * @param $name
      * @param string|null $text
+     * @param array $valueTranslates
      * @return Mesour\Filter\Date
      */
-    public function addDateFilter($name, $text = NULL);
+    public function addDateFilter($name, $text = NULL, array $valueTranslates = []);
 
     /**
      * @param $name

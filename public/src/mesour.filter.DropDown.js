@@ -4,76 +4,81 @@
  * @author Matous Nemec (http://mesour.com)
  */
 var mesour = !mesour ? {} : mesour;
-if(!mesour.filter) {
-    throw new Error('Widget '+mesour.filter+' is not created. First create mesour.filter widget.');
+if (!mesour.filter) {
+    throw new Error('Widget ' + mesour.filter + ' is not created. First create mesour.filter widget.');
 }
 
-mesour.filter.applyDropDown = function(filterName, href, filterData) {
-    if(filterData !== '') {
+mesour.filter.applyDropDown = function (filterName, href, filterData) {
+    if (filterData !== '') {
         var name = filterData.id;
         var opened = filterData.opened;
-        mesour.cookie(filterName+'-'+name, opened);
+        mesour.cookie(filterName + '-' + name, opened);
     }
 };
 mesour.filter.DropDown = function (element, name, filter) {
     var _this = this;
 
     var fixVariable = function (variable) {
-        if(variable === null) {
+        if (variable === null) {
             return mesour.filter.VALUE_NULL;
         } else if (variable === true) {
             return mesour.filter.VALUE_TRUE;
-        } else if(variable === false) {
+        } else if (variable === false) {
             return mesour.filter.VALUE_FALSE;
         }
         return variable;
     };
-    this.fixVariable = function(variable) {
+    this.fixVariable = function (variable) {
         return fixVariable(variable);
     };
     this.translateVariable = function (variable) {
-        if(variable === null) {
-            return '<i>'+mesour.filter.translations['empty']+'</i>';
+        if (variable === null) {
+            return '<i>' + mesour.filter.translations['empty'] + '</i>';
         } else if (variable === true) {
-            return '<i>'+mesour.filter.translations['true']+'</i>';
-        } else if(variable === false) {
-            return '<i>'+mesour.filter.translations['false']+'</i>';
+            return '<i>' + mesour.filter.translations['true'] + '</i>';
+        } else if (variable === false) {
+            return '<i>' + mesour.filter.translations['false'] + '</i>';
+        } else if (translates[variable]) {
+            return translates[variable];
         }
         return variable;
     };
 
     var type = element.attr('data-type');
+    var translatesInput = element.find('[data-translates]');
+    var translates = translatesInput.is('*') ? jQuery.parseJSON(translatesInput.val()) : [];
 
     var customFilter,
         checkers,
         mouseIn = false;
 
-    var create = function(){};
+    var create = function () {
+    };
 
-    var destroy = function() {
+    var destroy = function () {
         var ul = element.find('.box-inner').find('ul');
         ul.find('li:not(.all-select-li):not(.all-select-searched-li)').remove();
     };
 
-    this.destroy = function() {
+    this.destroy = function () {
         destroy();
     };
 
-    this.create = function(gridData, isAgain) {
+    this.create = function (gridData, isAgain) {
         create(gridData, isAgain);
     };
 
-    var apply = function(open) {
+    var apply = function (open) {
         mesour.filter.applyDropDown(filter.getName(), filter.getDropDownLink(), open);
     };
 
-    create = function(gridData, isAgain) {
+    create = function (gridData, isAgain) {
         gridData = !gridData ? filter.getData() : gridData;
-        if(!gridData) return;
+        if (!gridData) return;
         var values = {};
-        for(var x = 0;x<gridData.length;x++) {
-            if(typeof gridData[x][name] === 'undefined') {
-                throw new Error('MesourFilterDropDownException: Column "'+name+'" does not exists in data.');
+        for (var x = 0; x < gridData.length; x++) {
+            if (typeof gridData[x][name] === 'undefined') {
+                throw new Error('MesourFilterDropDownException: Column "' + name + '" does not exists in data.');
             }
             if (!values[gridData[x][name]]) {
                 values[fixVariable(gridData[x][name])] = {
@@ -86,29 +91,29 @@ mesour.filter.DropDown = function (element, name, filter) {
             }
         }
 
-        if(!type) {
+        if (!type) {
             var ul = element.find('.box-inner').find('ul');
-            for(var y in values) {
-                if(!values[y].val && Number(values[y].val) !== 0) continue;
+            for (var y in values) {
+                if (!values[y].val && Number(values[y].val) !== 0) continue;
 
                 var li = $('<li>'),
                     id = name + ((values[y].val && typeof values[y].val.replace === 'function') ? values[y].val.replace(' ', '') : values[y].val);
-                li.append('<input type="checkbox" class="checker" data-value="'+values[y].val+'" id="'+id+'">');
+                li.append('<input type="checkbox" class="checker" data-value="' + values[y].val + '" id="' + id + '">');
                 li.append('&nbsp;');
                 li.append('<label for="' + id + '">' + values[y].translated + '</label>');
                 ul.append(li);
             }
-        } else if(type === 'date') {
+        } else if (type === 'date') {
             var years = [],
                 months = {},
                 special = {};
-            for(var y in values) {
-                if(!values[y].val) continue;
+            for (var y in values) {
+                if (!values[y].val) continue;
 
                 var isTimestamp = isNaN(values[y].val);
 
-                if(values[y].val) {
-                    if(values[y].val === mesour.filter.VALUE_NULL || values[y].val === mesour.filter.VALUE_TRUE || values[y].val === mesour.filter.VALUE_FALSE) {
+                if (values[y].val) {
+                    if (values[y].val === mesour.filter.VALUE_NULL || values[y].val === mesour.filter.VALUE_TRUE || values[y].val === mesour.filter.VALUE_FALSE) {
                         special[values[y]] = values[y];
                     }
                 }
@@ -116,39 +121,41 @@ mesour.filter.DropDown = function (element, name, filter) {
                 var year = mesour.core.phpDate('Y', timestamp);
                 var month = mesour.core.phpDate('n', timestamp);
                 var day = mesour.core.phpDate('j', timestamp);
-                if(years.indexOf(year) === -1) {
+                if (years.indexOf(year) === -1) {
                     years.push(year)
                 }
-                if(!months[year]) {
+                if (!months[year]) {
                     months[year] = {};
                     months[year]['months'] = [];
                     months[year]['days'] = {};
                 }
-                if(months[year]['months'].indexOf(month) === -1) {
+                if (months[year]['months'].indexOf(month) === -1) {
                     months[year]['months'].push(month);
                 }
-                if(!months[year]['days'][month]) {
+                if (!months[year]['days'][month]) {
                     months[year]['days'][month] = [];
                 }
-                if(months[year]['days'][month].indexOf(day) === -1) {
+                if (months[year]['days'][month].indexOf(day) === -1) {
                     months[year]['days'][month].push(day);
                 }
             }
-            years.sort(function(a, b){return b-a});
+            years.sort(function (a, b) {
+                return b - a
+            });
             var ul = element.find('.box-inner').find('ul');
-            for(var i in special) {
-                if(!special.hasOwnProperty(i)) {
+            for (var i in special) {
+                if (!special.hasOwnProperty(i)) {
                     continue;
                 }
                 var li = $('<li>'),
                     id = name + ((special[i].val && typeof special[i].val.replace === 'function') ? special[i].val.replace(' ', '') : special[i].val);
-                li.append('<input type="checkbox" class="checker" data-value="'+special[i].val+'" id="'+id+'">');
+                li.append('<input type="checkbox" class="checker" data-value="' + special[i].val + '" id="' + id + '">');
                 li.append('&nbsp;');
                 li.append('<label for="' + id + '">' + special[i].translated + '</label>');
                 ul.append(li);
             }
-            for(var a in years) {
-                if(!years.hasOwnProperty(a)) {
+            for (var a in years) {
+                if (!years.hasOwnProperty(a)) {
                     continue;
                 }
                 var year_li = $('<li>');
@@ -156,41 +163,45 @@ mesour.filter.DropDown = function (element, name, filter) {
                 year_li.append('&nbsp;');
                 year_li.append('<input type="checkbox" class="checker">');
                 year_li.append('&nbsp;');
-                year_li.append('<label>'+years[a]+'</label>');
+                year_li.append('<label>' + years[a] + '</label>');
                 year_li.append('<span class="close-all">(<a href="#">Close all</a>)</span>');
                 var month_ul = $('<ul class="toggled-sub-ul">');
                 year_li.append(month_ul);
 
-                months[years[a]].months.sort(function(a, b){return a-b});
+                months[years[a]].months.sort(function (a, b) {
+                    return a - b
+                });
                 var month = months[years[a]].months;
-                for(var b in month) {
+                for (var b in month) {
                     var month_li = $('<li>');
                     month_li.append('<span class="glyphicon glyphicon-plus toggle-sub-ul"></span>');
                     month_li.append('&nbsp;');
                     month_li.append('<input type="checkbox" class="checker">');
                     month_li.append('&nbsp;');
-                    month_li.append('<label>'+mesour.filter.translations.months[month[b]]+'</label>');
+                    month_li.append('<label>' + mesour.filter.translations.months[month[b]] + '</label>');
                     month_ul.append(month_li);
                     var days_ul = $('<ul class="toggled-sub-ul">');
                     month_li.append(days_ul);
 
-                    months[years[a]].days[month[b]].sort(function(a, b){return a-b});
+                    months[years[a]].days[month[b]].sort(function (a, b) {
+                        return a - b
+                    });
                     var days = months[years[a]].days[month[b]];
-                    for(var c in days) {
-                        var this_time = mesour.core.strtotime(years[a]+'-'+month[b]+'-'+days[c]);
+                    for (var c in days) {
+                        var this_time = mesour.core.strtotime(years[a] + '-' + month[b] + '-' + days[c]);
                         var date_text = isTimestamp ? mesour.core.phpDate(filter.getPhpDateFormat(), this_time) : this_time;
                         var day_li = $('<li>');
                         day_li.append('<span class="glyphicon">&nbsp;</span>');
-                        day_li.append('<input type="checkbox" class="checker" data-value="'+date_text+'">');
+                        day_li.append('<input type="checkbox" class="checker" data-value="' + date_text + '">');
                         day_li.append('&nbsp;');
-                        day_li.append('<label>'+days[c]+'</label>');
+                        day_li.append('<label>' + days[c] + '</label>');
                         days_ul.append(day_li);
                     }
                 }
                 ul.append(year_li);
             }
         }
-        if(isAgain) {
+        if (isAgain) {
             //customFilter = new mesour.filter.CustomFilter(_this);
             checkers = new mesour.filter.Checkers(_this);
         }
@@ -229,13 +240,13 @@ mesour.filter.DropDown = function (element, name, filter) {
         filter.setValues(val, name);
     };
 
-    this.unsetValues = function(valType) {
+    this.unsetValues = function (valType) {
         var val = filter.getValues(name);
         delete val[valType];
         filter.setValues(val, name);
     };
 
-    this.getFilter = function() {
+    this.getFilter = function () {
         return filter;
     };
 
@@ -260,26 +271,26 @@ mesour.filter.DropDown = function (element, name, filter) {
             if (values.checkers && typeof values.checkers[0] !== 'undefined') {
                 toggle_button.find('.glyphicon-ok').show();
                 element.addClass('active-checkers');
-                for(var x = 0;x < values.checkers.length; x++) {
+                for (var x = 0; x < values.checkers.length; x++) {
                     checkers.check(values.checkers[x]);
                 }
             }
         }
     };
 
-    this.toggle = function() {
-        if(_this.isOpened()) {
+    this.toggle = function () {
+        if (_this.isOpened()) {
             _this.close();
         } else {
             _this.open();
         }
     };
 
-    this.isOpened = function() {
+    this.isOpened = function () {
         return element.hasClass('open');
     };
 
-    this.open = function() {
+    this.open = function () {
         filter.closeAll(element);
         element.addClass('open');
         apply({
@@ -288,7 +299,7 @@ mesour.filter.DropDown = function (element, name, filter) {
         });
     };
 
-    this.close = function() {
+    this.close = function () {
         _this.update();
         element.removeClass('open');
         apply({
@@ -298,59 +309,59 @@ mesour.filter.DropDown = function (element, name, filter) {
     };
 
     element.on({
-        mouseenter: function() {
+        mouseenter: function () {
             mouseIn = true;
         },
-        mouseleave: function() {
+        mouseleave: function () {
             mouseIn = false;
         }
     });
 
     $('.mesour-filter-modal').on({
-        mouseenter: function() {
+        mouseenter: function () {
             mouseIn = true;
         },
-        mouseleave: function() {
+        mouseleave: function () {
             mouseIn = false;
         }
     });
 
-    $('html').on('click.filter-el-'+name, function() {
-        if(_this.isOpened() && !mouseIn) {
+    $('html').on('click.filter-el-' + name, function () {
+        if (_this.isOpened() && !mouseIn) {
             _this.close();
         }
     });
 
-    element.children('button').on('click', function(e) {
+    element.children('button').on('click', function (e) {
         e.preventDefault();
         filter.closeAll(element);
         _this.toggle(element);
     });
 
     element.find('.reset-filter').on({
-        click: function() {
+        click: function () {
             _this.unsetValues('custom');
             _this.update();
             _this.save();
             filter.apply();
         },
-        mouseenter: function() {
+        mouseenter: function () {
             $(this).removeClass('btn-success').addClass('btn-danger');
         },
-        mouseleave: function() {
+        mouseleave: function () {
             $(this).removeClass('btn-danger').addClass('btn-success');
         }
     });
 
-    element.find('.close-filter').on('click', function(e) {
+    element.find('.close-filter').on('click', function (e) {
         e.preventDefault();
         _this.update();
         _this.close();
     });
 
-    this.save = function() {
+    this.save = function () {
         var checked = checkers.getChecked();
-        if(checked.length > 0) {
+        if (checked.length > 0) {
             _this.setValues(_this.getFilter().generateNextPriority(), 'priority');
             _this.setValues(checked, 'checkers');
             _this.setValues(type !== 'date' ? 'text' : 'date', 'type');

@@ -39,6 +39,8 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
     protected $filters = [];
 
+    protected $valueTranslates = [];
+
     protected $filters_name = 'Filters';
 
     protected $hasCheckers = FALSE;
@@ -98,6 +100,12 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
                 $attributes
             )
         );
+    }
+
+    public function setValueTranslates(array $valueTranslates)
+    {
+        $this->valueTranslates = $valueTranslates;
+        return $this;
     }
 
     public function setText($text)
@@ -209,6 +217,14 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         $button->add('<span class="glyphicon glyphicon-ok" style="display: none;"></span>');
         $button->add('&nbsp;' . $this->getText() . '&nbsp;');
         $button->add('<span class="caret"></span>');
+
+        if (count($this->valueTranslates)) {
+            $wrapper->add(Mesour\Components\Utils\Html::el('input', [
+                'value' => json_encode($this->valueTranslates),
+                'type' => 'hidden',
+                'data-translates' => 1
+            ]));
+        }
 
         $wrapper->add($button);
 

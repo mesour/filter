@@ -183,39 +183,45 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
     /**
      * @param $name
      * @param string|null $text
+     * @param array $valueTranslates
      * @return Mesour\Filter\Number
      */
-    public function addNumberFilter($name, $text = NULL)
+    public function addNumberFilter($name, $text = NULL, array $valueTranslates = [])
     {
         /** @var Mesour\Filter\Number $filter */
         $filter = $this->addCustomFilter($name, new Mesour\Filter\Number);
         $filter->setText($text);
+        $filter->setValueTranslates($valueTranslates);
         return $filter;
     }
 
     /**
      * @param $name
      * @param string|null $text
+     * @param array $valueTranslates
      * @return Mesour\Filter\Text
      */
-    public function addTextFilter($name, $text = NULL)
+    public function addTextFilter($name, $text = NULL, array $valueTranslates = [])
     {
         /** @var Mesour\Filter\Text $filter */
         $filter = $this->addCustomFilter($name, new Mesour\Filter\Text);
         $filter->setText($text);
+        $filter->setValueTranslates($valueTranslates);
         return $filter;
     }
 
     /**
      * @param $name
      * @param string|null $text
+     * @param array $valueTranslates
      * @return Mesour\Filter\Date
      */
-    public function addDateFilter($name, $text = NULL)
+    public function addDateFilter($name, $text = NULL, array $valueTranslates = [])
     {
         /** @var Mesour\Filter\Date $filter */
         $filter = $this->addCustomFilter($name, new Mesour\Filter\Date);
         $filter->setText($text);
+        $filter->setValueTranslates($valueTranslates);
         return $filter;
     }
 

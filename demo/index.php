@@ -12,6 +12,7 @@ require_once __DIR__ . '/../vendor/mesour/sources/tests/Entity/User.php';
 @mkdir(__DIR__ . '/log');
 
 \Tracy\Debugger::enable(\Tracy\Debugger::DEVELOPMENT, __DIR__ . '/log');
+\Tracy\Debugger::$strictMode = TRUE;
 
 require_once SRC_DIR . 'Mesour/Filter/IFilter.php';
 require_once SRC_DIR . 'Mesour/Filter/IFilterItem.php';
@@ -67,11 +68,11 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
         ['id' => '3', 'name' => 'Group 3'],
     ];
 
-    $application = new \Mesour\UI\Application;
+    $application = new Mesour\UI\Application;
 
     $application->setRequest($_REQUEST);
 
-    $filter = new \Mesour\UI\Filter('test');
+    $filter = new Mesour\UI\Filter('test');
 
     $application->addComponent($filter);
 
@@ -79,7 +80,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
         ->select('u')
         ->from(Mesour\Sources\Tests\Entity\User::class, 'u');
 
-    $source = new \Mesour\Filter\Sources\DoctrineFilterSource($qb, [
+    $source = new Mesour\Filter\Sources\DoctrineFilterSource($qb, [
         'user_id' => 'u.userId',
         'group_id' => 'u.groups',
         'last_login' => 'u.lastLogin',
@@ -88,9 +89,14 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
     $entityManager->getConfiguration()->addCustomDatetimeFunction('DATE', Mesour\Filter\Sources\DateFunction::class);
 
-    $source->setRelated(\Mesour\Sources\Tests\Entity\Groups::class, 'group_id', 'name', 'group_name', 'id');
+    $source->setRelated(Mesour\Sources\Tests\Entity\Groups::class, 'group_id', 'name', 'group_name', 'id');
 
     $filter->setSource($source);
+
+    $filter->addTextFilter('action', 'Status', [
+        0 => 'Inactive',
+        1 => 'Active',
+    ]);
 
     $filter->addTextFilter('name', 'Name');
 
@@ -104,7 +110,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
     $filter->addDateFilter('timestamp', 'Last login');
 
-    $filter->onRender[] = function (\Mesour\UI\Filter $_filter) use ($source) {
+    $filter->onRender[] = function (Mesour\UI\Filter $_filter) use ($source) {
         //dump($_filter->getValues());
 
         foreach ($_filter->getValues() as $name => $value) {
@@ -131,29 +137,22 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="../docs/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="../docs/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="../docs/css/datetimepicker.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="../public/css/datetimepicker.css">
 
 <link rel="stylesheet" href="../public/mesour.filter.css">
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="../docs/js/jquery.min.js"></script>
-<script src="../docs/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 <script src="../vendor/mesour/components/public/mesour.components.js"></script>
 <script src="../vendor/mesour/components/public/cookie.js"></script>
 
 
-<script src="../docs/js/bootstrap.datetimepicker.js"></script>
-
+<script src="../public/js/bootstrap.datetimepicker.js"></script>
 
 <script src="../public/src/mesour.filter.js"></script>
 <script src="../public/src/mesour.filter.Checkers.js"></script>
 <script src="../public/src/mesour.filter.CustomFilter.js"></script>
 <script src="../public/src/mesour.filter.Filter.js"></script>
 <script src="../public/src/mesour.filter.DropDown.js"></script>
-
-
-<script src="../docs/js/main.js"></script>
