@@ -55,8 +55,10 @@ class NetteDBFilterSource extends Mesour\Sources\NetteDbSource implements IFilte
     {
         $output = [];
         $selection = $this->getSelection(FALSE, FALSE);
+        $this->lastFetchAllResult = [];
         foreach ($selection as $data) {
             /** @var Nette\Database\ActiveRow */
+            $this->lastFetchAllResult[] = $data;
             $current_data = $data->toArray();
             foreach ($current_data as $key => $val) {
                 if ($val instanceof \DateTime) {

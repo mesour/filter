@@ -92,6 +92,7 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
             }
             $output[] = $this->makeArrayHash($data);
         }
+        $this->lastFetchAllResult = $output;
         return $output;
     }
 
