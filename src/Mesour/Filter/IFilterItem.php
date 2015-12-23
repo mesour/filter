@@ -18,12 +18,6 @@ use Mesour;
 interface IFilterItem extends Mesour\Components\Control\IAttributesControl
 {
 
-    /**
-     * @param bool $has_checkers
-     * @return mixed
-     */
-    public function setCheckers($has_checkers = TRUE);
-
     public function setText($text);
 
     /**
@@ -35,5 +29,17 @@ interface IFilterItem extends Mesour\Components\Control\IAttributesControl
      * @return Mesour\Components\Utils\Html
      */
     public function getButtonPrototype();
+
+    /**
+     * @param bool|TRUE $hasCheckers
+     * @return mixed
+     */
+    public function setCheckers($hasCheckers = TRUE);
+
+    /**
+     * @param bool|TRUE $hasMainFilter
+     * @return mixed
+     */
+    public function setMainFilter($hasMainFilter = TRUE);
 
 }

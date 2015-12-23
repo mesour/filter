@@ -96,7 +96,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
     $filter->addTextFilter('action', 'Status', [
         0 => 'Inactive',
         1 => 'Active',
-    ]);
+    ])->setMainFilter(FALSE);
 
     $filter->addTextFilter('name', 'Name');
 

@@ -45,6 +45,8 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
     protected $hasCheckers = FALSE;
 
+    protected $hasMainFilter = TRUE;
+
     public $onRender = [];
 
     protected $defaults = [
@@ -122,9 +124,23 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         return $this->text;
     }
 
+    /**
+     * @param bool|TRUE $hasCheckers
+     * @return $this
+     */
     public function setCheckers($hasCheckers = TRUE)
     {
-        $this->hasCheckers = $hasCheckers;
+        $this->hasCheckers = (bool)$hasCheckers;
+        return $this;
+    }
+
+    /**
+     * @param bool|TRUE $hasMainFilter
+     * @return $this
+     */
+    public function setMainFilter($hasMainFilter = TRUE)
+    {
+        $this->hasMainFilter = (bool)$hasMainFilter;
         return $this;
     }
 
@@ -230,7 +246,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
         $ul = $this->getListUlPrototype();
 
-        if (count($this->filters) > 0) {
+        if ($this->hasMainFilter && count($this->filters) > 0) {
             $subMenu = $this->getListLiPrototype([
                 'class' => 'dropdown-submenu'
             ]);
@@ -255,9 +271,11 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         }
 
         if ($this->hasCheckers) {
-            $ul->add($this->getListLiPrototype([
-                'class' => 'divider'
-            ]));
+            if ($this->hasMainFilter) {
+                $ul->add($this->getListLiPrototype([
+                    'class' => 'divider'
+                ]));
+            }
 
             $checkers_li = $this->getListLiPrototype();
             $inline_box = Mesour\Components\Utils\Html::el('div', ['class' => 'inline-box']);
