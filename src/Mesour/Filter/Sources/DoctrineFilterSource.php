@@ -10,6 +10,7 @@
 namespace Mesour\Filter\Sources;
 
 use Mesour;
+use Doctrine;
 
 
 /**
@@ -51,21 +52,28 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
 
     public function fetchFullData($dateFormat = 'Y-m-d')
     {
-        $allData = $this->fixResult($this->cloneQueryBuilder(TRUE)
-            ->setMaxResults(null)
-            ->setFirstResult(null)
-            ->getQuery()->getArrayResult());
-        $output = [];
-        foreach ($allData as $data) {
-            $currentData = (array)$data;
-            foreach ($currentData as $key => $val) {
-                if ($val instanceof \DateTime) {
-                    $currentData[$key] = $val->format($dateFormat);
+        try {
+            $this->lastFetchAllResult = $this->cloneQueryBuilder(TRUE)
+                ->setMaxResults(null)
+                ->setFirstResult(null)
+                ->getQuery()
+                ->getResult();
+
+            $allData = $this->fixResult(
+                $this->getEntityArrayAsArrays($this->lastFetchAllResult)
+            );
+
+            foreach ($allData as &$currentData) {
+                foreach ($currentData as $key => $val) {
+                    if ($val instanceof \DateTime) {
+                        $currentData[$key] = $val->format($dateFormat);
+                    }
                 }
             }
-            $output[] = $this->makeArrayHash($currentData);
+            return $allData;
+        } catch (Doctrine\ORM\NoResultException $e) {
+            return [];
         }
-        return $output;
     }
 
 }
