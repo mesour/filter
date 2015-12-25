@@ -73,10 +73,11 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
         return $this;
     }
 
-    public function applyCheckers($column_name, array $value, $type)
+    public function applyCheckers($columnName, array $value, $type)
     {
         foreach ($value as $val) {
-            $this->where($column_name, $val, Condition::EQUAL, 'or');
+            $val = (string)$val;
+            $this->where($columnName, $val, Condition::EQUAL, 'or');
         }
         return $this;
     }
