@@ -19,7 +19,11 @@ use Mesour;
 interface IFilterSource extends Mesour\Sources\ISource
 {
 
-    public function fetchFullData();
+    /**
+     * @param string $dateFormat
+     * @return Mesour\Sources\ArrayHash[]
+     */
+    public function fetchFullData($dateFormat = 'Y-m-d');
 
     public function applyCheckers($columnName, array $value, $type);
 

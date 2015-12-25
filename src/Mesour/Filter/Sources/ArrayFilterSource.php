@@ -51,7 +51,7 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
         }
     }
 
-    public function applyCustom($column_name, array $custom, $type)
+    public function applyCustom($columnName, array $custom, $type)
     {
         $values = [];
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
@@ -68,7 +68,7 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
             }
         }
         foreach ($values as $key => $val) {
-            $this->where($column_name, $custom['val' . ($key + 1)], $val, isset($operator) ? $operator : 'and');
+            $this->where($columnName, $custom['val' . ($key + 1)], $val, isset($operator) ? $operator : 'and');
         }
         return $this;
     }
@@ -82,13 +82,17 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
         return $this;
     }
 
-    public function fetchFullData($date_format = 'Y-m-d')
+    /**
+     * @param string $dateFormat
+     * @return Mesour\Sources\ArrayHash[]
+     */
+    public function fetchFullData($dateFormat = 'Y-m-d')
     {
         $output = [];
-        foreach ($this->data_arr as $data) {
+        foreach ($this->dataArr as $data) {
             foreach ($data as $key => $val) {
                 if ($val instanceof \DateTime) {
-                    $data[$key] = $val->format($date_format);
+                    $data[$key] = $val->format($dateFormat);
                 }
             }
             $output[] = $this->makeArrayHash($data);

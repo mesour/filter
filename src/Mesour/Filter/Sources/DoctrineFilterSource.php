@@ -49,7 +49,7 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
         return $this;
     }
 
-    public function fetchFullData($date_format = 'Y-m-d')
+    public function fetchFullData($dateFormat = 'Y-m-d')
     {
         $allData = $this->fixResult($this->cloneQueryBuilder(TRUE)
             ->setMaxResults(null)
@@ -57,13 +57,13 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
             ->getQuery()->getArrayResult());
         $output = [];
         foreach ($allData as $data) {
-            $current_data = (array)$data;
-            foreach ($current_data as $key => $val) {
+            $currentData = (array)$data;
+            foreach ($currentData as $key => $val) {
                 if ($val instanceof \DateTime) {
-                    $current_data[$key] = $val->format($date_format);
+                    $currentData[$key] = $val->format($dateFormat);
                 }
             }
-            $output[] = $current_data;
+            $output[] = $this->makeArrayHash($currentData);
         }
         return $output;
     }
