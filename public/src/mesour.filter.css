@@ -1,3 +1,8 @@
+/**
+ * Mesour Filter Component - mesour.filter.css
+ *
+ * @author Matous Nemec (http://mesour.com)
+ */
 .bootstrap-datetimepicker-widget {
     z-index: 5000;
 }
@@ -128,24 +133,28 @@
     left: 36%;
     z-index: 1500;
     display: none;
-    width: 450px;
+    width: 420px;
+    height: 300px;
     top: 100px;
 }
 
-.mesour-filter-modal .form-inline .form-group.grid-operators {
-    margin-left: 38px;
-    margin-top: 5px;
-    margin-bottom: 3px;
+.mesour-filter-modal.modal-dialog {
+    top: 50%;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
 }
 
-.mesour-filter-modal .form-inline .form-group.grid-operators label {
-    cursor: pointer;
+.mesour-filter-modal.modal-dialog .filter-value-1,
+.mesour-filter-modal.modal-dialog .filter-value-2 {
+    border-radius: 4px;
 }
 
-.mesour-filter-modal .grid-operators #grid-operator-and,
-.mesour-filter-modal .grid-operators #grid-operator-or {
-    position: relative;
-    top: 3px;
+@media (max-width: 767px) {
+    .mesour-filter-modal.modal-dialog .filter-value-1,
+    .mesour-filter-modal.modal-dialog .filter-value-2 {
+        width: 348px;
+    }
 }
 
 .dropdown.mesour-filter-dropdown .close-all {

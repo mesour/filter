@@ -141,7 +141,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 <link rel="stylesheet" href="../public/datetimepicker.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-<link rel="stylesheet" href="../public/mesour.filter.css">
+<link rel="stylesheet" href="../public/src/mesour.filter.css">
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
