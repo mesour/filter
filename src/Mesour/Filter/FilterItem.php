@@ -2,7 +2,7 @@
 /**
  * This file is part of the Mesour Filter (http://components.mesour.com/component/filter)
  *
- * Copyright (c) 2015 Matouš Němec (http://mesour.com)
+ * Copyright (c) 2015-2016 Matouš Němec (http://mesour.com)
  *
  * For full licence and copyright please view the file licence.md in root of this project
  */
@@ -26,6 +26,12 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         FILTERS_ITEM = 'filters-item',
         BUTTON = 'button';
 
+    protected $iconOk = 'check';
+
+    protected $iconClose = 'times';
+
+    protected $iconEdit = 'pencil';
+
     /** @var Mesour\Components\Utils\Html */
     protected $button;
 
@@ -41,7 +47,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
     protected $valueTranslates = [];
 
-    protected $filters_name = 'Filters';
+    protected $filtersName = 'Filters';
 
     protected $hasCheckers = FALSE;
 
@@ -230,9 +236,17 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
         $this->onRender($this);
 
-        $button->add('<span class="glyphicon glyphicon-ok" style="display: none;"></span>');
+        /** @var Mesour\UI\Icon $icon */
+        $iconClass = $this->getIconClass();
+        $icon = new $iconClass();
+
+        $icon->setType($this->iconOk);
+        $icon->setAttribute('style', 'display: none');
+        $icon->setAttribute('data-filter-icon', 'check');
+        $button->add($icon->render());
         $button->add('&nbsp;' . $this->getText() . '&nbsp;');
         $button->add('<span class="caret"></span>');
+        $icon->setAttribute('style', FALSE);
 
         if (count($this->valueTranslates)) {
             $wrapper->add(Mesour\Components\Utils\Html::el('input', [
@@ -251,11 +265,28 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
                 'class' => 'dropdown-submenu'
             ]);
 
-            $subMenu->add('<span>
-                                <button type="button" class="btn btn-success btn-xs reset-filter" title="Reset filter" style="display: none;"><span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span></button>
-                                <button type="button" class="btn btn-primary btn-xs mesour-open-modal edit-filter" title="Edit filter" style="display: none;"><span class="glyphicon glyphicon-pencil"></span></button>
-                                ' . $this->getTranslator()->translate($this->filters_name) . '
-                            </span>');
+            $icons = '<span><button type="button" class="btn btn-success btn-xs reset-filter" title="';
+            $icons .= $this->getTranslator()->translate('Reset filter') . '" style="display: none;">';
+
+            $icon->setAttribute('data-filter-icon', 'has-custom');
+            $icons .= $icon->render();
+
+            $icon->setAttribute('style', 'display: none');
+            $icon->setType($this->iconClose);
+            $icon->setAttribute('data-filter-icon', 'reset');
+            $icons .= $icon->render();
+            $icon->setAttribute('style', FALSE);
+
+            $icons .= '</button><button type="button" class="btn btn-primary btn-xs mesour-open-modal edit-filter" title="';
+            $icons .= $this->getTranslator()->translate('Edit filter') . '" style="display: none;">';
+
+            $icon->setAttribute('data-filter-icon', 'edit');
+            $icon->setType($this->iconEdit);
+            $icons .= $icon->render();
+
+            $icons .= "</button>{$this->getTranslator()->translate($this->filtersName)}</span>";
+
+            $subMenu->add($icons);
 
             $sub_ul = Mesour\Components\Utils\Html::el('ul', [
                 'class' => 'dropdown-menu'

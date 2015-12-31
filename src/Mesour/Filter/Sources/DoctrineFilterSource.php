@@ -2,7 +2,7 @@
 /**
  * This file is part of the Mesour Filter (http://components.mesour.com/component/filter)
  *
- * Copyright (c) 2015 Matouš Němec (http://mesour.com)
+ * Copyright (c) 2015-2016 Matouš Němec (http://mesour.com)
  *
  * For full licence and copyright please view the file licence.md in root of this project
  */
@@ -36,7 +36,7 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
             }
             $parameters = ['(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', [$values[0][1], $values[1][1]]];
         } else {
-            $parameters = [$values[0][0], $values[0][1]];
+            $parameters = [$values[0][0], [$values[0][1]]];
         }
         call_user_func_array([$this, 'where'], $parameters);
         return $this;

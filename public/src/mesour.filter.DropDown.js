@@ -44,12 +44,28 @@ mesour.filter.DropDown = function (element, name, filter) {
         return variable;
     };
 
+    this.fixDropDownPosition = function () {
+        var windowWidth = $(window).width();
+        var width = $(this).width();
+        var offset = $(this).closest('.dropdown-menu').offset();
+
+        if (windowWidth - (offset.left + width) < 250) {
+            $(this).addClass('pull-left');
+        } else {
+            $(this).removeClass('pull-left');
+        }
+    };
+
     var type = element.attr('data-type');
     var translatesInput = element.find('[data-translates]');
     var translates = translatesInput.is('*') ? jQuery.parseJSON(translatesInput.val()) : [];
 
+    element.find('.dropdown-submenu')
+        .on('mousemove', this.fixDropDownPosition);
+
     var customFilter,
         checkers,
+        cookieName = filter.getName() + '-' + name + '-checkers',
         mouseIn = false;
 
     var create = function () {
@@ -58,6 +74,10 @@ mesour.filter.DropDown = function (element, name, filter) {
     var destroy = function () {
         var ul = element.find('.box-inner').find('ul');
         ul.find('li:not(.all-select-li):not(.all-select-searched-li)').remove();
+    };
+
+    this.getCookieName = function () {
+        return cookieName;
     };
 
     this.destroy = function () {
@@ -114,7 +134,8 @@ mesour.filter.DropDown = function (element, name, filter) {
 
                 if (values[y].val) {
                     if (values[y].val === mesour.filter.VALUE_NULL || values[y].val === mesour.filter.VALUE_TRUE || values[y].val === mesour.filter.VALUE_FALSE) {
-                        special[values[y]] = values[y];
+                        special[values[y].val] = values[y];
+                        continue;
                     }
                 }
                 var timestamp = isTimestamp ? mesour.core.strtotime(values[y].val) : values[y].val;
@@ -154,12 +175,21 @@ mesour.filter.DropDown = function (element, name, filter) {
                 li.append('<label for="' + id + '">' + special[i].translated + '</label>');
                 ul.append(li);
             }
+            var val = mesour.cookie(cookieName),
+                checkersInfo = val ? jQuery.parseJSON(val) : {};
+
             for (var a in years) {
                 if (!years.hasOwnProperty(a)) {
                     continue;
                 }
+                var yearName = 'year-' + years[a];
+
+                var isYearOpened = checkersInfo[yearName] ? true : false;
+
                 var year_li = $('<li>');
-                year_li.append('<span class="glyphicon glyphicon-plus toggle-sub-ul"></span>');
+                year_li.append('<span class="' + filter.getIconClass(
+                        isYearOpened ? mesour.filter.ICON_MINUS : mesour.filter.ICON_PLUS
+                    ) + ' toggle-sub-ul" data-name="' + yearName + '"></span>');
                 year_li.append('&nbsp;');
                 year_li.append('<input type="checkbox" class="checker">');
                 year_li.append('&nbsp;');
@@ -168,13 +198,24 @@ mesour.filter.DropDown = function (element, name, filter) {
                 var month_ul = $('<ul class="toggled-sub-ul">');
                 year_li.append(month_ul);
 
+                if(isYearOpened) {
+                    month_ul.show();
+                    year_li.find('.close-all').show();
+                }
+
                 months[years[a]].months.sort(function (a, b) {
                     return a - b
                 });
                 var month = months[years[a]].months;
                 for (var b in month) {
+                    var monthName = 'month-' + years[a] + '-' + month[b];
+
+                    var isMonthOpened = checkersInfo[monthName] ? true : false;
+
                     var month_li = $('<li>');
-                    month_li.append('<span class="glyphicon glyphicon-plus toggle-sub-ul"></span>');
+                    month_li.append('<span class="' + filter.getIconClass(
+                            isMonthOpened ? mesour.filter.ICON_MINUS : mesour.filter.ICON_PLUS
+                        ) + ' toggle-sub-ul" data-name="' + monthName + '"></span>');
                     month_li.append('&nbsp;');
                     month_li.append('<input type="checkbox" class="checker">');
                     month_li.append('&nbsp;');
@@ -182,6 +223,10 @@ mesour.filter.DropDown = function (element, name, filter) {
                     month_ul.append(month_li);
                     var days_ul = $('<ul class="toggled-sub-ul">');
                     month_li.append(days_ul);
+
+                    if(isMonthOpened) {
+                        days_ul.show();
+                    }
 
                     months[years[a]].days[month[b]].sort(function (a, b) {
                         return a - b
@@ -191,7 +236,7 @@ mesour.filter.DropDown = function (element, name, filter) {
                         var this_time = mesour.core.strtotime(years[a] + '-' + month[b] + '-' + days[c]);
                         var date_text = isTimestamp ? mesour.core.phpDate(filter.getPhpDateFormat(), this_time) : this_time;
                         var day_li = $('<li>');
-                        day_li.append('<span class="glyphicon">&nbsp;</span>');
+                        day_li.append('<span class="' + filter.getIconPrefix() + '">&nbsp;</span>');
                         day_li.append('<input type="checkbox" class="checker" data-value="' + date_text + '">');
                         day_li.append('&nbsp;');
                         day_li.append('<label>' + days[c] + '</label>');
@@ -258,18 +303,18 @@ mesour.filter.DropDown = function (element, name, filter) {
             toggle_button = element.find('.dropdown-toggle'),
             menu = element.find('.dropdown-menu'),
             first_submenu = menu.children('.dropdown-submenu');
-        toggle_button.find('.glyphicon-ok').hide();
-        first_submenu.find('.glyphicon').closest('button').hide();
+        toggle_button.find('[data-filter-icon="check"]').hide();
+        first_submenu.find('[data-filter-icon]').closest('button').hide();
         element.removeClass('active-item').removeClass('active-checkers');
 
         if (values) {
             if (values.custom && values.custom.operator) {
-                toggle_button.find('.glyphicon-ok').show();
+                toggle_button.find('[data-filter-icon="check"]').show();
                 element.addClass('active-item');
-                first_submenu.find('.glyphicon').closest('button').show();
+                first_submenu.find('[data-filter-icon]').closest('button').show();
             }
             if (values.checkers && typeof values.checkers[0] !== 'undefined') {
-                toggle_button.find('.glyphicon-ok').show();
+                toggle_button.find('[data-filter-icon="check"]').show();
                 element.addClass('active-checkers');
                 for (var x = 0; x < values.checkers.length; x++) {
                     checkers.check(values.checkers[x]);
@@ -346,10 +391,14 @@ mesour.filter.DropDown = function (element, name, filter) {
             filter.apply();
         },
         mouseenter: function () {
-            $(this).removeClass('btn-success').addClass('btn-danger');
+            $(this).removeClass('btn-success').addClass('btn-danger')
+                .find('[data-filter-icon]').hide()
+                .filter('[data-filter-icon="reset"]').show();
         },
         mouseleave: function () {
-            $(this).removeClass('btn-danger').addClass('btn-success');
+            $(this).removeClass('btn-danger').addClass('btn-success')
+                .find('[data-filter-icon]').hide()
+                .filter('[data-filter-icon="has-custom"]').show();
         }
     });
 

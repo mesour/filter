@@ -2,7 +2,7 @@
 /**
  * This file is part of the Mesour Filter (http://components.mesour.com/component/filter)
  *
- * Copyright (c) 2015 Matouš Němec (http://mesour.com)
+ * Copyright (c) 2015-2016 Matouš Němec (http://mesour.com)
  *
  * For full licence and copyright please view the file licence.md in root of this project
  */
@@ -10,6 +10,7 @@
 namespace Mesour\UI;
 
 use Mesour;
+use Nette;
 
 
 /**
@@ -31,7 +32,23 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
     const VALUE_FALSE = '-mesour-bool-0';
     const VALUE_NULL = '-mesour-null';
 
+    const ICON_ITEM_ACTIVE = 'itemIsActive';
+    const ICON_EDIT_CUSTOM = 'editCustom';
+    const ICON_REMOVE_CUSTOM = 'removeCustom';
+    const ICON_PLUS = 'plus';
+    const ICON_MINUS = 'minus';
+    const ICON_CALENDAR = 'calendar';
+
     static public $maxCheckboxCount = 1000;
+
+    static public $icons = [
+        self::ICON_ITEM_ACTIVE => 'check',
+        self::ICON_EDIT_CUSTOM => 'pencil',
+        self::ICON_REMOVE_CUSTOM => 'pencil',
+        self::ICON_PLUS => 'plus-square',
+        self::ICON_MINUS => 'minus-square',
+        self::ICON_CALENDAR => 'calendar',
+    ];
 
     /** @var Mesour\Components\Utils\Html */
     protected $hidden;
@@ -305,11 +322,16 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
     public function createHiddenInput($data = [])
     {
+        /** @var Mesour\Icon\IIcon $icon */
+        $className = $this->getIconClass();
+        $icon = new $className;
         $hidden = $this->getHiddenPrototype();
         $attributes = [
             'data-mesour-data' => json_encode($data),
             'value' => json_encode($this->getValues()),
             'data-mesour-date' => $this->getDateFormat(),
+            'data-icon-prefix' => $icon->getPrefix(),
+            'data-icons' => Nette\Utils\Json::encode(self::$icons),
             'data-mesour-js-date' => Mesour\Components\Utils\Helpers::convertDateToJsFormat($this->getDateFormat()),
         ];
         $hidden->addAttributes($attributes);

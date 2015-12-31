@@ -4,11 +4,11 @@
  * @author Matous Nemec (http://mesour.com)
  */
 var mesour = !mesour ? {} : mesour;
-if(!mesour.filter) {
+if (!mesour.filter) {
     throw new Error('Widget mesour.filter is not created. First create mesour.filter widget.');
 }
 
-mesour.filter.applyFilter = function(filterName, filterData) {
+mesour.filter.applyFilter = function (filterName, filterData) {
     filterData = $.parseJSON(filterData);
     filterData = {filterData: filterData};
     var created = mesour.core.createLink(filterName, 'applyFilter', filterData, true);
@@ -17,17 +17,29 @@ mesour.filter.applyFilter = function(filterName, filterData) {
 mesour.filter.Filter = function (filterName, element) {
     var _this = this;
 
-    var dropdowns = {};
-    var valuesInput = element;
+    var dropdowns = {},
+        valuesInput = element,
+        dropDownLink = element.attr('data-dropdown-link'),
+        iconPrefix = element.attr('data-icon-prefix'),
+        icons = jQuery.parseJSON(element.attr('data-icons')),
+        resetButton = $('.full-reset[data-filter-name="' + filterName + '"]');
 
-    var dropDownLink = element.attr('data-dropdown-link');
-    var resetButton = $('.full-reset[data-filter-name="'+filterName+'"]');
-
-    this.apply = function() {
+    this.apply = function () {
         mesour.filter.applyFilter(filterName, valuesInput.val());
     };
 
-    this.getDropdowns = function() {
+    this.getIconClass = function (iconType) {
+        if (!icons[iconType]) {
+            throw new Error('Icon type ' + iconType + ' not exists.');
+        }
+        return iconPrefix + icons[iconType];
+    };
+
+    this.getIconPrefix = function () {
+        return iconPrefix;
+    };
+
+    this.getDropdowns = function () {
         return dropdowns;
     };
 
@@ -35,22 +47,25 @@ mesour.filter.Filter = function (filterName, element) {
         return filterName;
     };
 
-    this.getDropDownLink = function() {
+    this.getDropDownLink = function () {
         return dropDownLink;
     };
 
-    this.getFilterModal = function() {
+    this.getFilterModal = function () {
         return modal;
     };
 
-    this.closeAll = function(notThis) {
-        for(var x in dropdowns) {
+    this.closeAll = function (notThis) {
+        for (var x in dropdowns) {
+            if(!dropdowns.hasOwnProperty(x)) {
+                continue;
+            }
             dropdowns[x].update();
         }
-        element.find('.dropdown').each(function() {
-            if(!notThis || $(this)[0] !== notThis[0]) {
+        element.find('.dropdown').each(function () {
+            if (!notThis || $(this)[0] !== notThis[0]) {
                 $(this).removeClass('open');
-                mesour.cookie(filterName+'-'+$(this).attr('data-filter'), 0);
+                mesour.cookie(filterName + '-' + $(this).attr('data-filter'), 0);
             }
         });
     };
@@ -70,17 +85,17 @@ mesour.filter.Filter = function (filterName, element) {
     };
 
     var modal = $('.mesour-filter-modal.modal-dialog');
-    if(!modal.is('*')) {
-        modal = $('<div class="mesour-filter-modal modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <h4 class="modal-title">Custom filter</h4> </div> <div class="modal-body"> <form class="form-inline"> <p>Show rows where:</p> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-1"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker1"> <input type="text" class="form-control filter-value-1" data-date-format="'+_this.getJsDateFormat()+'" placeholder="Value"> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div> </div> <br> <div class="form-group grid-operators"> <input type="radio" name="operator" class="filter-operator-and" value="and" checked="checked"> <label>and</label> <input type="radio" name="operator" class="filter-operator-or" value="or"> <label>or</label> </div> <br> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-2"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker2"> <input type="text" class="form-control filter-value-2" data-date-format="'+_this.getJsDateFormat()+'" placeholder="Value"> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div> </div> </form> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-sm save-custom-filter">Ok</button> <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Storno</button> </div> <input type="hidden" data-name=""> </div> <!-- /.modal-content --> </div> <!-- /.modal-dialog -->');
+    if (!modal.is('*')) {
+        modal = $('<div class="mesour-filter-modal modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <h4 class="modal-title">Custom filter</h4> </div> <div class="modal-body"> <form class="form-inline"> <p>Show rows where:</p> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-1"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker1"> <input type="text" class="form-control filter-value-1" data-date-format="' + _this.getJsDateFormat() + '" placeholder="Value"> <span class="input-group-addon"> <span class="' + _this.getIconClass(mesour.filter.ICON_CALENDAR) + '"></span> </span> </div> </div> <br> <div class="form-group grid-operators"> <input type="radio" name="operator" class="filter-operator-and" value="and" checked="checked"> <label>and</label> <input type="radio" name="operator" class="filter-operator-or" value="or"> <label>or</label> </div> <br> <div class="form-group"> <label class="sr-only"></label> <select class="form-control filter-how-2"> <option></option> <option value="equal_to">Equal to</option> <option value="not_equal_to">Not equal to</option> <option value="bigger">Is greater than</option> <option value="not_bigger">Is no greater than</option> <option value="smaller">Is smaller than</option> <option value="not_smaller">Is no smaller than</option> <option value="start_with">Starts with</option> <option value="not_start_with">Not starts with</option> <option value="end_with">Ends with</option> <option value="not_end_with">Not ends with</option> <option value="equal">Contains</option> <option value="not_equal">Not contains</option> </select> </div> <div class="form-group"> <label class="sr-only">Value</label> <div class="input-group date filter-datepicker2"> <input type="text" class="form-control filter-value-2" data-date-format="' + _this.getJsDateFormat() + '" placeholder="Value"> <span class="input-group-addon"> <span class="' + _this.getIconClass(mesour.filter.ICON_CALENDAR) + '"></span> </span> </div> </div> </form> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-sm save-custom-filter">Ok</button> <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Storno</button> </div> <input type="hidden" data-name=""> </div> <!-- /.modal-content --> </div> <!-- /.modal-dialog -->');
 
         $('body').append(modal);
 
-        modal.find('[aria-hidden="true"], [data-dismiss="modal"]').on('click.custom-filter', function(e) {
+        modal.find('[aria-hidden="true"], [data-dismiss="modal"]').on('click.custom-filter', function (e) {
             e.preventDefault();
             $(this).closest('.modal-dialog').fadeOut();
         });
 
-        modal.find('.save-custom-filter').on('click', function() {
+        modal.find('.save-custom-filter').on('click', function () {
             var name = modal.find('[data-name]').val(),
                 internalValues = {
                     how1: modal.find('.filter-how-1').val(),
@@ -89,17 +104,20 @@ mesour.filter.Filter = function (filterName, element) {
                     val2: modal.find('.filter-value-2').val(),
                     operator: modal.find('input[name="operator"]:checked').val()
                 };
-            if(internalValues.how1.length === 0) {
+            if (internalValues.how1.length === 0) {
                 alert('Please select some value in first select.');
-                modal.find('.filter-how-1').focus();return;
+                modal.find('.filter-how-1').focus();
+                return;
             }
-            if(internalValues.val1.length === 0) {
+            if (internalValues.val1.length === 0) {
                 alert('Please insert some value for first text input.');
-                modal.find('.filter-value-1').focus();return;
+                modal.find('.filter-value-1').focus();
+                return;
             }
-            if(internalValues.how2.length !== 0 && internalValues.val2.length === 0) {
+            if (internalValues.how2.length !== 0 && internalValues.val2.length === 0) {
                 alert('Please insert some value for second input.');
-                modal.find('.filter-value-2').focus();return;
+                modal.find('.filter-value-2').focus();
+                return;
             }
             dropdowns[name].setValues(internalValues, 'custom');
             dropdowns[name].setValues(dropdowns[name].getType() !== 'date' ? 'text' : 'date', 'type');
@@ -125,16 +143,19 @@ mesour.filter.Filter = function (filterName, element) {
         }
     };
 
-    this.setValues = function(newValues, name) {
+    this.setValues = function (newValues, name) {
         var oldValues = valuesInput.val().length > 0 ? $.parseJSON(valuesInput.val()) : {};
         oldValues[name] = newValues;
         valuesInput.val(JSON.stringify(oldValues));
     };
 
-    this.refreshPriorities = function() {
+    this.refreshPriorities = function () {
         var _currentValues = _this.getValues();
         var _usedPriorities = {};
-        for(var x in _currentValues) {
+        for (var x in _currentValues) {
+            if(!_currentValues.hasOwnProperty(x)) {
+                continue;
+            }
             _usedPriorities[_currentValues[x].priority] = x;
         }
         var keys = [];
@@ -148,7 +169,7 @@ mesour.filter.Filter = function (filterName, element) {
         var priority = 1;
         for (var i = 0; i < keys.length; i++) {
             k = keys[i];
-            if(_currentValues[_usedPriorities[k]].priority) {
+            if (_currentValues[_usedPriorities[k]].priority) {
                 _currentValues[_usedPriorities[k]].priority = priority;
                 priority++
             }
@@ -156,19 +177,22 @@ mesour.filter.Filter = function (filterName, element) {
         valuesInput.val(JSON.stringify(_currentValues));
     };
 
-    this.generateNextPriority = function() {
+    this.generateNextPriority = function () {
         _this.refreshPriorities();
         var currentValues = _this.getValues();
         var usedPriorities = [];
-        for(var x in currentValues) {
+        for (var x in currentValues) {
+            if(!currentValues.hasOwnProperty(x)) {
+                continue;
+            }
             usedPriorities.push(currentValues[x].priority);
         }
-        if(usedPriorities.length > 0) {
+        if (usedPriorities.length > 0) {
             var nextPriority = 1;
-            for(var y = 0; y < usedPriorities.length;y++) {
-                if(usedPriorities[y] > nextPriority) {
-                    nextPriority = usedPriorities[y]+1;
-                } else if(usedPriorities[y] === nextPriority) {
+            for (var y = 0; y < usedPriorities.length; y++) {
+                if (usedPriorities[y] > nextPriority) {
+                    nextPriority = usedPriorities[y] + 1;
+                } else if (usedPriorities[y] === nextPriority) {
                     nextPriority++;
                 }
             }
@@ -178,23 +202,29 @@ mesour.filter.Filter = function (filterName, element) {
         }
     };
 
-    this.filterData = function(key, valuesArr) {
+    this.filterData = function (key, valuesArr) {
         var data = _this.getData(),
             output = [];
-        for(var x in data) {
-            if(valuesArr.indexOf(data[x][key]) !== -1) {
+        for (var x in data) {
+            if(!data.hasOwnProperty(x)) {
+                continue;
+            }
+            if (valuesArr.indexOf(data[x][key]) !== -1) {
                 output.push(data[x]);
             }
         }
         return output;
     };
 
-    this.filterCheckers = function() {
+    this.filterCheckers = function () {
         var currentValues = _this.getValues(),
             usedPriorities = {};
 
-        for(var x in currentValues) {
-            usedPriorities[currentValues[x].priority] = x;
+        for (var z in currentValues) {
+            if(!currentValues.hasOwnProperty(z)) {
+                continue;
+            }
+            usedPriorities[currentValues[z].priority] = z;
         }
         var keys = [];
         for (var k in usedPriorities) {
@@ -208,24 +238,30 @@ mesour.filter.Filter = function (filterName, element) {
         for (var i = 0; i < keys.length; i++) {
             k = keys[i];
             usedDropdowns[usedPriorities[k]] = true;
+            if(!dropdowns[usedPriorities[k]]) {
+                continue;
+            }
             dropdowns[usedPriorities[k]].destroy();
             dropdowns[usedPriorities[k]].create(newData, true);
             dropdowns[usedPriorities[k]].update();
-            if(currentValues[usedPriorities[k]].checkers && currentValues[usedPriorities[k]].checkers.length > 0)
+            if (currentValues[usedPriorities[k]].checkers && currentValues[usedPriorities[k]].checkers.length > 0)
                 newData = _this.filterData(usedPriorities[k], currentValues[usedPriorities[k]].checkers);
         }
-        for(var x in dropdowns) {
+        for (var x in dropdowns) {
+            if(!dropdowns.hasOwnProperty(x)) {
+                continue;
+            }
             var dropdown = dropdowns[x];
-            if(usedDropdowns[dropdown.getName()]) continue;
+            if (usedDropdowns[dropdown.getName()]) continue;
             dropdowns[x].destroy();
             dropdowns[x].create(newData, true);
             dropdowns[x].update();
         }
     };
 
-    resetButton.on('click', function(e) {
+    resetButton.on('click', function (e) {
         e.preventDefault();
-        $.each(_this.getDropdowns(), function(key, dropdown) {
+        $.each(_this.getDropdowns(), function (key, dropdown) {
             dropdown.unsetValues('custom');
             dropdown.unsetValues('priority');
             dropdown.unsetValues('checkers');
@@ -235,7 +271,7 @@ mesour.filter.Filter = function (filterName, element) {
         _this.apply();
     });
 
-    $('.dropdown[data-filter-name="'+filterName+'"]').each(function () {
+    $('.dropdown[data-filter-name="' + filterName + '"]').each(function () {
         var $this = $(this),
             name = $this.attr('data-filter');
         dropdowns[name] = new mesour.filter.DropDown($this, name, _this);
@@ -244,7 +280,7 @@ mesour.filter.Filter = function (filterName, element) {
 
     _this.filterCheckers();
 
-    if($.fn.bootstrapDatetimepicker) {
+    if ($.fn.bootstrapDatetimepicker) {
         $('.filter-datepicker1, .filter-datepicker2').bootstrapDatetimepicker({
             pickTime: false
         });

@@ -138,7 +138,8 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<link rel="stylesheet" href="../public/css/datetimepicker.css">
+<link rel="stylesheet" href="../public/datetimepicker.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 <link rel="stylesheet" href="../public/mesour.filter.css">
 
@@ -149,7 +150,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 <script src="../vendor/mesour/components/public/cookie.js"></script>
 
 
-<script src="../public/js/bootstrap.datetimepicker.js"></script>
+<script src="../public/bootstrap.datetimepicker.js"></script>
 
 <script src="../public/src/mesour.filter.js"></script>
 <script src="../public/src/mesour.filter.Checkers.js"></script>

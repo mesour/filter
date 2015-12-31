@@ -14,6 +14,13 @@ mesour.filter = !mesour.filter ? {} : mesour.filter;
         this.VALUE_FALSE = '-mesour-bool-0';
         this.VALUE_NULL = '-mesour-null';
 
+        this.ICON_ITEM_ACTIVE = 'itemIsActive';
+        this.ICON_EDIT_CUSTOM = 'editCustom';
+        this.ICON_REMOVE_CUSTOM = 'removeCustom';
+        this.ICON_PLUS = 'plus';
+        this.ICON_MINUS = 'minus';
+        this.ICON_CALENDAR = 'calendar';
+
         this.translations = {
             months: {
                 1: 'January',
