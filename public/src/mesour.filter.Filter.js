@@ -12,7 +12,7 @@ mesour.filter.applyFilter = function (filterName, filterData) {
     filterData = $.parseJSON(filterData);
     filterData = {filterData: filterData};
     var created = mesour.core.createLink(filterName, 'applyFilter', filterData, true);
-    $.post(created[0], created[1]).complete(mesour.core.redrawCallback);
+    $.post(created[0], created[1])//.complete(mesour.core.redrawCallback);
 };
 mesour.filter.Filter = function (filterName, element) {
     var _this = this;
@@ -145,7 +145,11 @@ mesour.filter.Filter = function (filterName, element) {
 
     this.setValues = function (newValues, name) {
         var oldValues = valuesInput.val().length > 0 ? $.parseJSON(valuesInput.val()) : {};
+        if(oldValues instanceof Array) {
+            oldValues = {};
+        }
         oldValues[name] = newValues;
+
         valuesInput.val(JSON.stringify(oldValues));
     };
 
