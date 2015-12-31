@@ -19,11 +19,6 @@
     "mesour/array-manager": "dev-master",
     "doctrine/orm": "^2.5"
   },
-  "suggest": {
-    "mesour/array-manager": "to use DataSource for Array",
-    "nette/database": "to use DataSource for Nette Database",
-    "doctrine/orm": "to use DataSource for Doctrine"
-  },
   "autoload": {
     "classmap": ["src/"]
   }

@@ -51,21 +51,25 @@ class NetteDBFilterSource extends Mesour\Sources\NetteDbSource implements IFilte
         return $this;
     }
 
-    public function fetchFullData($date_format = 'Y-m-d')
+    /**
+     * @param string $dateFormat
+     * @return Mesour\Sources\ArrayHash[]
+     */
+    public function fetchFullData($dateFormat = 'Y-m-d')
     {
         $output = [];
         $selection = $this->getSelection(FALSE, FALSE);
         $this->lastFetchAllResult = [];
         foreach ($selection as $data) {
-            /** @var Nette\Database\ActiveRow */
+            /** @var Nette\Database\Table\ActiveRow $data */
             $this->lastFetchAllResult[] = $data;
             $current_data = $data->toArray();
             foreach ($current_data as $key => $val) {
                 if ($val instanceof \DateTime) {
-                    $current_data[$key] = $val->format($date_format);
+                    $current_data[$key] = $val->format($dateFormat);
                 }
             }
-            $output[] = $current_data;
+            $output[] = $this->makeArrayHash($current_data);
         }
         return $output;
     }
