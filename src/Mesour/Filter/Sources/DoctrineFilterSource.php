@@ -24,10 +24,10 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
         $values = [];
         $columnName = $this->prefixColumn($columnName);
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
-            $values[] = SQLHelper::createWherePairs($columnName, $custom['how1'], $custom['val1'], $type);
+            $values[] = SQLHelper::createWherePairs($columnName, $custom['how1'], $custom['val1'], $type, ':val1');
         }
         if (!empty($custom['how2']) && !empty($custom['val2'])) {
-            $values[] = SQLHelper::createWherePairs($columnName, $custom['how2'], $custom['val2'], $type);
+            $values[] = SQLHelper::createWherePairs($columnName, $custom['how2'], $custom['val2'], $type, ':val2');
         }
         if (count($values) === 2) {
             if ($custom['operator'] === 'and') {
@@ -35,9 +35,12 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
             } else {
                 $operator = 'or';
             }
-            $parameters = ['(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', [$values[0][1], $values[1][1]]];
+            $parameters = ['(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', [
+                substr($values[0][2], 1) => $values[0][1],
+                substr($values[1][2], 1) => $values[1][1]
+            ]];
         } else {
-            $parameters = [$values[0][0], [$values[0][1]]];
+            $parameters = [$values[0][0], [substr($values[0][2], 1) => $values[0][1]]];
         }
         call_user_func_array([$this, 'where'], $parameters);
         return $this;

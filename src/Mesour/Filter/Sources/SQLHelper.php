@@ -18,58 +18,55 @@ use Mesour;
 class SQLHelper
 {
 
-    static public function createWherePairs($columnName, $how, $value, $type)
+    static public function createWherePairs($columnName, $how, $value, $type, $wildcard = '?')
     {
         $output = [];
+        $output[1] = $value;
+        $output[2] = $wildcard;
+
         $columnName = $type === 'date' ? ('DATE(' . $columnName . ')') : $columnName;
         switch ($how) {
             case 'equal_to';
-                $output[] = $columnName . ' = ?';
-                $output[] = $value;
+                $output[0] = $columnName . ' = ' . $wildcard;
                 break;
             case 'not_equal_to';
-                $output[] = $columnName . ' != ?';
-                $output[] = $value;
+                $output[0] = $columnName . ' != ' . $wildcard;
                 break;
             case 'bigger';
-                $output[] = $columnName . ' > ?';
-                $output[] = $value;
+                $output[0] = $columnName . ' > ' . $wildcard;
                 break;
             case 'not_bigger';
-                $output[] = $columnName . ' <= ?';
-                $output[] = $value;
+                $output[0] = $columnName . ' <= ' . $wildcard;
                 break;
             case 'smaller';
-                $output[] = $columnName . ' < ?';
-                $output[] = $value;
+                $output[0] = $columnName . ' < ' . $wildcard;
                 break;
             case 'not_smaller';
-                $output[] = $columnName . ' >= ?';
-                $output[] = $value;
+                $output[0] = $columnName . ' >= ' . $wildcard;
                 break;
             case 'start_with';
-                $output[] = $columnName . ' LIKE ?';
-                $output[] = $value . '%';
+                $output[0] = $columnName . ' LIKE ' . $wildcard;
+                $output[1] = $value . '%';
                 break;
             case 'not_start_with';
-                $output[] = $columnName . ' NOT LIKE ?';
-                $output[] = $value . '%';
+                $output[0] = $columnName . ' NOT LIKE ' . $wildcard;
+                $output[1] = $value . '%';
                 break;
             case 'end_with';
-                $output[] = $columnName . ' LIKE ?';
-                $output[] = '%' . $value;
+                $output[0] = $columnName . ' LIKE ' . $wildcard;
+                $output[1] = '%' . $value;
                 break;
             case 'not_end_with';
-                $output[] = $columnName . ' NOT LIKE ?';
-                $output[] = '%' . $value;
+                $output[0] = $columnName . ' NOT LIKE ' . $wildcard;
+                $output[1] = '%' . $value;
                 break;
             case 'equal';
-                $output[] = $columnName . ' LIKE ?';
-                $output[] = '%' . $value . '%';
+                $output[0] = $columnName . ' LIKE ' . $wildcard;
+                $output[1] = '%' . $value . '%';
                 break;
             case 'not_equal';
-                $output[] = $columnName . ' NOT LIKE ?';
-                $output[] = '%' . $value . '%';
+                $output[0] = $columnName . ' NOT LIKE ' . $wildcard;
+                $output[1] = '%' . $value . '%';
                 break;
             default:
                 throw new Mesour\InvalidArgumentException('Unexpected key for custom filtering.');
