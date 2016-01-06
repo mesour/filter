@@ -10,15 +10,17 @@
   }],
   "require": {
     "php": ">=5.5.0",
-    "mesour/components": "~0.1.0",
-    "mesour/sources": "~0.1.0",
-    "mesour/icon": "~0.1.0"
+    "mesour/components": "~0.1.0-beta",
+    "mesour/sources": "~0.1.0-beta",
+    "mesour/icon": "~0.1.0-beta"
   },
   "require-dev": {
     "tracy/tracy": "~2.3.0",
     "mesour/array-manager": "dev-master",
     "doctrine/orm": "^2.5"
   },
+  "minimum-stability": "beta",
+  "prefer-stable": true,
   "autoload": {
     "classmap": ["src/"]
   }
