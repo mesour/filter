@@ -24,7 +24,7 @@ require_once SRC_DIR . 'Mesour/Filter/Number.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/IFilterSource.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/ArrayFilterSource.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/DoctrineFilterSource.php';
-require_once SRC_DIR . 'Mesour/Filter/Sources/NetteDBFilterSource.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/NetteDbFilterSource.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/SQLHelper.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 

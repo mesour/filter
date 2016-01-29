@@ -88,16 +88,16 @@ class SQLHelper
         $fixedValues = array_unique($fixedValues);
         $paramName = self::fixParameterName($columnName) . '_source';
 
-        if ($type === 'date') {
-            $is_timestamp = TRUE;
+        if ($type === IFilterSource::TYPE_DATE) {
+            $isTimestamp = TRUE;
             foreach ($value as $val) {
                 if (!is_numeric($val)) {
-                    $is_timestamp = FALSE;
+                    $isTimestamp = FALSE;
                     break;
                 }
             }
 
-            if ($is_timestamp) {
+            if ($isTimestamp) {
                 $where = '(';
                 $i = 1;
                 foreach ($value as $val) {

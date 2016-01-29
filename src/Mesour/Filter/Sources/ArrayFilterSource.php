@@ -11,6 +11,7 @@ namespace Mesour\Filter\Sources;
 
 use Mesour;
 use Mesour\ArrayManage\Searcher\Condition;
+use Nette\Utils\Strings;
 
 
 /**
@@ -77,7 +78,19 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
     {
         foreach ($value as $val) {
             $val = (string)$val;
-            $this->where($columnName, $val, Condition::EQUAL, 'or');
+            if ($type === self::TYPE_DATE) {
+                $this->where($columnName, $val, function ($heystack, $needle) {
+                    if (is_numeric($heystack)) {
+                        $heystack = date('Y-m-d', $heystack);
+                    }
+                    if (is_numeric($needle)) {
+                        $needle = date('Y-m-d', $needle);
+                    }
+                    return $heystack === $needle;
+                }, 'or');
+            } else {
+                $this->where($columnName, $val, Condition::EQUAL, 'or');
+            }
         }
         return $this;
     }

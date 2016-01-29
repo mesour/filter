@@ -17,9 +17,12 @@
   "require-dev": {
     "tracy/tracy": "~2.3.0",
     "mesour/array-manager": "dev-master",
-    "doctrine/orm": "^2.5"
+    "doctrine/orm": "^2.5",
+    "nette/database": "~2.3",
+    "nette/tester": "^1.6"
   },
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "autoload": {
     "classmap": ["src/"]
   }

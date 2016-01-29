@@ -16,12 +16,13 @@ use Nette;
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-class NetteDBFilterSource extends Mesour\Sources\NetteDbSource implements IFilterSource
+class NetteDbFilterSource extends Mesour\Sources\NetteDbSource implements IFilterSource
 {
 
     public function applyCustom($columnName, array $custom, $type)
     {
         $values = [];
+        $columnName = $this->getRealColumnName($columnName);
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
             $values[] = SQLHelper::createWherePairs($columnName, $custom['how1'], $custom['val1'], $type);
         }
@@ -34,7 +35,10 @@ class NetteDBFilterSource extends Mesour\Sources\NetteDbSource implements IFilte
             } else {
                 $operator = 'OR';
             }
-            $parameters = ['(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', $values[0][1], $values[1][1]];
+            $parameters = [
+                '(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')',
+                $values[0][1], $values[1][1]
+            ];
         } else {
             $parameters = [$values[0][0], $values[0][1]];
         }

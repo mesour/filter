@@ -19,6 +19,9 @@ use Mesour;
 interface IFilterSource extends Mesour\Sources\ISource
 {
 
+    const TYPE_STRING = 'string';
+    const TYPE_DATE = 'date';
+
     /**
      * @param string $dateFormat
      * @return Mesour\Sources\ArrayHash[]
