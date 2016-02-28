@@ -12,46 +12,58 @@ abstract class BaseNetteDbFilterSourceTest extends Sources\Tests\BaseNetteDbSour
 
     public function testApplyCheckersText()
     {
-        $source = new NetteDbFilterSource($this->user, $this->tableName);
+        $source = new NetteDbFilterSource($this->user);
 
         DataSourceChecker::matchCheckersText($source, Database\Table\ActiveRow::class);
     }
 
     public function testApplyCheckersDate()
     {
-        $source = new NetteDbFilterSource($this->user, $this->tableName);
+        $source = new NetteDbFilterSource($this->user);
 
         DataSourceChecker::matchCheckersDate($source, Database\Table\ActiveRow::class);
     }
 
     public function testApplyCheckersRelated()
     {
-        $source = new NetteDbFilterSource($this->user, $this->tableName, $this->context);
+        $selection = clone $this->user;
+        $selection->select('user.*')
+            ->select('group.name group_name');
 
-        $source->setRelated('group', 'group_id', 'name', 'group_name');
+        $source = new NetteDbFilterSource($selection, [
+            'group_name' => 'group.name'
+        ], $this->context);
+
+        $source->setRelated('group', 'group_name');
 
         DataSourceChecker::matchCheckersRelated($source, Database\Table\ActiveRow::class);
     }
 
     public function testApplyCustomText()
     {
-        $source = new NetteDbFilterSource($this->user, $this->tableName);
+        $source = new NetteDbFilterSource($this->user);
 
         DataSourceChecker::matchCustomText(clone $source, Database\Table\ActiveRow::class);
     }
 
     public function testApplyCustomDate()
     {
-        $source = new NetteDbFilterSource($this->user, $this->tableName);
+        $source = new NetteDbFilterSource($this->user);
 
         DataSourceChecker::matchCustomDate(clone $source, Database\Table\ActiveRow::class);
     }
 
     public function testApplyCustomRelated()
     {
-        $source = new NetteDbFilterSource($this->user, $this->tableName, $this->context);
+        $selection = clone $this->user;
+        $selection->select('user.*')
+            ->select('group.name group_name');
 
-        $source->setRelated('group', 'group_id', 'name', 'group_name');
+        $source = new NetteDbFilterSource($selection, [
+            'group_name' => 'group.name'
+        ], $this->context);
+
+        $source->setRelated('group', 'group_name');
 
         DataSourceChecker::matchCustomRelated(clone $source, Database\Table\ActiveRow::class);
     }

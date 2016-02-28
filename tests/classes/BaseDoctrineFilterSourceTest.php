@@ -4,6 +4,7 @@ namespace Mesour\Filter\Tests;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Tools\Setup;
 use Mesour\Filter\Sources\DateFunction;
 use Mesour\Filter\Sources\DoctrineFilterSource;
@@ -45,6 +46,14 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
             ->from(Sources\Tests\Entity\EmptyTable::class, 'e');
     }
 
+    public function testApplyCustomDate()
+    {
+        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
+
+        DataSourceChecker::matchCustomDate(clone $source, Sources\Tests\Entity\User::class);
+        die;
+    }
+
     public function testApplyCheckersText()
     {
         $source = new DoctrineFilterSource($this->user, $this->columnMapping);
@@ -61,11 +70,15 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
 
     public function testApplyCheckersRelated()
     {
-        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
+        $queryBuilder = clone $this->user;
+        $queryBuilder->addSelect('g.name groupName')
+            ->join(Sources\Tests\Entity\Groups::class, 'g', Join::WITH, 'u.groupId = g.id');
 
-        $source->setRelated(Sources\Tests\Entity\Groups::class, 'groupId', 'name', 'groupName');
+        $source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
 
-        DataSourceChecker::matchCheckersRelated($source, 'array');
+        $source->setRelated(Sources\Tests\Entity\Groups::class, 'groupName');
+
+        DataSourceChecker::matchCheckersRelated($source, 'array', 'groupName');
     }
 
     public function testApplyCustomText()
@@ -75,20 +88,19 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
         DataSourceChecker::matchCustomText(clone $source, Sources\Tests\Entity\User::class);
     }
 
-    public function testApplyCustomDate()
-    {
-        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
-
-        DataSourceChecker::matchCustomDate(clone $source, Sources\Tests\Entity\User::class);
-    }
+    //todo: here test custom date
 
     public function testApplyCustomRelated()
     {
-        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
+        $queryBuilder = clone $this->user;
+        $queryBuilder->addSelect('g.name groupName')
+            ->join(Sources\Tests\Entity\Groups::class, 'g', Join::WITH, 'u.groupId = g.id');
 
-        $source->setRelated(Sources\Tests\Entity\Groups::class, 'groupId', 'name', 'groupName');
+        $source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
 
-        DataSourceChecker::matchCustomRelated(clone $source, 'array');
+        $source->setRelated(Sources\Tests\Entity\Groups::class, 'groupName');
+
+        DataSourceChecker::matchCustomRelated(clone $source, 'array', 'groupName');
     }
 
 }

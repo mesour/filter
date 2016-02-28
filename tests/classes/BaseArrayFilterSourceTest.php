@@ -32,7 +32,7 @@ abstract class BaseArrayFilterSourceTest extends Sources\Tests\BaseArraySourceTe
     {
         $source = new ArrayFilterSource(self::$user, $this->relations);
 
-        $source->setRelated('group', 'group_id', 'name', 'group_name');
+        $source->join('group', 'group_id', 'name', 'group_name');
 
         DataSourceChecker::matchCheckersRelated($source, Sources\ArrayHash::class);
     }
@@ -55,7 +55,7 @@ abstract class BaseArrayFilterSourceTest extends Sources\Tests\BaseArraySourceTe
     {
         $source = new ArrayFilterSource(self::$user, $this->relations);
 
-        $source->setRelated('group', 'group_id', 'name', 'group_name');
+        $source->join('group', 'group_id', 'name', 'group_name');
 
         DataSourceChecker::matchCustomRelated(clone $source, Sources\ArrayHash::class);
     }

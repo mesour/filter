@@ -3,6 +3,7 @@ namespace Mesour\Filter\Tests;
 
 require_once __DIR__ . '/../bootstrap.php';
 
+
 use Mesour\Filter\Sources\IFilterSource;
 use Mesour\Sources\ArrayHash;
 use Tester\Assert;
@@ -20,9 +21,9 @@ class DataSourceChecker
     const COUNT_OF_GROUP_1_OR_GROUP_2 = 13;
 
     const COUNT_OF_DATE_14_09_09 = 2;
-    const COUNT_OF_DATE_14_09_09_BIGGER = 1;
+    const COUNT_OF_DATE_14_09_09_BIGGER = 2;
     const COUNT_OF_DATE_14_09_09_AND_14_08_06 = 0;
-    const COUNT_OF_DATE_14_09_09_OR_14_08_06 = 2;
+    const COUNT_OF_DATE_14_09_09_OR_14_08_06 = 3;
 
     const TYPE_OR = 'or';
     const TYPE_AND = 'and';
@@ -47,9 +48,9 @@ class DataSourceChecker
         self::matchCounts($source, self::COUNT_OF_DATE_14_09_09, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
     }
 
-    static public function matchCheckersRelated(IFilterSource $source, $rawClassType)
+    static public function matchCheckersRelated(IFilterSource $source, $rawClassType, $columnName = 'group_name')
     {
-        $source->applyCheckers('group_name', ['Group 1'], $source::TYPE_STRING);
+        $source->applyCheckers($columnName, ['Group 1'], $source::TYPE_STRING);
 
         self::matchCounts($source, self::COUNT_OF_GROUP_1, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
     }
@@ -77,7 +78,7 @@ class DataSourceChecker
 
     static public function matchCustomDate(IFilterSource $source, $rawClassType)
     {
-        foreach ([self::TYPE_AND, self::TYPE_OR, self::TYPE_SIMPLE] as $type) {
+        foreach ([self::TYPE_OR, self::TYPE_AND, self::TYPE_SIMPLE] as $type) {
             if ($type === self::TYPE_OR) {
                 $custom = self::createCustomData('2014-09-09 13:37:32', '2014-08-06 13:37:17', 'or');
                 $filteredCount = self::COUNT_OF_DATE_14_09_09_OR_14_08_06;
@@ -96,7 +97,7 @@ class DataSourceChecker
         }
     }
 
-    static public function matchCustomRelated(IFilterSource $source, $rawClassType)
+    static public function matchCustomRelated(IFilterSource $source, $rawClassType, $columnName = 'group_name')
     {
         foreach ([self::TYPE_AND, self::TYPE_OR, self::TYPE_SIMPLE] as $type) {
             if ($type === self::TYPE_OR) {
@@ -111,7 +112,7 @@ class DataSourceChecker
             }
 
             $currentSource = clone $source;
-            $currentSource->applyCustom('group_name', $custom, $currentSource::TYPE_STRING);
+            $currentSource->applyCustom($columnName, $custom, $currentSource::TYPE_STRING);
 
             self::matchCounts($currentSource, $filteredCount, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
         }
@@ -128,6 +129,7 @@ class DataSourceChecker
             $out['how2'] = 'equal_to';
             $out['val2'] = $secondValue;
         }
+
         return $out;
     }
 

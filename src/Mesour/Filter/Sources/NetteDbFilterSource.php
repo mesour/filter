@@ -22,7 +22,7 @@ class NetteDbFilterSource extends Mesour\Sources\NetteDbSource implements IFilte
     public function applyCustom($columnName, array $custom, $type)
     {
         $values = [];
-        $columnName = $this->getRealColumnName($columnName);
+        $columnName = $this->prefixColumn($columnName);
         if (!empty($custom['how1']) && !empty($custom['val1'])) {
             $values[] = SQLHelper::createWherePairs($columnName, $custom['how1'], $custom['val1'], $type);
         }
@@ -48,7 +48,7 @@ class NetteDbFilterSource extends Mesour\Sources\NetteDbSource implements IFilte
 
     public function applyCheckers($columnName, array $value, $type)
     {
-        $columnName = $this->getRealColumnName($columnName);
+        $columnName = $this->prefixColumn($columnName);
         $parameters = SQLHelper::createWhereForCheckers($columnName, $value, $type);
 
         call_user_func_array([$this, 'where'], $parameters);

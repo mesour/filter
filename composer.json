@@ -11,7 +11,7 @@
   "require": {
     "php": ">=5.5.0",
     "mesour/components": "@dev",
-    "mesour/sources": "@dev",
+    "mesour/sources": "dev-master",
     "mesour/icon": "@dev"
   },
   "require-dev": {

@@ -20,11 +20,15 @@ class SQLHelper
 
     static public function createWherePairs($columnName, $how, $value, $type, $wildcard = '?')
     {
+        if ($type === IFilterSource::TYPE_DATE) {
+            $value = date('Y-m-d', is_numeric($value) ? $value : strtotime($value));
+            $columnName = 'DATE(' . $columnName . ')';
+        }
+
         $output = [];
         $output[1] = $value;
         $output[2] = $wildcard;
 
-        $columnName = $type === 'date' ? ('DATE(' . $columnName . ')') : $columnName;
         switch ($how) {
             case 'equal_to';
                 $output[0] = $columnName . ' = ' . $wildcard;
@@ -71,16 +75,17 @@ class SQLHelper
             default:
                 throw new Mesour\InvalidArgumentException('Unexpected key for custom filtering.');
         }
+
         return $output;
     }
 
-    static public function createWhereForCheckers($columnName, array $value, $type, $isDoctrine = FALSE)
+    static public function createWhereForCheckers($columnName, array $value, $type, $isDoctrine = false)
     {
         $fixedValues = [];
-        $hasNull = FALSE;
+        $hasNull = false;
         foreach ($value as $val) {
             if (is_null($val)) {
-                $hasNull = TRUE;
+                $hasNull = true;
             } else {
                 $fixedValues[] = $val;
             }
@@ -89,10 +94,10 @@ class SQLHelper
         $paramName = self::fixParameterName($columnName) . '_source';
 
         if ($type === IFilterSource::TYPE_DATE) {
-            $isTimestamp = TRUE;
+            $isTimestamp = true;
             foreach ($value as $val) {
                 if (!is_numeric($val)) {
-                    $isTimestamp = FALSE;
+                    $isTimestamp = false;
                     break;
                 }
             }
@@ -108,17 +113,20 @@ class SQLHelper
                     $i++;
                 }
                 $where .= ')';
+
                 return [$where];
             } else {
                 if ($isDoctrine) {
                     $parameters = [$paramName => $fixedValues];
                     if ($hasNull) {
                         $columnName = '(DATE(' . $columnName . ') IN (:' . $paramName . ') OR ' . $columnName . ' IS NULL)';
+
                         return [$columnName, $parameters];
                     } else {
                         return ['DATE(' . $columnName . ') IN (:' . $paramName . ')', [$paramName => $fixedValues]];
                     }
                 }
+
                 return ['DATE(' . $columnName . ')', $value];
             }
         } else {
@@ -126,6 +134,7 @@ class SQLHelper
                 $parameters = [$paramName => $fixedValues];
                 if ($hasNull) {
                     $columnName = '(' . $columnName . ' IN :' . $paramName . ' OR ' . $columnName . ' IS NULL)';
+
                     return [$columnName, $parameters];
                 } else {
                     return [$columnName . ' IN (:' . $paramName . ')', [$paramName => $fixedValues]];
@@ -134,6 +143,7 @@ class SQLHelper
             if ($hasNull) {
                 $columnName = '(' . $columnName . ' IN ? OR ' . $columnName . ' IS NULL)';
             }
+
             return [$columnName, $fixedValues];
         }
     }

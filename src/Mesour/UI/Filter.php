@@ -298,7 +298,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
     public function renderResetButton()
     {
-        echo $this->createResetButton();
+        return $this->createResetButton();
     }
 
     public function setDateFormat($date_format)
@@ -340,7 +340,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
     public function renderHiddenInput($data = [])
     {
-        echo $this->createHiddenInput();
+        return $this->createHiddenInput();
     }
 
     public function beforeCreate($inner = FALSE)
