@@ -86,6 +86,8 @@ mesour.filter.Filter = function (filterName, element) {
         var referencesData = valuesInput.attr('data-references'),
             output = [];
 
+        //console.log(referencesData);
+
         if (referencesData) {
             var data = $.parseJSON(referencesData);
             if (reference === mesour.filter.PREDEFINED_KEY) {
@@ -93,7 +95,7 @@ mesour.filter.Filter = function (filterName, element) {
                     return null;
                 }
                 output = data[reference][columnName];
-                return !output.length ? null : output;
+                return !output || (output instanceof Array && !output.length) ? null : output;
             } else {
                 var reference = jQuery.parseJSON(reference);
 

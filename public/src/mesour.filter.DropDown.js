@@ -102,7 +102,7 @@ mesour.filter.DropDown = function (element, name, filter) {
 
         var values = {};
         if (referenceData) {
-            for (var x = 0; x < referenceData.length; x++) {
+            for (var x in referenceData) {
                 if (!referenceData.hasOwnProperty(x)) {
                     continue;
                 }
