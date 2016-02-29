@@ -43,15 +43,17 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
     protected $text;
 
+    protected $referenceTable = false;
+
     protected $filters = [];
 
     protected $valueTranslates = [];
 
     protected $filtersName = 'Filters';
 
-    protected $hasCheckers = FALSE;
+    protected $hasCheckers = false;
 
-    protected $hasMainFilter = TRUE;
+    protected $hasMainFilter = true;
 
     public $onRender = [];
 
@@ -60,21 +62,21 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
             'el' => 'button',
             'attributes' => [
                 'class' => 'btn btn-default dropdown-toggle',
-                'type' => 'button'
-            ]
+                'type' => 'button',
+            ],
         ],
         self::LIST_UL => [
             'el' => 'ul',
             'attributes' => [
                 'class' => 'dropdown-menu',
-                'role' => 'menu'
-            ]
+                'role' => 'menu',
+            ],
         ],
         self::LIST_LI => [
             'el' => 'li',
             'attributes' => [
-                'role' => 'presentation'
-            ]
+                'role' => 'presentation',
+            ],
         ],
         self::WRAPPER => [
             'el' => 'div',
@@ -90,7 +92,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
                 'tabindex' => '-1',
                 'href' => '#',
             ],
-        ]
+        ],
     ];
 
     public function attached(Mesour\Components\ComponentModel\IContainer $parent)
@@ -113,12 +115,21 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
     public function setValueTranslates(array $valueTranslates)
     {
         $this->valueTranslates = $valueTranslates;
+
         return $this;
     }
 
     public function setText($text)
     {
         $this->text = $this->getTranslator()->translate($text);
+
+        return $this;
+    }
+
+    public function setReferenceTable($table)
+    {
+        $this->referenceTable = $table;
+
         return $this;
     }
 
@@ -127,6 +138,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         if (!$this->text) {
             $this->text = ucfirst($this->getName());
         }
+
         return $this->text;
     }
 
@@ -134,9 +146,10 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
      * @param bool|TRUE $hasCheckers
      * @return $this
      */
-    public function setCheckers($hasCheckers = TRUE)
+    public function setCheckers($hasCheckers = true)
     {
         $this->hasCheckers = (bool)$hasCheckers;
+
         return $this;
     }
 
@@ -144,9 +157,10 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
      * @param bool|TRUE $hasMainFilter
      * @return $this
      */
-    public function setMainFilter($hasMainFilter = TRUE)
+    public function setMainFilter($hasMainFilter = true)
     {
         $this->hasMainFilter = (bool)$hasMainFilter;
+
         return $this;
     }
 
@@ -165,10 +179,16 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         return $this->getHtmlElement();
     }
 
+    public function setReference($table, $column, $primaryKey = 'id')
+    {
+
+    }
+
     protected function getListUlPrototype(array $user_attributes = [])
     {
         $attributes = $this->getOption(self::LIST_UL, 'attributes');
         $attributes = array_merge($attributes, $user_attributes);
+
         return Mesour\Components\Utils\Html::el($this->getOption(self::LIST_UL, 'el'), $attributes);
     }
 
@@ -212,13 +232,13 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
                 $this->createCustomFilterItem($_ul, $_filter);
             }
             $sub_li = $this->getListLiPrototype([
-                'class' => 'dropdown-submenu'
+                'class' => 'dropdown-submenu',
             ]);
             $sub_li->add('<span tabindex="-1">' . $this->getTranslator()->translate($filter['name']) . '</span>');
             $sub_li->add($_ul);
         } elseif ($filter['type'] === 'divider') {
             $sub_li = $this->getListLiPrototype([
-                'class' => 'divider'
+                'class' => 'divider',
             ]);
         } else {
             throw new Mesour\InvalidArgumentException('Unknown type ' . $filter['type'] . ' possible are only array, "divider" or NULL.');
@@ -231,6 +251,12 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         parent::create();
 
         $wrapper = $this->getWrapperPrototype();
+
+        if($this->referenceTable) {
+            $wrapper->addAttributes([
+                'data-reference-table' => $this->referenceTable
+            ]);
+        }
 
         $button = $this->getButtonPrototype();
 
@@ -246,13 +272,13 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         $button->add($icon->render());
         $button->add('&nbsp;' . $this->getText() . '&nbsp;');
         $button->add('<span class="caret"></span>');
-        $icon->setAttribute('style', FALSE);
+        $icon->setAttribute('style', false);
 
         if (count($this->valueTranslates)) {
             $wrapper->add(Mesour\Components\Utils\Html::el('input', [
                 'value' => json_encode($this->valueTranslates),
                 'type' => 'hidden',
-                'data-translates' => 1
+                'data-translates' => 1,
             ]));
         }
 
@@ -262,7 +288,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
         if ($this->hasMainFilter && count($this->filters) > 0) {
             $subMenu = $this->getListLiPrototype([
-                'class' => 'dropdown-submenu'
+                'class' => 'dropdown-submenu',
             ]);
 
             $icons = '<span><button type="button" class="btn btn-success btn-xs reset-filter" title="';
@@ -275,7 +301,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
             $icon->setType($this->iconClose);
             $icon->setAttribute('data-filter-icon', 'reset');
             $icons .= $icon->render();
-            $icon->setAttribute('style', FALSE);
+            $icon->setAttribute('style', false);
 
             $icons .= '</button><button type="button" class="btn btn-primary btn-xs mesour-open-modal edit-filter" title="';
             $icons .= $this->getTranslator()->translate('Edit filter') . '" style="display: none;">';
@@ -289,7 +315,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
             $subMenu->add($icons);
 
             $sub_ul = Mesour\Components\Utils\Html::el('ul', [
-                'class' => 'dropdown-menu'
+                'class' => 'dropdown-menu',
             ]);
 
             foreach ($this->filters as $filter) {
@@ -304,7 +330,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         if ($this->hasCheckers) {
             if ($this->hasMainFilter) {
                 $ul->add($this->getListLiPrototype([
-                    'class' => 'divider'
+                    'class' => 'divider',
                 ]));
             }
 

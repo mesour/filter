@@ -26,6 +26,12 @@ interface IFilterItem extends Mesour\Components\Control\IAttributesControl
     public function getText();
 
     /**
+     * @param $table
+     * @return mixed
+     */
+    public function setReferenceTable($table);
+
+    /**
      * @return Mesour\Components\Utils\Html
      */
     public function getButtonPrototype();

@@ -62,6 +62,8 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
     /** @var Mesour\Components\Session\ISessionSection */
     private $privateSession;
 
+    public $predefinedData = [];
+
     public $onFilter = [];
 
     public $onRender = [];
@@ -71,8 +73,8 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
             'el' => 'input',
             'attributes' => [
                 'type' => 'hidden',
-                'value' => ''
-            ]
+                'value' => '',
+            ],
         ],
         self::ITEMS => [
             'el' => 'a',
@@ -95,10 +97,10 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
             'attributes' => [
                 'class' => 'mesour-filter',
             ],
-        ]
+        ],
     ];
 
-    public function __construct($name = NULL, Mesour\Components\ComponentModel\IContainer $parent = NULL)
+    public function __construct($name = null, Mesour\Components\ComponentModel\IContainer $parent = null)
     {
         if (is_null($name)) {
             throw new Mesour\InvalidArgumentException('Component name is required.');
@@ -118,7 +120,8 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
     public function attached(Mesour\Components\ComponentModel\IContainer $parent)
     {
         parent::attached($parent);
-        $this->startPrivateSession(TRUE);
+        $this->startPrivateSession(true);
+
         return $this;
     }
 
@@ -127,9 +130,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
      */
     private $source;
 
-    private $is_source_used = FALSE;
+    private $is_source_used = false;
 
-    private $date_format = 'Y-m-d';
+    private $dateFormat = 'Y-m-d';
 
     /**
      * @param mixed $source
@@ -150,6 +153,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
             }
         }
         $this->source = $source;
+
         return $this;
     }
 
@@ -158,12 +162,13 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
      * @return Mesour\Filter\Sources\IFilterSource
      * @throws Mesour\InvalidStateException
      */
-    public function getSource($need = TRUE)
+    public function getSource($need = true)
     {
         if ($need && !$this->source) {
             throw new Mesour\InvalidStateException('Data source is not set.');
         }
-        $this->is_source_used = TRUE;
+        $this->is_source_used = true;
+
         return $this->source;
     }
 
@@ -182,18 +187,20 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
                 }
             }
         }
+
         return $filterData;
     }
 
     private function fixCheckerValue($val)
     {
         if ($val === self::VALUE_FALSE) {
-            return FALSE;
+            return false;
         } else if ($val === self::VALUE_TRUE) {
-            return TRUE;
+            return true;
         } else if ($val === self::VALUE_NULL) {
-            return NULL;
+            return null;
         }
+
         return $val;
     }
 
@@ -203,12 +210,13 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
      * @param array $valueTranslates
      * @return Mesour\Filter\Number
      */
-    public function addNumberFilter($name, $text = NULL, array $valueTranslates = [])
+    public function addNumberFilter($name, $text = null, array $valueTranslates = [])
     {
         /** @var Mesour\Filter\Number $filter */
         $filter = $this->addCustomFilter($name, new Mesour\Filter\Number);
         $filter->setText($text);
         $filter->setValueTranslates($valueTranslates);
+
         return $filter;
     }
 
@@ -218,12 +226,13 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
      * @param array $valueTranslates
      * @return Mesour\Filter\Text
      */
-    public function addTextFilter($name, $text = NULL, array $valueTranslates = [])
+    public function addTextFilter($name, $text = null, array $valueTranslates = [])
     {
         /** @var Mesour\Filter\Text $filter */
         $filter = $this->addCustomFilter($name, new Mesour\Filter\Text);
         $filter->setText($text);
         $filter->setValueTranslates($valueTranslates);
+
         return $filter;
     }
 
@@ -233,12 +242,13 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
      * @param array $valueTranslates
      * @return Mesour\Filter\Date
      */
-    public function addDateFilter($name, $text = NULL, array $valueTranslates = [])
+    public function addDateFilter($name, $text = null, array $valueTranslates = [])
     {
         /** @var Mesour\Filter\Date $filter */
         $filter = $this->addCustomFilter($name, new Mesour\Filter\Date);
         $filter->setText($text);
         $filter->setValueTranslates($valueTranslates);
+
         return $filter;
     }
 
@@ -258,6 +268,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
         $attributes = array_merge($attributes, [
             'data-mesour-filter' => $this->createLinkName(),
         ]);
+
         return $this->hidden
             ? $this->hidden
             : ($this->hidden = Mesour\Components\Utils\Html::el($this->getOption(self::HIDDEN, 'el'), $attributes));
@@ -274,15 +285,22 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
         $attributes = array_merge($attributes, [
             'data-filter-name' => $this->createLinkName(),
         ]);
+
         return $this->resetButton
             ? $this->resetButton
             : ($this->resetButton = Mesour\Components\Utils\Html::el($this->getOption(self::RESET_BUTTON, 'el'), $attributes)
                 ->setHtml($this->getOption(self::RESET_BUTTON, 'content')));
     }
 
+    /**
+     * @param $name
+     * @param array $data
+     * @return Mesour\Filter\IFilterItem
+     */
     public function getItem($name, $data = [])
     {
         $this[$name]->setOption('data', $data);
+
         return $this[$name];
     }
 
@@ -301,15 +319,21 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
         return $this->createResetButton();
     }
 
-    public function setDateFormat($date_format)
+    public function setDateFormat($dateFormat)
     {
-        $this->date_format = $date_format;
+        $this->dateFormat = $dateFormat;
+
         return $this;
     }
 
     public function getDateFormat()
     {
-        return $this->date_format;
+        return $this->dateFormat;
+    }
+
+    public function setCustomReference($column, $data)
+    {
+        return $this->predefinedData[$column] = $data;
     }
 
     /**
@@ -320,40 +344,55 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
         return $this->privateSession->get('values', (object)[]);
     }
 
-    public function createHiddenInput($data = [])
+    public function createHiddenInput($data = [], $references = [])
     {
         /** @var Mesour\Icon\IIcon $icon */
         $className = $this->getIconClass();
         $icon = new $className;
+        $referenceData = [];
+        foreach ($references as $table => $reference) {
+            $source = $this->getSource()->getReferencedSource($table);
+            $referenceData[$table] = $source->fetchFullData($this->getDateFormat());
+        }
+
         $hidden = $this->getHiddenPrototype();
         $attributes = [
-            'data-mesour-data' => json_encode($data),
-            'value' => json_encode($this->getValues()),
+            'data-mesour-data' => Nette\Utils\Json::encode($data),
+            'value' => Nette\Utils\Json::encode($this->getValues()),
+            'data-references' => Nette\Utils\Json::encode(array_merge(['predefined' => $this->predefinedData], $referenceData)),
             'data-mesour-date' => $this->getDateFormat(),
             'data-icon-prefix' => $icon->getPrefix(),
             'data-icons' => Nette\Utils\Json::encode(self::$icons),
             'data-mesour-js-date' => Mesour\Components\Utils\Helpers::convertDateToJsFormat($this->getDateFormat()),
         ];
         $hidden->addAttributes($attributes);
+
         return $hidden;
     }
 
     public function renderHiddenInput($data = [])
     {
-        return $this->createHiddenInput();
+        return $this->createHiddenInput($data);
     }
 
-    public function beforeCreate($inner = FALSE)
+    public function beforeCreate($inner = false)
     {
-        if ($inner === TRUE) {
+        if ($inner === true) {
             parent::beforeRender();
         }
-        $full_data = [];
-        $source = $this->getSource(FALSE);
-        if ($source && $source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
-            $full_data = $source->fetchFullData();
+        $fullData = [];
+        $references = [];
+        $source = $this->getSource(false);
+        if ($source && $source->getTotalCount() > 0) {
+            if ($source->getTotalCount() < self::$maxCheckboxCount) {
+                $fullData = $source->fetchFullData();
+            }
+            foreach ($source->getReferenceSettings() as $table => $referenceSetting) {
+                $references[$table] = $referenceSetting;
+            }
         }
-        return $full_data;
+
+        return [$fullData, $references];
     }
 
     public function create()
@@ -362,9 +401,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
         $wrapper = $this->getWrapperPrototype();
 
-        $fullData = $this->beforeCreate(TRUE);
+        list($fullData, $references) = $this->beforeCreate(true);
 
-        $hidden = $this->createHiddenInput($fullData);
+        $hidden = $this->createHiddenInput($fullData, $references);
 
         $this->onRender($this);
 
@@ -373,9 +412,18 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
             /** @var Mesour\Filter\IFilterItem $itemInstance */
             $itemInstance->setCheckers($hasCheckers);
 
-            $item = $this->getItem($name)->create();
+            $item = $this->getItem($name);
 
-            $wrapper->add($item);
+            $source = $this->getSource(false);
+            if ($source && $source->getTotalCount() > 0) {
+                $table = $source->getReferenceTable($name);
+                if ($table) {
+                    $item->setReferenceTable($table);
+                }
+            }
+
+
+            $wrapper->add($item->create());
         }
 
         $wrapper->add($this->createResetButton());
@@ -385,7 +433,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
         return $wrapper;
     }
 
-    private function startPrivateSession($force = FALSE)
+    private function startPrivateSession($force = false)
     {
         if ($force || !$this->privateSession) {
             $this->privateSession = $this->getSession()->getSection($this->createLinkName());
