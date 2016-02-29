@@ -34,7 +34,7 @@ abstract class BaseNetteDbFilterSourceTest extends Sources\Tests\BaseNetteDbSour
             'group_name' => 'group.name'
         ], $this->context);
 
-        $source->setRelated('group', 'group_name');
+        $source->setReference('group_name', 'group', 'name');
 
         DataSourceChecker::matchCheckersRelated($source, Database\Table\ActiveRow::class);
     }
@@ -63,7 +63,7 @@ abstract class BaseNetteDbFilterSourceTest extends Sources\Tests\BaseNetteDbSour
             'group_name' => 'group.name'
         ], $this->context);
 
-        $source->setRelated('group', 'group_name');
+        $source->setReference('group_name', 'group', 'name');
 
         DataSourceChecker::matchCustomRelated(clone $source, Database\Table\ActiveRow::class);
     }

@@ -65,7 +65,7 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
      */
     public function getItem($name, $data = []);
 
-    public function setCustomReference($column, $data);
+    public function setCustomReference($column, array $data);
 
     /**
      * @param $name

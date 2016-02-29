@@ -21,7 +21,7 @@ class DoctrineFilterSourceTest extends BaseDoctrineFilterSourceTest
 
     public function __construct()
     {
-        $this->credentials = DataSourceChecker::$credentials;
+        self::$credentials = DataSourceChecker::$credentials;
 
         parent::__construct(__DIR__ . '/../../vendor/mesour/sources/tests/Entity');
     }

@@ -49,9 +49,7 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
     public function testApplyCustomDate()
     {
         $source = new DoctrineFilterSource($this->user, $this->columnMapping);
-
         DataSourceChecker::matchCustomDate(clone $source, Sources\Tests\Entity\User::class);
-        die;
     }
 
     public function testApplyCheckersText()
@@ -76,7 +74,7 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
 
         $source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
 
-        $source->setRelated(Sources\Tests\Entity\Groups::class, 'groupName');
+        $source->setReference('groupName', Sources\Tests\Entity\Groups::class, 'name');
 
         DataSourceChecker::matchCheckersRelated($source, 'array', 'groupName');
     }
@@ -98,7 +96,7 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
 
         $source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
 
-        $source->setRelated(Sources\Tests\Entity\Groups::class, 'groupName');
+        $source->setReference('groupName', Sources\Tests\Entity\Groups::class, 'name');
 
         DataSourceChecker::matchCustomRelated(clone $source, 'array', 'groupName');
     }

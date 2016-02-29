@@ -39,6 +39,8 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
     const ICON_MINUS = 'minus';
     const ICON_CALENDAR = 'calendar';
 
+    const PREDEFINED_KEY = 'predefined';
+
     static public $maxCheckboxCount = 1000;
 
     static public $icons = [
@@ -331,7 +333,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
         return $this->dateFormat;
     }
 
-    public function setCustomReference($column, $data)
+    public function setCustomReference($column, array $data)
     {
         return $this->predefinedData[$column] = $data;
     }
@@ -344,22 +346,24 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
         return $this->privateSession->get('values', (object)[]);
     }
 
-    public function createHiddenInput($data = [], $references = [])
+    public function createHiddenInput($data = [], $referenceSettings = [])
     {
         /** @var Mesour\Icon\IIcon $icon */
         $className = $this->getIconClass();
         $icon = new $className;
         $referenceData = [];
-        foreach ($references as $table => $reference) {
+        foreach ($this->source->getReferencedTables() as $table => $primary) {
             $source = $this->getSource()->getReferencedSource($table);
-            $referenceData[$table] = $source->fetchFullData($this->getDateFormat());
+            if ($source->getTotalCount() <= self::$maxCheckboxCount) {
+                $referenceData[$table] = $source->fetchFullData($this->getDateFormat());
+            }
         }
 
         $hidden = $this->getHiddenPrototype();
         $attributes = [
             'data-mesour-data' => Nette\Utils\Json::encode($data),
             'value' => Nette\Utils\Json::encode($this->getValues()),
-            'data-references' => Nette\Utils\Json::encode(array_merge(['predefined' => $this->predefinedData], $referenceData)),
+            'data-references' => Nette\Utils\Json::encode(array_merge([self::PREDEFINED_KEY => $this->predefinedData], $referenceData)),
             'data-mesour-date' => $this->getDateFormat(),
             'data-icon-prefix' => $icon->getPrefix(),
             'data-icons' => Nette\Utils\Json::encode(self::$icons),
@@ -381,18 +385,12 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
             parent::beforeRender();
         }
         $fullData = [];
-        $references = [];
         $source = $this->getSource(false);
-        if ($source && $source->getTotalCount() > 0) {
-            if ($source->getTotalCount() < self::$maxCheckboxCount) {
-                $fullData = $source->fetchFullData();
-            }
-            foreach ($source->getReferenceSettings() as $table => $referenceSetting) {
-                $references[$table] = $referenceSetting;
-            }
+        if ($source && $source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
+            $fullData = $source->fetchFullData();
         }
 
-        return [$fullData, $references];
+        return $fullData;
     }
 
     public function create()
@@ -401,12 +399,13 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
         $wrapper = $this->getWrapperPrototype();
 
-        list($fullData, $references) = $this->beforeCreate(true);
+        $fullData = $this->beforeCreate(true);
 
-        $hidden = $this->createHiddenInput($fullData, $references);
+        $hidden = $this->createHiddenInput($fullData);
 
         $this->onRender($this);
 
+        $referenceSettings = $this->getSource()->getReferenceSettings();
         $hasCheckers = count($fullData) > 0;
         foreach ($this as $name => $itemInstance) {
             /** @var Mesour\Filter\IFilterItem $itemInstance */
@@ -416,12 +415,12 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
             $source = $this->getSource(false);
             if ($source && $source->getTotalCount() > 0) {
-                $table = $source->getReferenceTable($name);
-                if ($table) {
-                    $item->setReferenceTable($table);
+                if (isset($referenceSettings[$name])) {
+                    $item->setReferenceSettings($referenceSettings[$name]);
+                } elseif (isset($this->predefinedData[$name])) {
+                    $item->setReferenceSettings(self::PREDEFINED_KEY);
                 }
             }
-
 
             $wrapper->add($item->create());
         }

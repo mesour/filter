@@ -57,6 +57,10 @@ mesour.filter.DropDown = function (element, name, filter) {
     };
 
     var type = element.attr('data-type');
+
+    var referenceSetting = element.attr('data-reference-settings');
+    var referenceData = filter.getReferencedData(referenceSetting, name);
+
     var translatesInput = element.find('[data-translates]');
     var translates = translatesInput.is('*') ? jQuery.parseJSON(translatesInput.val()) : [];
 
@@ -94,20 +98,36 @@ mesour.filter.DropDown = function (element, name, filter) {
 
     create = function (gridData, isAgain) {
         gridData = !gridData ? filter.getData() : gridData;
-        if (!gridData) return;
+        if (!gridData && !referenceData) return;
+
         var values = {};
-        for (var x = 0; x < gridData.length; x++) {
-            if (typeof gridData[x][name] === 'undefined') {
-                throw new Error('MesourFilterDropDownException: Column "' + name + '" does not exists in data.');
+        if (referenceData) {
+            for (var x = 0; x < referenceData.length; x++) {
+                if (!referenceData.hasOwnProperty(x)) {
+                    continue;
+                }
+                var fixedVariable = fixVariable(referenceData[x]);
+                values[fixedVariable] = {
+                    val: referenceSetting === mesour.filter.PREDEFINED_KEY ? x : fixedVariable,
+                    translated: _this.translateVariable(referenceData[x]),
+                    keys: [0]
+                }
             }
-            if (!values[gridData[x][name]]) {
-                values[fixVariable(gridData[x][name])] = {
-                    val: fixVariable(gridData[x][name]),
-                    translated: _this.translateVariable(gridData[x][name]),
-                    keys: [x]
-                };
-            } else {
-                values[gridData[x][name]].keys.push(x);
+        } else {
+            for (var x = 0; x < gridData.length; x++) {
+                if (typeof gridData[x][name] === 'undefined') {
+                    throw new Error('MesourFilterDropDownException: Column "' + name + '" does not exists in data.');
+                }
+                if (!values[gridData[x][name]]) {
+                    var fixedVariable = fixVariable(gridData[x][name]);
+                    values[fixedVariable] = {
+                        val: fixedVariable,
+                        translated: _this.translateVariable(gridData[x][name]),
+                        keys: [x]
+                    };
+                } else {
+                    values[gridData[x][name]].keys.push(x);
+                }
             }
         }
 
@@ -198,7 +218,7 @@ mesour.filter.DropDown = function (element, name, filter) {
                 var month_ul = $('<ul class="toggled-sub-ul">');
                 year_li.append(month_ul);
 
-                if(isYearOpened) {
+                if (isYearOpened) {
                     month_ul.show();
                     year_li.find('.close-all').show();
                 }
@@ -224,7 +244,7 @@ mesour.filter.DropDown = function (element, name, filter) {
                     var days_ul = $('<ul class="toggled-sub-ul">');
                     month_li.append(days_ul);
 
-                    if(isMonthOpened) {
+                    if (isMonthOpened) {
                         days_ul.show();
                     }
 

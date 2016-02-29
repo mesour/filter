@@ -57,7 +57,7 @@ mesour.filter.Filter = function (filterName, element) {
 
     this.closeAll = function (notThis) {
         for (var x in dropdowns) {
-            if(!dropdowns.hasOwnProperty(x)) {
+            if (!dropdowns.hasOwnProperty(x)) {
                 continue;
             }
             dropdowns[x].update();
@@ -78,6 +78,37 @@ mesour.filter.Filter = function (filterName, element) {
 
     this.getPhpDateFormat = function () {
         return valuesInput.attr('data-mesour-date');
+    };
+
+    this.getReferencedData = function (reference, columnName) {
+        if (!reference) return null;
+
+        var referencesData = valuesInput.attr('data-references'),
+            output = [];
+
+        if (referencesData) {
+            var data = $.parseJSON(referencesData);
+            if (reference === mesour.filter.PREDEFINED_KEY) {
+                if (!data[reference] || !data[reference][columnName]) {
+                    return null;
+                }
+                output = data[reference][columnName];
+                return !output.length ? null : output;
+            } else {
+                var reference = jQuery.parseJSON(reference);
+
+                if (!data[reference['table']]) {
+                    return null;
+                }
+                data = data[reference['table']];
+                for (var x = 0; x < data.length; x++) {
+                    var item = data[x];
+                    output.push(data[x][reference['column']]);
+                }
+                return !output.length ? null : output;
+            }
+        }
+        return null;
     };
 
     this.getJsDateFormat = function () {
@@ -145,7 +176,7 @@ mesour.filter.Filter = function (filterName, element) {
 
     this.setValues = function (newValues, name) {
         var oldValues = valuesInput.val().length > 0 ? $.parseJSON(valuesInput.val()) : {};
-        if(oldValues instanceof Array) {
+        if (oldValues instanceof Array) {
             oldValues = {};
         }
         oldValues[name] = newValues;
@@ -157,7 +188,7 @@ mesour.filter.Filter = function (filterName, element) {
         var _currentValues = _this.getValues();
         var _usedPriorities = {};
         for (var x in _currentValues) {
-            if(!_currentValues.hasOwnProperty(x)) {
+            if (!_currentValues.hasOwnProperty(x)) {
                 continue;
             }
             _usedPriorities[_currentValues[x].priority] = x;
@@ -186,7 +217,7 @@ mesour.filter.Filter = function (filterName, element) {
         var currentValues = _this.getValues();
         var usedPriorities = [];
         for (var x in currentValues) {
-            if(!currentValues.hasOwnProperty(x)) {
+            if (!currentValues.hasOwnProperty(x)) {
                 continue;
             }
             usedPriorities.push(currentValues[x].priority);
@@ -210,7 +241,7 @@ mesour.filter.Filter = function (filterName, element) {
         var data = _this.getData(),
             output = [];
         for (var x in data) {
-            if(!data.hasOwnProperty(x)) {
+            if (!data.hasOwnProperty(x)) {
                 continue;
             }
             if (valuesArr.indexOf(data[x][key]) !== -1) {
@@ -225,7 +256,7 @@ mesour.filter.Filter = function (filterName, element) {
             usedPriorities = {};
 
         for (var z in currentValues) {
-            if(!currentValues.hasOwnProperty(z)) {
+            if (!currentValues.hasOwnProperty(z)) {
                 continue;
             }
             usedPriorities[currentValues[z].priority] = z;
@@ -242,7 +273,7 @@ mesour.filter.Filter = function (filterName, element) {
         for (var i = 0; i < keys.length; i++) {
             k = keys[i];
             usedDropdowns[usedPriorities[k]] = true;
-            if(!dropdowns[usedPriorities[k]]) {
+            if (!dropdowns[usedPriorities[k]]) {
                 continue;
             }
             dropdowns[usedPriorities[k]].destroy();
@@ -252,7 +283,7 @@ mesour.filter.Filter = function (filterName, element) {
                 newData = _this.filterData(usedPriorities[k], currentValues[usedPriorities[k]].checkers);
         }
         for (var x in dropdowns) {
-            if(!dropdowns.hasOwnProperty(x)) {
+            if (!dropdowns.hasOwnProperty(x)) {
                 continue;
             }
             var dropdown = dropdowns[x];

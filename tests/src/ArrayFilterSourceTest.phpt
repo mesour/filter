@@ -18,7 +18,7 @@ class ArrayFilterSourceTest extends BaseArrayFilterSourceTest
 
     public function __construct()
     {
-        $this->credentials = DataSourceChecker::$credentials;
+        self::$credentials = DataSourceChecker::$credentials;
 
         parent::__construct();
     }

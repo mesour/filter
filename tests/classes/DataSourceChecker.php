@@ -31,7 +31,7 @@ class DataSourceChecker
 
     static public $credentials = [
         'user' => 'root',
-        'password' => 'root',
+        'password' => '',
     ];
 
     static public function matchCheckersText(IFilterSource $source, $rawClassType)

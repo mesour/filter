@@ -20,7 +20,7 @@ mesour.filter.Checkers = function (dropdown) {
                 someIndeterminate = false;
             all_checkers.each(function () {
                 if (!$(this).is(':checked')) {
-                    if($(this).is(':indeterminate')) {
+                    if ($(this).is(':indeterminate')) {
                         allChecked = true;
                         someIndeterminate = true;
                     } else {
@@ -35,13 +35,13 @@ mesour.filter.Checkers = function (dropdown) {
             if (someChecked && master_checker.is('.checker')) {
                 master_checker.prop("indeterminate", true)
                     .closest('li').children('label').addClass('active-one');
-            } else if(master_checker.is('.checker')) {
+            } else if (master_checker.is('.checker')) {
                 master_checker.prop("indeterminate", false)
                     .closest('li').children('label').addClass('active-one');
             }
 
             if (allChecked) {
-                if(someIndeterminate) {
+                if (someIndeterminate) {
                     master_checker.prop('checked', false)
                         .prop("indeterminate", true)
                         .closest('li').addClass('li-checked');

@@ -43,7 +43,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
     protected $text;
 
-    protected $referenceTable = false;
+    protected $referenceSettings = false;
 
     protected $filters = [];
 
@@ -115,21 +115,18 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
     public function setValueTranslates(array $valueTranslates)
     {
         $this->valueTranslates = $valueTranslates;
-
         return $this;
     }
 
     public function setText($text)
     {
         $this->text = $this->getTranslator()->translate($text);
-
         return $this;
     }
 
-    public function setReferenceTable($table)
+    public function setReferenceSettings($table)
     {
-        $this->referenceTable = $table;
-
+        $this->referenceSettings = $table;
         return $this;
     }
 
@@ -138,7 +135,6 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
         if (!$this->text) {
             $this->text = ucfirst($this->getName());
         }
-
         return $this->text;
     }
 
@@ -149,7 +145,6 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
     public function setCheckers($hasCheckers = true)
     {
         $this->hasCheckers = (bool)$hasCheckers;
-
         return $this;
     }
 
@@ -160,7 +155,6 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
     public function setMainFilter($hasMainFilter = true)
     {
         $this->hasMainFilter = (bool)$hasMainFilter;
-
         return $this;
     }
 
@@ -177,11 +171,6 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
     public function getWrapperPrototype()
     {
         return $this->getHtmlElement();
-    }
-
-    public function setReference($table, $column, $primaryKey = 'id')
-    {
-
     }
 
     protected function getListUlPrototype(array $user_attributes = [])
@@ -252,9 +241,9 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
         $wrapper = $this->getWrapperPrototype();
 
-        if($this->referenceTable) {
+        if ($this->referenceSettings) {
             $wrapper->addAttributes([
-                'data-reference-table' => $this->referenceTable
+                'data-reference-settings' => $this->referenceSettings,
             ]);
         }
 
@@ -327,7 +316,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
             $ul->add($subMenu);
         }
 
-        if ($this->hasCheckers) {
+        if ($this->hasCheckers || $this->referenceSettings !== false) {
             if ($this->hasMainFilter) {
                 $ul->add($this->getListLiPrototype([
                     'class' => 'divider',

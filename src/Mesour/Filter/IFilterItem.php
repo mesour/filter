@@ -29,7 +29,7 @@ interface IFilterItem extends Mesour\Components\Control\IAttributesControl
      * @param $table
      * @return mixed
      */
-    public function setReferenceTable($table);
+    public function setReferenceSettings($table);
 
     /**
      * @return Mesour\Components\Utils\Html
