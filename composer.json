@@ -10,9 +10,9 @@
   }],
   "require": {
     "php": ">=5.5.0",
-    "mesour/components": "@dev",
-    "mesour/sources": "dev-master",
-    "mesour/icon": "@dev"
+    "mesour/components": "3.0.*@beta",
+    "mesour/sources": "3.0.*@beta",
+    "mesour/icon": "3.0.*@beta"
   },
   "require-dev": {
     "tracy/tracy": "~2.3.0",
@@ -21,7 +21,7 @@
     "nette/database": "~2.3",
     "nette/tester": "^1.6"
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "beta",
   "prefer-stable": true,
   "autoload": {
     "classmap": ["src/"]
