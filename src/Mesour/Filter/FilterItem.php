@@ -20,11 +20,11 @@ use Mesour;
 abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 {
 
-	const WRAPPER = 'wrapper',
-		LIST_UL = 'list-ul',
-		LIST_LI = 'list-li',
-		FILTERS_ITEM = 'filters-item',
-		BUTTON = 'button';
+	const WRAPPER = 'wrapper';
+	const LIST_UL = 'list-ul';
+	const LIST_LI = 'list-li';
+	const FILTERS_ITEM = 'filters-item';
+	const BUTTON = 'button';
 
 	protected $iconOk = 'check';
 
@@ -118,9 +118,9 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 		return $this;
 	}
 
-	public function setText($text)
+	public function setText($text, $translated = true)
 	{
-		$this->text = $this->getTranslator()->translate($text);
+		$this->text = $translated ? $this->getTranslator()->translate($text) : $text;
 		return $this;
 	}
 

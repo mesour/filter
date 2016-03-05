@@ -23,10 +23,10 @@ use Nette;
 class Filter extends Mesour\Components\Control\AttributesControl implements Mesour\Filter\IFilter
 {
 
-	const ITEMS = 'items',
-		RESET_BUTTON = 'reset-button',
-		WRAPPER = 'wrapper',
-		HIDDEN = 'hidden';
+	const ITEMS = 'items';
+	const RESET_BUTTON = 'reset-button';
+	const WRAPPER = 'wrapper';
+	const HIDDEN = 'hidden';
 
 	const VALUE_TRUE = '-mesour-bool-1';
 	const VALUE_FALSE = '-mesour-bool-0';

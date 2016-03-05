@@ -18,7 +18,7 @@ use Mesour;
 interface IFilterItem extends Mesour\Components\Control\IAttributesControl
 {
 
-	public function setText($text);
+	public function setText($text, $translated = true);
 
 	/**
 	 * @return string
