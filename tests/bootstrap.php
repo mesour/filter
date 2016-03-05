@@ -17,8 +17,8 @@ require_once __DIR__ . '/../src/Mesour/Filter/Sources/SQLHelper.php';
 require_once __DIR__ . '/../src/Mesour/Filter/Sources/DateFunction.php';
 
 if (!class_exists('Tester\Assert')) {
-    echo "Install Nette Tester using `composer update --dev`\n";
-    exit(1);
+	echo "Install Nette Tester using `composer update --dev`\n";
+	exit(1);
 }
 @mkdir(__DIR__ . "/log");
 @mkdir(__DIR__ . "/tmp");
@@ -29,7 +29,8 @@ Tester\Helpers::purge(TEMP_DIR);
 
 Tester\Environment::setup();
 
-function pdump($val) {
-    Tracy\Debugger::$productionMode = FALSE;
-    call_user_func_array('dump', func_get_args());
+function pdump($val)
+{
+	Tracy\Debugger::$productionMode = false;
+	call_user_func_array('dump', func_get_args());
 }

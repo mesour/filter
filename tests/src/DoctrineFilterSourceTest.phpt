@@ -19,12 +19,12 @@ require_once __DIR__ . '/../classes/DataSourceChecker.php';
 class DoctrineFilterSourceTest extends BaseDoctrineFilterSourceTest
 {
 
-    public function __construct()
-    {
-        self::$credentials = DataSourceChecker::$credentials;
+	public function __construct()
+	{
+		self::$credentials = DataSourceChecker::$credentials;
 
-        parent::__construct(__DIR__ . '/../../vendor/mesour/sources/tests/Entity');
-    }
+		parent::__construct(__DIR__ . '/../../vendor/mesour/sources/tests/Entity');
+	}
 
 }
 

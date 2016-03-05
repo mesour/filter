@@ -18,34 +18,34 @@ use Mesour;
 interface IFilterItem extends Mesour\Components\Control\IAttributesControl
 {
 
-    public function setText($text);
+	public function setText($text);
 
-    /**
-     * @return string
-     */
-    public function getText();
+	/**
+	 * @return string
+	 */
+	public function getText();
 
-    /**
-     * @param $table
-     * @return mixed
-     */
-    public function setReferenceSettings($table);
+	/**
+	 * @param $table
+	 * @return mixed
+	 */
+	public function setReferenceSettings($table);
 
-    /**
-     * @return Mesour\Components\Utils\Html
-     */
-    public function getButtonPrototype();
+	/**
+	 * @return Mesour\Components\Utils\Html
+	 */
+	public function getButtonPrototype();
 
-    /**
-     * @param bool|TRUE $hasCheckers
-     * @return mixed
-     */
-    public function setCheckers($hasCheckers = TRUE);
+	/**
+	 * @param bool|TRUE $hasCheckers
+	 * @return mixed
+	 */
+	public function setCheckers($hasCheckers = true);
 
-    /**
-     * @param bool|TRUE $hasMainFilter
-     * @return mixed
-     */
-    public function setMainFilter($hasMainFilter = TRUE);
+	/**
+	 * @param bool|TRUE $hasMainFilter
+	 * @return mixed
+	 */
+	public function setMainFilter($hasMainFilter = true);
 
 }

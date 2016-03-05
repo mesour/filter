@@ -12,7 +12,6 @@ namespace Mesour\Filter;
 use Mesour;
 
 
-
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
@@ -21,54 +20,54 @@ class Number extends FilterItem implements IFilterItem
 
     protected $filtersName = 'Number filters';
 
-    protected $filters = array(
-        array(
+    protected $filters = [
+        [
             'name' => 'Equal to',
-            'attributes' => array(
-                'data-type-first' => 'equal_to'
-            )
-        ), array(
+            'attributes' => [
+                'data-type-first' => 'equal_to',
+            ],
+        ], [
             'name' => 'Not equal to',
-            'attributes' => array(
-                'data-type-first' => 'not_equal_to'
-            )
-        ), array(
-            'type' => 'divider'
-        ), array(
+            'attributes' => [
+                'data-type-first' => 'not_equal_to',
+            ],
+        ], [
+            'type' => 'divider',
+        ], [
             'name' => 'Bigger than',
-            'attributes' => array(
-                'data-type-first' => 'bigger'
-            )
-        ), array(
+            'attributes' => [
+                'data-type-first' => 'bigger',
+            ],
+        ], [
             'name' => 'Bigger than or equal',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'bigger',
                 'data-type-second' => 'equal_to',
-                'data-operator' => 'or'
-            )
-        ), array(
+                'data-operator' => 'or',
+            ],
+        ], [
             'name' => 'Smaller than',
-            'attributes' => array(
-                'data-type-first' => 'smaller'
-            )
-        ), array(
+            'attributes' => [
+                'data-type-first' => 'smaller',
+            ],
+        ], [
             'name' => 'Smaller than or equal',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'smaller',
                 'data-type-second' => 'equal_to',
-                'data-operator' => 'or'
-            )
-        ), array(
+                'data-operator' => 'or',
+            ],
+        ], [
             'name' => 'Between',
-            'attributes' => array(
+            'attributes' => [
                 'data-type-first' => 'bigger',
                 'data-type-second' => 'smaller',
-            )
-        ), array(
-            'type' => 'divider'
-        ), array(
-            'name' => 'Custom filter'
-        ),
-    );
+            ],
+        ], [
+            'type' => 'divider',
+        ], [
+            'name' => 'Custom filter',
+        ],
+    ];
 
 }

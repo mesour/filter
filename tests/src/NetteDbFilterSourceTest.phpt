@@ -16,12 +16,12 @@ require_once __DIR__ . '/../classes/DataSourceChecker.php';
 class NetteDbFilterSourceTest extends BaseNetteDbFilterSourceTest
 {
 
-    public function __construct()
-    {
-        self::$credentials = DataSourceChecker::$credentials;
+	public function __construct()
+	{
+		self::$credentials = DataSourceChecker::$credentials;
 
-        parent::__construct();
-    }
+		parent::__construct();
+	}
 
 }
 

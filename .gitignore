@@ -3,5 +3,5 @@
 /composer.lock
 /tests/tmp
 /tests/log
-/demo/log
-/demo/resources
+/examples/log
+/examples/resources

@@ -18,71 +18,71 @@ use Mesour;
 interface IFilter extends Mesour\Components\Control\IAttributesControl
 {
 
-    /**
-     * @return array
-     */
-    public function getValues();
+	/**
+	 * @return array
+	 */
+	public function getValues();
 
-    public function setSource($source);
+	public function setSource($source);
 
-    public function getSource();
+	public function getSource();
 
-    /**
-     * @param $name
-     * @param null $text
-     * @param array $valueTranslates
-     * @return Mesour\Filter\Number
-     */
-    public function addNumberFilter($name, $text = NULL, array $valueTranslates = []);
+	/**
+	 * @param $name
+	 * @param null $text
+	 * @param array $valueTranslates
+	 * @return Mesour\Filter\Number
+	 */
+	public function addNumberFilter($name, $text = null, array $valueTranslates = []);
 
-    /**
-     * @param $name
-     * @param string|null $text
-     * @param array $valueTranslates
-     * @return Mesour\Filter\Text
-     */
-    public function addTextFilter($name, $text = NULL, array $valueTranslates = []);
+	/**
+	 * @param $name
+	 * @param string|null $text
+	 * @param array $valueTranslates
+	 * @return Mesour\Filter\Text
+	 */
+	public function addTextFilter($name, $text = null, array $valueTranslates = []);
 
-    /**
-     * @param $name
-     * @param string|null $text
-     * @param array $valueTranslates
-     * @return Mesour\Filter\Date
-     */
-    public function addDateFilter($name, $text = NULL, array $valueTranslates = []);
+	/**
+	 * @param $name
+	 * @param string|null $text
+	 * @param array $valueTranslates
+	 * @return Mesour\Filter\Date
+	 */
+	public function addDateFilter($name, $text = null, array $valueTranslates = []);
 
-    /**
-     * @param $name
-     * @param IFilterItem $filterItem
-     * @return IFilterItem
-     */
-    public function addCustomFilter($name, IFilterItem $filterItem);
+	/**
+	 * @param $name
+	 * @param IFilterItem $filterItem
+	 * @return IFilterItem
+	 */
+	public function addCustomFilter($name, IFilterItem $filterItem);
 
-    /**
-     * @param $name
-     * @param array $data
-     * @return IFilterItem
-     */
-    public function getItem($name, $data = []);
+	/**
+	 * @param $name
+	 * @param array $data
+	 * @return IFilterItem
+	 */
+	public function getItem($name, $data = []);
 
-    public function setCustomReference($column, array $data);
+	public function setCustomReference($column, array $data);
 
-    /**
-     * @param $name
-     * @param array $data
-     * @return Mesour\Components\Utils\Html
-     */
-    public function renderItem($name, $data = []);
+	/**
+	 * @param $name
+	 * @param array $data
+	 * @return Mesour\Components\Utils\Html
+	 */
+	public function renderItem($name, $data = []);
 
-    /**
-     * @return Mesour\Components\Utils\Html
-     */
-    public function createResetButton();
+	/**
+	 * @return Mesour\Components\Utils\Html
+	 */
+	public function createResetButton();
 
-    public function renderResetButton();
+	public function renderResetButton();
 
-    public function createHiddenInput($data = []);
+	public function createHiddenInput($data = []);
 
-    public function renderHiddenInput($data = []);
+	public function renderHiddenInput($data = []);
 
 }

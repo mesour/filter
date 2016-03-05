@@ -16,89 +16,89 @@ use Tracy\Debugger;
 abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSourceTest
 {
 
-    public function __construct($entityDir = NULL)
-    {
-        parent::__construct($entityDir);
+	public function __construct($entityDir = null)
+	{
+		parent::__construct($entityDir);
 
-        $conn = [
-            'driver' => 'pdo_mysql',
-            'user' => $this->databaseFactory->getUserName(),
-            'password' => $this->databaseFactory->getPassword(),
-            'dbname' => $this->databaseFactory->getDatabaseName(),
-        ];
-        $paths = [$entityDir];
+		$conn = [
+			'driver' => 'pdo_mysql',
+			'user' => $this->databaseFactory->getUserName(),
+			'password' => $this->databaseFactory->getPassword(),
+			'dbname' => $this->databaseFactory->getDatabaseName(),
+		];
+		$paths = [$entityDir];
 
-        $config = Setup::createConfiguration(!Debugger::$productionMode);
+		$config = Setup::createConfiguration(!Debugger::$productionMode);
 
-        $driver = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(new AnnotationReader(), $paths);
-        \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
-        $config->setMetadataDriverImpl($driver);
+		$driver = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(new AnnotationReader(), $paths);
+		\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
+		$config->setMetadataDriverImpl($driver);
 
-        $config->addCustomDatetimeFunction('DATE', DateFunction::class);
+		$config->addCustomDatetimeFunction('DATE', DateFunction::class);
 
-        $this->entityManager = EntityManager::create($conn, $config);
+		$this->entityManager = EntityManager::create($conn, $config);
 
-        $this->user = $this->entityManager->createQueryBuilder()
-            ->select('u')
-            ->from(Sources\Tests\Entity\User::class, 'u');
-        $this->empty = $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from(Sources\Tests\Entity\EmptyTable::class, 'e');
-    }
+		$this->user = $this->entityManager->createQueryBuilder()
+			->select('u')
+			->from(Sources\Tests\Entity\User::class, 'u');
+		$this->empty = $this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(Sources\Tests\Entity\EmptyTable::class, 'e');
+	}
 
-    public function testApplyCustomDate()
-    {
-        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
-        DataSourceChecker::matchCustomDate(clone $source, Sources\Tests\Entity\User::class);
-    }
+	public function testApplyCustomDate()
+	{
+		$source = new DoctrineFilterSource($this->user, $this->columnMapping);
+		DataSourceChecker::matchCustomDate(clone $source, Sources\Tests\Entity\User::class);
+	}
 
-    public function testApplyCheckersText()
-    {
-        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
+	public function testApplyCheckersText()
+	{
+		$source = new DoctrineFilterSource($this->user, $this->columnMapping);
 
-        DataSourceChecker::matchCheckersText($source, Sources\Tests\Entity\User::class);
-    }
+		DataSourceChecker::matchCheckersText($source, Sources\Tests\Entity\User::class);
+	}
 
-    public function testApplyCheckersDate()
-    {
-        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
+	public function testApplyCheckersDate()
+	{
+		$source = new DoctrineFilterSource($this->user, $this->columnMapping);
 
-        DataSourceChecker::matchCheckersDate($source, Sources\Tests\Entity\User::class);
-    }
+		DataSourceChecker::matchCheckersDate($source, Sources\Tests\Entity\User::class);
+	}
 
-    public function testApplyCheckersRelated()
-    {
-        $queryBuilder = clone $this->user;
-        $queryBuilder->addSelect('g.name groupName')
-            ->join(Sources\Tests\Entity\Groups::class, 'g', Join::WITH, 'u.groupId = g.id');
+	public function testApplyCheckersRelated()
+	{
+		$queryBuilder = clone $this->user;
+		$queryBuilder->addSelect('g.name groupName')
+			->join(Sources\Tests\Entity\Groups::class, 'g', Join::WITH, 'u.groupId = g.id');
 
-        $source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
+		$source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
 
-        $source->setReference('groupName', Sources\Tests\Entity\Groups::class, 'name');
+		$source->setReference('groupName', Sources\Tests\Entity\Groups::class, 'name');
 
-        DataSourceChecker::matchCheckersRelated($source, 'array', 'groupName');
-    }
+		DataSourceChecker::matchCheckersRelated($source, 'array', 'groupName');
+	}
 
-    public function testApplyCustomText()
-    {
-        $source = new DoctrineFilterSource($this->user, $this->columnMapping);
+	public function testApplyCustomText()
+	{
+		$source = new DoctrineFilterSource($this->user, $this->columnMapping);
 
-        DataSourceChecker::matchCustomText(clone $source, Sources\Tests\Entity\User::class);
-    }
+		DataSourceChecker::matchCustomText(clone $source, Sources\Tests\Entity\User::class);
+	}
 
-    //todo: here test custom date
+	//todo: here test custom date
 
-    public function testApplyCustomRelated()
-    {
-        $queryBuilder = clone $this->user;
-        $queryBuilder->addSelect('g.name groupName')
-            ->join(Sources\Tests\Entity\Groups::class, 'g', Join::WITH, 'u.groupId = g.id');
+	public function testApplyCustomRelated()
+	{
+		$queryBuilder = clone $this->user;
+		$queryBuilder->addSelect('g.name groupName')
+			->join(Sources\Tests\Entity\Groups::class, 'g', Join::WITH, 'u.groupId = g.id');
 
-        $source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
+		$source = new DoctrineFilterSource($queryBuilder, $this->columnMapping);
 
-        $source->setReference('groupName', Sources\Tests\Entity\Groups::class, 'name');
+		$source->setReference('groupName', Sources\Tests\Entity\Groups::class, 'name');
 
-        DataSourceChecker::matchCustomRelated(clone $source, 'array', 'groupName');
-    }
+		DataSourceChecker::matchCustomRelated(clone $source, 'array', 'groupName');
+	}
 
 }

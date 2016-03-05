@@ -12,24 +12,23 @@ namespace Mesour\Filter\Sources;
 use Mesour;
 
 
-
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
 interface IFilterSource extends Mesour\Sources\ISource
 {
 
-    const TYPE_STRING = 'string';
-    const TYPE_DATE = 'date';
+	const TYPE_STRING = 'string';
+	const TYPE_DATE = 'date';
 
-    /**
-     * @param string $dateFormat
-     * @return Mesour\Sources\ArrayHash[]
-     */
-    public function fetchFullData($dateFormat = 'Y-m-d');
+	/**
+	 * @param string $dateFormat
+	 * @return Mesour\Sources\ArrayHash[]
+	 */
+	public function fetchFullData($dateFormat = 'Y-m-d');
 
-    public function applyCheckers($columnName, array $value, $type);
+	public function applyCheckers($columnName, array $value, $type);
 
-    public function applyCustom($columnName, array $custom, $type);
+	public function applyCustom($columnName, array $custom, $type);
 
 }
