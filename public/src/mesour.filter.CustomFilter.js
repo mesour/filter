@@ -77,14 +77,9 @@ mesour.filter.CustomFilter = function (dropdown) {
         }
 
         if (dropdown.getType() === 'date') {
-            if (!$.fn.bootstrapDatetimepicker) {
-                throw new Error('jQuery.fn.bootstrapDatetimepicker is required for filter type date.');
-            }
             $filter_modal.find('.input-group-addon').show();
-            $filter_modal.find('.filter-datepicker1, .filter-datepicker2').data('DateTimePicker').destroy();
-            $filter_modal.find('.filter-datepicker1, .filter-datepicker2').bootstrapDatetimepicker({
-                pickTime: false
-            });
+            mesour.dateTimePicker.destroy($filter_modal.find('.filter-datepicker1, .filter-datepicker2'));
+            mesour.dateTimePicker.create($filter_modal.find('.filter-datepicker1, .filter-datepicker2'));
             $filter_modal.find('.filter-value-1, .filter-value-2').on('keydown.data-grid', function (e) {
                 e.preventDefault();
                 if (e.keyCode === 46 || e.keyCode === 8) {

@@ -1,8 +1,9 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
 	  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<link rel="stylesheet" href="../public/datetimepicker.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="../vendor/mesour/components/public/DateTimePicker/bootstrap-datetimepicker.min.css">
 
 <link rel="stylesheet" href="../public/src/mesour.filter.css">
 
@@ -156,10 +157,10 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 		crossorigin="anonymous"></script>
-<script src="../vendor/mesour/components/public/mesour.components.js"></script>
-<script src="../vendor/mesour/components/public/cookie.js"></script>
 
+<script src="../vendor/mesour/components/public/mesour.components.min.js"></script>
 
-<script src="../public/bootstrap.datetimepicker.js"></script>
+<script src="../vendor/mesour/components/public/DateTimePicker/moment.min.js"></script>
+<script src="../vendor/mesour/components/public/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
 
 <script src="../public/mesour.filter.min.js"></script>
