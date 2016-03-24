@@ -137,24 +137,15 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	private $dateFormat = 'Y-m-d';
 
 	/**
-	 * @param mixed $source
+	 * @param Mesour\Filter\Sources\IFilterSource $source
 	 * @return $this
 	 * @throws Mesour\InvalidStateException
 	 * @throws Mesour\InvalidArgumentException
 	 */
-	public function setSource($source)
+	public function setSource(Mesour\Filter\Sources\IFilterSource $source)
 	{
 		if ($this->is_source_used) {
 			throw new Mesour\InvalidStateException('Cannot change source after using them.');
-		}
-		if (!$source instanceof Mesour\Filter\Sources\IFilterSource) {
-			if (is_array($source)) {
-				$source = new Mesour\Filter\Sources\ArrayFilterSource($source);
-			} else {
-				throw new Mesour\InvalidArgumentException(
-					'Source must be instance of \Mesour\Filter\Sources\IFilterSource or array.'
-				);
-			}
 		}
 		$this->source = $source;
 

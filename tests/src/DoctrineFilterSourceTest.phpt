@@ -17,7 +17,6 @@ require_once __DIR__ . '/../../vendor/mesour/sources/tests/Entity/UserAddress.ph
 require_once __DIR__ . '/../classes/BaseDoctrineFilterSourceTest.php';
 require_once __DIR__ . '/../classes/DataSourceChecker.php';
 
-
 class DoctrineFilterSourceTest extends BaseDoctrineFilterSourceTest
 {
 

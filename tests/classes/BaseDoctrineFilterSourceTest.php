@@ -12,10 +12,12 @@ use Nette\Database;
 abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSourceTest
 {
 
-	public function __construct()
+	public function __construct($setConfigFiles = true)
 	{
-		$this->configFile = __DIR__ . '/../config.php';
-		$this->localConfigFile = __DIR__ . '/../config.local.php';
+		if ($setConfigFiles) {
+			$this->configFile = __DIR__ . '/../config.php';
+			$this->localConfigFile = __DIR__ . '/../config.local.php';
+		}
 
 		//todo: test custom date
 

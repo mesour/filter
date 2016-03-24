@@ -22,7 +22,7 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
 	 */
 	public function getValues();
 
-	public function setSource($source);
+	public function setSource(Mesour\Filter\Sources\IFilterSource $source);
 
 	public function getSource();
 

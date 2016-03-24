@@ -12,7 +12,6 @@ require_once __DIR__ . '/../../vendor/mesour/sources/tests/classes/BaseNetteDbSo
 require_once __DIR__ . '/../classes/BaseNetteDbFilterSourceTest.php';
 require_once __DIR__ . '/../classes/DataSourceChecker.php';
 
-
 class NetteDbFilterSourceTest extends BaseNetteDbFilterSourceTest
 {
 

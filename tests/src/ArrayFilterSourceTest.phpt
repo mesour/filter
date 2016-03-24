@@ -12,7 +12,6 @@ require_once __DIR__ . '/../../vendor/mesour/sources/tests/classes/BaseArraySour
 require_once __DIR__ . '/../classes/BaseArrayFilterSourceTest.php';
 require_once __DIR__ . '/../classes/DataSourceChecker.php';
 
-
 class ArrayFilterSourceTest extends BaseArrayFilterSourceTest
 {
 
