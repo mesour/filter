@@ -16,7 +16,7 @@ use Nette;
 /**
  * @author Matouš Němec <matous.nemec@mesour.com>
  */
-class NetteDbFilterSource extends Mesour\Sources\NetteDbSource implements IFilterSource
+class NetteDbFilterSource extends Mesour\Sources\NetteDbTableSource implements IFilterSource
 {
 
 	public function applyCustom($columnName, array $custom, $type)

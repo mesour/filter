@@ -11,6 +11,7 @@ namespace Mesour\UI;
 
 use Mesour;
 use Nette;
+use Mesour\Sources\Structures\Columns\BaseTableColumnStructure;
 
 
 /**
@@ -151,7 +152,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 			if (is_array($source)) {
 				$source = new Mesour\Filter\Sources\ArrayFilterSource($source);
 			} else {
-				throw new Mesour\InvalidArgumentException('Source must be instance of \Mesour\Filter\Sources\IFilterSource or array.');
+				throw new Mesour\InvalidArgumentException(
+					'Source must be instance of \Mesour\Filter\Sources\IFilterSource or array.'
+				);
 			}
 		}
 		$this->source = $source;
@@ -343,7 +346,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	 */
 	public function getValues()
 	{
-		return $this->privateSession->get('values', (object)[]);
+		return $this->privateSession->get('values', (object) []);
 	}
 
 	public function createHiddenInput($data = [], $referenceSettings = [])
@@ -352,10 +355,10 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		$className = $this->getIconClass();
 		$icon = new $className;
 		$referenceData = [];
-		foreach ($this->source->getReferencedTables() as $table => $primary) {
-			$source = $this->getSource()->getReferencedSource($table);
+		foreach ($this->source->getDataStructure()->getTableStructures() as $tableStructure) {
+			$source = $this->getSource()->getReferencedSource($tableStructure->getName());
 			if ($source->getTotalCount() <= self::$maxCheckboxCount) {
-				$referenceData[$table] = $source->fetchFullData($this->getDateFormat());
+				$referenceData[$tableStructure->getName()] = $source->fetchFullData($this->getDateFormat());
 			}
 		}
 
@@ -405,7 +408,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
 		$this->onRender($this);
 
-		$referenceSettings = $this->getSource()->getReferenceSettings();
+		$dataStructure = $this->getSource()->getDataStructure();
 		$hasCheckers = count($fullData) > 0;
 		foreach ($this as $name => $itemInstance) {
 			/** @var Mesour\Filter\IFilterItem $itemInstance */
@@ -415,8 +418,13 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
 			$source = $this->getSource(false);
 			if ($source && $source->getTotalCount() > 0) {
-				if (isset($referenceSettings[$name])) {
-					$item->setReferenceSettings($referenceSettings[$name]);
+				if (
+					$dataStructure->hasColumn($name)
+					&& $dataStructure->getColumn($name) instanceof BaseTableColumnStructure
+				) {
+					/** @var BaseTableColumnStructure $column */
+					$column = $dataStructure->getColumn($name);
+					$item->setReferenceSettings($column->getTableStructure()->getName());
 				} elseif (isset($this->predefinedData[$name])) {
 					$item->setReferenceSettings(self::PREDEFINED_KEY);
 				}
