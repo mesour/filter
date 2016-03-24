@@ -9,10 +9,12 @@ use Nette\Database;
 abstract class BaseNetteDbFilterSourceTest extends Sources\Tests\BaseNetteDbSourceTest
 {
 
-	public function __construct()
+	public function __construct($setConfigFiles = true)
 	{
-		$this->configFile = __DIR__ . '/../config.php';
-		$this->localConfigFile = __DIR__ . '/../config.local.php';
+		if ($setConfigFiles) {
+			$this->configFile = __DIR__ . '/../config.php';
+			$this->localConfigFile = __DIR__ . '/../config.local.php';
+		}
 
 		parent::__construct();
 	}

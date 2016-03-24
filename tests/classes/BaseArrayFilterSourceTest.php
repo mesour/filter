@@ -9,10 +9,12 @@ use Nette\Database;
 abstract class BaseArrayFilterSourceTest extends Sources\Tests\BaseArraySourceTest
 {
 
-	public function __construct()
+	public function __construct($setConfigFiles = true)
 	{
-		$this->configFile = __DIR__ . '/../config.php';
-		$this->localConfigFile = __DIR__ . '/../config.local.php';
+		if ($setConfigFiles) {
+			$this->configFile = __DIR__ . '/../config.php';
+			$this->localConfigFile = __DIR__ . '/../config.local.php';
+		}
 
 		parent::__construct();
 	}
