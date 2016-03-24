@@ -6,7 +6,6 @@ use Mesour\Filter\Sources\ArrayFilterSource;
 use Mesour\Sources;
 use Nette\Database;
 
-
 abstract class BaseArrayFilterSourceTest extends Sources\Tests\BaseArraySourceTest
 {
 

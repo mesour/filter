@@ -107,7 +107,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
 	$filter->addTextFilter('has_pro', 'Bool value');
 
-	$filter->addDateFilter('timestamp', 'Last login');
+	$filter->addDateFilter('timestamp', 'Timestamp');
 
 	$filter->onRender[] = function (Mesour\UI\Filter $_filter) use ($source) {
 		foreach ($_filter->getValues() as $name => $value) {

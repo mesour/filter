@@ -10,12 +10,11 @@
 namespace Mesour\UI;
 
 use Mesour;
-use Nette;
 use Mesour\Sources\Structures\Columns\BaseTableColumnStructure;
-
+use Nette;
 
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  *
  * @method null onFilter(Filter $filter)
  * @method null onRender(Filter $filter)
@@ -200,9 +199,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	{
 		if ($val === self::VALUE_FALSE) {
 			return false;
-		} else if ($val === self::VALUE_TRUE) {
+		} elseif ($val === self::VALUE_TRUE) {
 			return true;
-		} else if ($val === self::VALUE_NULL) {
+		} elseif ($val === self::VALUE_NULL) {
 			return null;
 		}
 
@@ -210,7 +209,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	}
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param string|null $text
 	 * @param array $valueTranslates
 	 * @return Mesour\Filter\Number
@@ -226,7 +225,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	}
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param string|null $text
 	 * @param array $valueTranslates
 	 * @return Mesour\Filter\Text
@@ -242,7 +241,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	}
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param string|null $text
 	 * @param array $valueTranslates
 	 * @return Mesour\Filter\Date
@@ -258,7 +257,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	}
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param Mesour\Filter\IFilterItem $filterItem
 	 * @return Mesour\Filter\IFilterItem
 	 */
@@ -298,7 +297,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	}
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param array $data
 	 * @return Mesour\Filter\IFilterItem
 	 */

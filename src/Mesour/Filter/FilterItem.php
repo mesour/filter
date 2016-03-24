@@ -11,9 +11,8 @@ namespace Mesour\Filter;
 
 use Mesour;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  *
  * @method null onRender(FilterItem $filterItem)
  */
@@ -144,7 +143,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 	 */
 	public function setCheckers($hasCheckers = true)
 	{
-		$this->hasCheckers = (bool)$hasCheckers;
+		$this->hasCheckers = (bool) $hasCheckers;
 		return $this;
 	}
 
@@ -154,7 +153,7 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 	 */
 	public function setMainFilter($hasMainFilter = true)
 	{
-		$this->hasMainFilter = (bool)$hasMainFilter;
+		$this->hasMainFilter = (bool) $hasMainFilter;
 		return $this;
 	}
 
@@ -173,10 +172,10 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 		return $this->getHtmlElement();
 	}
 
-	protected function getListUlPrototype(array $user_attributes = [])
+	protected function getListUlPrototype(array $userAttributes = [])
 	{
 		$attributes = $this->getOption(self::LIST_UL, 'attributes');
-		$attributes = array_merge($attributes, $user_attributes);
+		$attributes = array_merge($attributes, $userAttributes);
 
 		return Mesour\Components\Utils\Html::el($this->getOption(self::LIST_UL, 'el'), $attributes);
 	}
@@ -197,42 +196,42 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 		);
 	}
 
-	protected function createCustomFilterItem(Mesour\Components\Utils\Html & $sub_ul, $filter)
+	protected function createCustomFilterItem(Mesour\Components\Utils\Html & $subUl, $filter)
 	{
 		if (!isset($filter['type'])) {
 			if (!isset($filter['name'])) {
 				throw new Mesour\InvalidArgumentException('Key name is required in filter items.');
 			}
 
-			$sub_li = $this->getListLiPrototype();
+			$subLi = $this->getListLiPrototype();
 
-			$filter_item = $this->getFiltersItemPrototype(isset($filter['attributes']) ? $filter['attributes'] : []);
+			$filterItem = $this->getFiltersItemPrototype(isset($filter['attributes']) ? $filter['attributes'] : []);
 
-			$filter_item->setText($this->getTranslator()->translate($filter['name']));
+			$filterItem->setText($this->getTranslator()->translate($filter['name']));
 
-			$sub_li->add($filter_item);
+			$subLi->add($filterItem);
 		} elseif (is_array($filter['type'])) {
 			if (!isset($filter['name'])) {
 				throw new Mesour\InvalidArgumentException('Key name is required in filter items.');
 			}
 
-			$_ul = $this->getListUlPrototype();
-			foreach ($filter['type'] as $_filter) {
-				$this->createCustomFilterItem($_ul, $_filter);
+			$currentUl = $this->getListUlPrototype();
+			foreach ($filter['type'] as $currentFilter) {
+				$this->createCustomFilterItem($currentUl, $currentFilter);
 			}
-			$sub_li = $this->getListLiPrototype([
+			$subLi = $this->getListLiPrototype([
 				'class' => 'dropdown-submenu',
 			]);
-			$sub_li->add('<span tabindex="-1">' . $this->getTranslator()->translate($filter['name']) . '</span>');
-			$sub_li->add($_ul);
+			$subLi->add('<span tabindex="-1">' . $this->getTranslator()->translate($filter['name']) . '</span>');
+			$subLi->add($currentUl);
 		} elseif ($filter['type'] === 'divider') {
-			$sub_li = $this->getListLiPrototype([
+			$subLi = $this->getListLiPrototype([
 				'class' => 'divider',
 			]);
 		} else {
 			throw new Mesour\InvalidArgumentException('Unknown type ' . $filter['type'] . ' possible are only array, "divider" or NULL.');
 		}
-		$sub_ul->add($sub_li);
+		$subUl->add($subLi);
 	}
 
 	public function create()
@@ -299,19 +298,19 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 			$icon->setType($this->iconEdit);
 			$icons .= $icon->render();
 
-			$icons .= "</button>{$this->getTranslator()->translate($this->filtersName)}</span>";
+			$icons .= sprintf('</button>%s</span>', $this->getTranslator()->translate($this->filtersName));
 
 			$subMenu->add($icons);
 
-			$sub_ul = Mesour\Components\Utils\Html::el('ul', [
+			$subUl = Mesour\Components\Utils\Html::el('ul', [
 				'class' => 'dropdown-menu',
 			]);
 
 			foreach ($this->filters as $filter) {
-				$this->createCustomFilterItem($sub_ul, $filter);
+				$this->createCustomFilterItem($subUl, $filter);
 			}
 
-			$subMenu->add($sub_ul);
+			$subMenu->add($subUl);
 
 			$ul->add($subMenu);
 		}
@@ -323,33 +322,33 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 				]));
 			}
 
-			$checkers_li = $this->getListLiPrototype();
-			$inline_box = Mesour\Components\Utils\Html::el('div', ['class' => 'inline-box']);
+			$checkersLi = $this->getListLiPrototype();
+			$inlineBox = Mesour\Components\Utils\Html::el('div', ['class' => 'inline-box']);
 
 			$search = Mesour\Components\Utils\Html::el('div', ['class' => 'search']);
 			$search->add('<input type="text" class="form-control search-input" placeholder="' . $this->getTranslator()->translate('Search...') . '">');
 
-			$checkers_li->add($inline_box);
-			$inline_box->add($search);
+			$checkersLi->add($inlineBox);
+			$inlineBox->add($search);
 
-			$box_inner = Mesour\Components\Utils\Html::el('div', ['class' => 'box-inner']);
+			$boxInner = Mesour\Components\Utils\Html::el('div', ['class' => 'box-inner']);
 
-			$checkers_li->add($box_inner);
+			$checkersLi->add($boxInner);
 
-			$inner_ul = Mesour\Components\Utils\Html::el('ul');
-			$box_inner->add($inner_ul);
+			$innerUl = Mesour\Components\Utils\Html::el('ul');
+			$boxInner->add($innerUl);
 
-			$link_name = $this->createLinkName();
-			$inner_ul->add('<li class="all-select-li">
-                                <input type="checkbox" class="select-all" id="select-all-' . $link_name . '">
-                                <label for="select-all-' . $link_name . '">' . $this->getTranslator()->translate('Select all') . '</label>
+			$linkName = $this->createLinkName();
+			$innerUl->add('<li class="all-select-li">
+                                <input type="checkbox" class="select-all" id="select-all-' . $linkName . '">
+                                <label for="select-all-' . $linkName . '">' . $this->getTranslator()->translate('Select all') . '</label>
                             </li>
                             <li class="all-select-searched-li">
-                                <input type="checkbox" class="select-all-searched" id="selected-' . $link_name . '">
-                                <label for="selected-' . $link_name . '">' . $this->getTranslator()->translate('Select all searched') . '</label>
+                                <input type="checkbox" class="select-all-searched" id="selected-' . $linkName . '">
+                                <label for="selected-' . $linkName . '">' . $this->getTranslator()->translate('Select all searched') . '</label>
                             </li>');
 
-			$ul->add($checkers_li);
+			$ul->add($checkersLi);
 		}
 
 		$wrapper->add($ul);

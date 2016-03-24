@@ -12,9 +12,8 @@ namespace Mesour\Filter\Sources;
 use Mesour;
 use Mesour\ArrayManage\Searcher\Condition;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSource
 {
@@ -59,7 +58,7 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
 	public function applyCheckers($columnName, array $value, $type)
 	{
 		foreach ($value as $val) {
-			$val = (string)$val;
+			$val = (string) $val;
 			if ($type === self::TYPE_DATE) {
 				$this->where($columnName, $val, function ($actual, $expected) {
 					if (is_numeric($expected)) {
@@ -104,81 +103,80 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
 
 	private function customFilter($how, $type)
 	{
-		switch ($how) {
-			case 'equal_to';
-				if ($type === self::TYPE_DATE) {
-					return function ($actual, $expected) {
-						$expected = date($this->dateFormat, $this->fixDate($expected));
-						$actual = date($this->dateFormat, $this->fixDate($actual));
-						return $expected === $actual;
-					};
-				} else {
-					return Condition::EQUAL;
-				}
-			case 'not_equal_to';
-				if ($type === self::TYPE_DATE) {
-					return function ($actual, $expected) {
-						$expected = date($this->dateFormat, $this->fixDate($expected));
-						$actual = date($this->dateFormat, $this->fixDate($actual));
-						return $expected !== $actual;
-					};
-				} else {
-					return Condition::NOT_EQUAL;
-				}
-			case 'bigger';
-				if ($type === self::TYPE_DATE) {
-					return function ($actual, $expected) {
-						$expected = date($this->dateFormat, $this->fixDate($expected));
-						$actual = date($this->dateFormat, $this->fixDate($actual));
-						return $expected < $actual;
-					};
-				} else {
-					return Condition::BIGGER;
-				}
-			case 'not_bigger';
-				if ($type === self::TYPE_DATE) {
-					return function ($actual, $expected) {
-						$expected = date($this->dateFormat, $this->fixDate($expected));
-						$actual = date($this->dateFormat, $this->fixDate($actual));
-						return $expected >= $actual;
-					};
-				} else {
-					return Condition::NOT_BIGGER;
-				}
-			case 'smaller';
-				if ($type === self::TYPE_DATE) {
-					return function ($actual, $expected) {
-						$expected = date($this->dateFormat, $this->fixDate($expected));
-						$actual = date($this->dateFormat, $this->fixDate($actual));
-						return $expected > $actual;
-					};
-				} else {
-					return Condition::SMALLER;
-				}
-			case 'not_smaller';
-				if ($type === self::TYPE_DATE) {
-					return function ($actual, $expected) {
-						$expected = date($this->dateFormat, $this->fixDate($expected));
-						$actual = date($this->dateFormat, $this->fixDate($actual));
-						return $expected <= $actual;
-					};
-				} else {
-					return Condition::NOT_SMALLER;
-				}
-			case 'start_with';
-				return Condition::STARTS_WITH;
-			case 'not_start_with';
-				return Condition::NOT_STARTS_WITH;
-			case 'end_with';
-				return Condition::ENDS_WITH;
-			case 'not_end_with';
-				return Condition::NOT_ENDS_WITH;
-			case 'equal';
-				return Condition::CONTAINS;
-			case 'not_equal';
-				return Condition::NOT_CONTAINS;
-			default:
-				throw new Mesour\UnexpectedValueException('Unexpected key for custom filtering.');
+		if ($how === 'equal_to') {
+			if ($type === self::TYPE_DATE) {
+				return function ($actual, $expected) {
+					$expected = date($this->dateFormat, $this->fixDate($expected));
+					$actual = date($this->dateFormat, $this->fixDate($actual));
+					return $expected === $actual;
+				};
+			} else {
+				return Condition::EQUAL;
+			}
+		} elseif ($how === 'not_equal_to') {
+			if ($type === self::TYPE_DATE) {
+				return function ($actual, $expected) {
+					$expected = date($this->dateFormat, $this->fixDate($expected));
+					$actual = date($this->dateFormat, $this->fixDate($actual));
+					return $expected !== $actual;
+				};
+			} else {
+				return Condition::NOT_EQUAL;
+			}
+		} elseif ($how === 'bigger') {
+			if ($type === self::TYPE_DATE) {
+				return function ($actual, $expected) {
+					$expected = date($this->dateFormat, $this->fixDate($expected));
+					$actual = date($this->dateFormat, $this->fixDate($actual));
+					return $expected < $actual;
+				};
+			} else {
+				return Condition::BIGGER;
+			}
+		} elseif ($how === 'not_bigger') {
+			if ($type === self::TYPE_DATE) {
+				return function ($actual, $expected) {
+					$expected = date($this->dateFormat, $this->fixDate($expected));
+					$actual = date($this->dateFormat, $this->fixDate($actual));
+					return $expected >= $actual;
+				};
+			} else {
+				return Condition::NOT_BIGGER;
+			}
+		} elseif ($how === 'smaller') {
+			if ($type === self::TYPE_DATE) {
+				return function ($actual, $expected) {
+					$expected = date($this->dateFormat, $this->fixDate($expected));
+					$actual = date($this->dateFormat, $this->fixDate($actual));
+					return $expected > $actual;
+				};
+			} else {
+				return Condition::SMALLER;
+			}
+		} elseif ($how === 'not_smaller') {
+			if ($type === self::TYPE_DATE) {
+				return function ($actual, $expected) {
+					$expected = date($this->dateFormat, $this->fixDate($expected));
+					$actual = date($this->dateFormat, $this->fixDate($actual));
+					return $expected <= $actual;
+				};
+			} else {
+				return Condition::NOT_SMALLER;
+			}
+		} elseif ($how === 'start_with') {
+			return Condition::STARTS_WITH;
+		} elseif ($how === 'not_start_with') {
+			return Condition::NOT_STARTS_WITH;
+		} elseif ($how === 'end_with') {
+			return Condition::ENDS_WITH;
+		} elseif ($how === 'not_end_with') {
+			return Condition::NOT_ENDS_WITH;
+		} elseif ($how === 'equal') {
+			return Condition::CONTAINS;
+		} elseif ($how === 'not_equal') {
+			return Condition::NOT_CONTAINS;
+		} else {
+			throw new Mesour\UnexpectedValueException('Unexpected key for custom filtering.');
 		}
 	}
 

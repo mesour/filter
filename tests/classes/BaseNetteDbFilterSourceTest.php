@@ -6,7 +6,6 @@ use Mesour\Filter\Sources\NetteDbFilterSource;
 use Mesour\Sources;
 use Nette\Database;
 
-
 abstract class BaseNetteDbFilterSourceTest extends Sources\Tests\BaseNetteDbSourceTest
 {
 

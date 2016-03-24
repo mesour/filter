@@ -11,14 +11,13 @@ namespace Mesour\Filter\Sources;
 
 use Mesour;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 class SQLHelper
 {
 
-	static public function createWherePairs($columnName, $how, $value, $type, $wildcard = '?')
+	public static function createWherePairs($columnName, $how, $value, $type, $wildcard = '?')
 	{
 		if ($type === IFilterSource::TYPE_DATE) {
 			$value = date('Y-m-d', is_numeric($value) ? $value : strtotime($value));
@@ -30,45 +29,45 @@ class SQLHelper
 		$output[2] = $wildcard;
 
 		switch ($how) {
-			case 'equal_to';
+			case 'equal_to':
 				$output[0] = $columnName . ' = ' . $wildcard;
 				break;
-			case 'not_equal_to';
+			case 'not_equal_to':
 				$output[0] = $columnName . ' != ' . $wildcard;
 				break;
-			case 'bigger';
+			case 'bigger':
 				$output[0] = $columnName . ' > ' . $wildcard;
 				break;
-			case 'not_bigger';
+			case 'not_bigger':
 				$output[0] = $columnName . ' <= ' . $wildcard;
 				break;
-			case 'smaller';
+			case 'smaller':
 				$output[0] = $columnName . ' < ' . $wildcard;
 				break;
-			case 'not_smaller';
+			case 'not_smaller':
 				$output[0] = $columnName . ' >= ' . $wildcard;
 				break;
-			case 'start_with';
+			case 'start_with':
 				$output[0] = $columnName . ' LIKE ' . $wildcard;
 				$output[1] = $value . '%';
 				break;
-			case 'not_start_with';
+			case 'not_start_with':
 				$output[0] = $columnName . ' NOT LIKE ' . $wildcard;
 				$output[1] = $value . '%';
 				break;
-			case 'end_with';
+			case 'end_with':
 				$output[0] = $columnName . ' LIKE ' . $wildcard;
 				$output[1] = '%' . $value;
 				break;
-			case 'not_end_with';
+			case 'not_end_with':
 				$output[0] = $columnName . ' NOT LIKE ' . $wildcard;
 				$output[1] = '%' . $value;
 				break;
-			case 'equal';
+			case 'equal':
 				$output[0] = $columnName . ' LIKE ' . $wildcard;
 				$output[1] = '%' . $value . '%';
 				break;
-			case 'not_equal';
+			case 'not_equal':
 				$output[0] = $columnName . ' NOT LIKE ' . $wildcard;
 				$output[1] = '%' . $value . '%';
 				break;
@@ -79,7 +78,7 @@ class SQLHelper
 		return $output;
 	}
 
-	static public function createWhereForCheckers($columnName, array $value, $type, $isDoctrine = false)
+	public static function createWhereForCheckers($columnName, array $value, $type, $isDoctrine = false)
 	{
 		$fixedValues = [];
 		$hasNull = false;
@@ -106,7 +105,7 @@ class SQLHelper
 				$where = '(';
 				$i = 1;
 				foreach ($value as $val) {
-					$where .= '(' . $columnName . ' >= ' . (int)$val . ' AND ' . $columnName . ' <= ' . ((int)$val + 86398) . ')';
+					$where .= '(' . $columnName . ' >= ' . (int) $val . ' AND ' . $columnName . ' <= ' . ((int) $val + 86398) . ')';
 					if ($i < count($value)) {
 						$where .= ' OR ';
 					}
@@ -148,7 +147,7 @@ class SQLHelper
 		}
 	}
 
-	static private function fixParameterName($columnName)
+	private static function fixParameterName($columnName)
 	{
 		return str_replace(['.', '-'], '', $columnName);
 	}

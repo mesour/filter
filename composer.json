@@ -20,7 +20,9 @@
     "mesour/array-manager": "3.0.*@beta",
     "doctrine/orm": "^2.5",
     "nette/database": "~2.3",
-    "nette/tester": "^1.6"
+    "nette/tester": "^1.6",
+    "slevomat/coding-standard": "^1.0",
+    "consistence/coding-standard": "^0.10"
   },
   "minimum-stability": "beta",
   "prefer-stable": true,

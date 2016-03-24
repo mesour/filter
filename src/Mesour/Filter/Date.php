@@ -11,9 +11,8 @@ namespace Mesour\Filter;
 
 use Mesour;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 class Date extends FilterItem implements IFilterItem
 {
@@ -196,54 +195,54 @@ class Date extends FilterItem implements IFilterItem
 		$attributes['data-type'] = 'date';
 		$this->setOption(self::WRAPPER, $attributes, 'attributes');
 
-		$one_day = 60 * 60 * 24;
+		$oneDay = 60 * 60 * 24;
 		$quarter = $this->dateQuarter();
 		$data = [
 			'YESTERDAY' => date('Y-m-d', strtotime('yesterday midnight')),
 			'TODAY' => date('Y-m-d', strtotime('today midnight')),
 			'TOMORROW' => date('Y-m-d', strtotime('tomorrow midnight')),
 			// ---
-			'LAST_WEEK_FIRST' => date('Y-m-d', ($last_week_monday = strtotime('monday', strtotime('last week'))) - $one_day),
-			'LAST_WEEK_SECOND' => date('Y-m-d', $last_week_monday + 7 * $one_day),
-			'THIS_WEEK_FIRST' => date('Y-m-d', ($this_week_monday = strtotime("last monday midnight")) - $one_day),
-			'THIS_WEEK_SECOND' => date('Y-m-d', $this_week_monday + 7 * $one_day),
-			'NEXT_WEEK_FIRST' => date('Y-m-d', ($this_week_monday + 7 * $one_day) - $one_day),
-			'NEXT_WEEK_SECOND' => date('Y-m-d', $this_week_monday + 14 * $one_day),
+			'LAST_WEEK_FIRST' => date('Y-m-d', ($lastWeekMonday = strtotime('monday', strtotime('last week'))) - $oneDay),
+			'LAST_WEEK_SECOND' => date('Y-m-d', $lastWeekMonday + 7 * $oneDay),
+			'THIS_WEEK_FIRST' => date('Y-m-d', ($thisWeekMonday = strtotime('last monday midnight')) - $oneDay),
+			'THIS_WEEK_SECOND' => date('Y-m-d', $thisWeekMonday + 7 * $oneDay),
+			'NEXT_WEEK_FIRST' => date('Y-m-d', ($thisWeekMonday + 7 * $oneDay) - $oneDay),
+			'NEXT_WEEK_SECOND' => date('Y-m-d', $thisWeekMonday + 14 * $oneDay),
 			// ---
-			'LAST_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $last_month = strtotime('last month'))) - $one_day),
-			'LAST_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $last_month)) + $one_day),
-			'THIS_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y')) - $one_day),
-			'THIS_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y')) + $one_day),
-			'NEXT_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $next_month = strtotime('next month'))) - $one_day),
-			'NEXT_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $next_month)) + $one_day),
+			'LAST_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $lastMonth = strtotime('last month'))) - $oneDay),
+			'LAST_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $lastMonth)) + $oneDay),
+			'THIS_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y')) - $oneDay),
+			'THIS_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y')) + $oneDay),
+			'NEXT_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $nextMonth = strtotime('next month'))) - $oneDay),
+			'NEXT_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $nextMonth)) + $oneDay),
 			// ---
-			'LAST_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) - $one_day),
-			'LAST_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) + $one_day),
-			'THIS_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter) - $one_day),
-			'THIS_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter) + $one_day),
-			'NEXT_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) - $one_day),
-			'NEXT_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) + $one_day),
+			'LAST_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) - $oneDay),
+			'LAST_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) + $oneDay),
+			'THIS_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter) - $oneDay),
+			'THIS_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter) + $oneDay),
+			'NEXT_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) - $oneDay),
+			'NEXT_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) + $oneDay),
 			// ---
-			'LAST_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', ($last_year = strtotime('last year')))) - $one_day),
-			'LAST_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', $last_year)) + $one_day),
-			'THIS_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y')) - $one_day),
-			'THIS_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y')) + $one_day),
-			'NEXT_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', strtotime('next year'))) - $one_day),
-			'NEXT_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', strtotime('next year'))) + $one_day),
+			'LAST_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', ($nextYear = strtotime('last year')))) - $oneDay),
+			'LAST_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', $nextYear)) + $oneDay),
+			'THIS_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y')) - $oneDay),
+			'THIS_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y')) + $oneDay),
+			'NEXT_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', strtotime('next year'))) - $oneDay),
+			'NEXT_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', strtotime('next year'))) + $oneDay),
 		];
-		foreach ($this->filters as $_id => $filter) {
+		foreach ($this->filters as $currentId => $filter) {
 			if (isset($filter['type']) && is_array($filter['type'])) {
-				foreach ($filter['type'] as $__id => $_filter) {
-					if (isset($_filter['attributes'])) {
-						foreach ($_filter['attributes'] as $key => $value) {
-							$this->filters[$_id]['type'][$__id]['attributes'][$key] = Mesour\Components\Utils\Helpers::parseValue($value, $data);
+				foreach ($filter['type'] as $currentInnerId => $currentFilter) {
+					if (isset($currentFilter['attributes'])) {
+						foreach ($currentFilter['attributes'] as $key => $value) {
+							$this->filters[$currentId]['type'][$currentInnerId]['attributes'][$key] = Mesour\Components\Utils\Helpers::parseValue($value, $data);
 						}
 					}
 				}
 			} elseif (!isset($filter['type'])) {
 				if (isset($filter['attributes'])) {
 					foreach ($filter['attributes'] as $key => $value) {
-						$this->filters[$_id]['attributes'][$key] = Mesour\Components\Utils\Helpers::parseValue($value, $data);
+						$this->filters[$currentId]['attributes'][$key] = Mesour\Components\Utils\Helpers::parseValue($value, $data);
 					}
 				}
 			}
@@ -252,17 +251,23 @@ class Date extends FilterItem implements IFilterItem
 
 	private function dateQuarter()
 	{
-		$thisMonth = (int)date('n');
-		if ($thisMonth <= 3) return 1;
-		if ($thisMonth <= 6) return 2;
-		if ($thisMonth <= 9) return 3;
+		$thisMonth = (int) date('n');
+		if ($thisMonth <= 3) {
+			return 1;
+		}
+		if ($thisMonth <= 6) {
+			return 2;
+		}
+		if ($thisMonth <= 9) {
+			return 3;
+		}
 		return 4;
 	}
 
 	private function getEndTimestampForQuarter($quarter, $year = null)
 	{
 		$year = !$year ? date('Y') : $year;
-		$quarter = (int)$quarter;
+		$quarter = (int) $quarter;
 		switch ($quarter) {
 			case 1:
 				return strtotime($year . '-03-31');
@@ -278,7 +283,7 @@ class Date extends FilterItem implements IFilterItem
 	public function getStartTimestampForQuarter($quarter, $year = null)
 	{
 		$year = !$year ? date('Y') : $year;
-		$quarter = (int)$quarter;
+		$quarter = (int) $quarter;
 		switch ($quarter) {
 			case 1:
 				return strtotime($year . '-01-01');

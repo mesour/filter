@@ -9,12 +9,11 @@
 
 namespace Mesour\Filter\Sources;
 
-use Mesour;
 use Doctrine;
-
+use Mesour;
 
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFilterSource
 {
@@ -35,10 +34,13 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
 			} else {
 				$operator = 'or';
 			}
-			$parameters = ['(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')', [
-				substr($values[0][2], 1) => $values[0][1],
-				substr($values[1][2], 1) => $values[1][1],
-			]];
+			$parameters = [
+				'(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')',
+				[
+					substr($values[0][2], 1) => $values[0][1],
+					substr($values[1][2], 1) => $values[1][1],
+				],
+			];
 		} else {
 			$parameters = [$values[0][0], [substr($values[0][2], 1) => $values[0][1]]];
 		}

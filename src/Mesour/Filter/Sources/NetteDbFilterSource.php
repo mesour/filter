@@ -12,9 +12,8 @@ namespace Mesour\Filter\Sources;
 use Mesour;
 use Nette;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 class NetteDbFilterSource extends Mesour\Sources\NetteDbTableSource implements IFilterSource
 {
@@ -37,7 +36,8 @@ class NetteDbFilterSource extends Mesour\Sources\NetteDbTableSource implements I
 			}
 			$parameters = [
 				'(' . $values[0][0] . ' ' . $operator . ' ' . $values[1][0] . ')',
-				$values[0][1], $values[1][1],
+				$values[0][1],
+				$values[1][1],
 			];
 		} else {
 			$parameters = [$values[0][0], $values[0][1]];
@@ -67,13 +67,13 @@ class NetteDbFilterSource extends Mesour\Sources\NetteDbTableSource implements I
 		foreach ($selection as $data) {
 			/** @var Nette\Database\Table\ActiveRow $data */
 			$this->lastFetchAllResult[] = $data;
-			$current_data = $data->toArray();
-			foreach ($current_data as $key => $val) {
+			$currentData = $data->toArray();
+			foreach ($currentData as $key => $val) {
 				if ($val instanceof \DateTime) {
-					$current_data[$key] = $val->format($dateFormat);
+					$currentData[$key] = $val->format($dateFormat);
 				}
 			}
-			$output[] = $this->makeArrayHash($current_data);
+			$output[] = $this->makeArrayHash($currentData);
 		}
 		return $output;
 	}

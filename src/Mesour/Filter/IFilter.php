@@ -11,9 +11,8 @@ namespace Mesour\Filter;
 
 use Mesour;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 interface IFilter extends Mesour\Components\Control\IAttributesControl
 {
@@ -28,7 +27,7 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
 	public function getSource();
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param null $text
 	 * @param array $valueTranslates
 	 * @return Mesour\Filter\Number
@@ -36,7 +35,7 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
 	public function addNumberFilter($name, $text = null, array $valueTranslates = []);
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param string|null $text
 	 * @param array $valueTranslates
 	 * @return Mesour\Filter\Text
@@ -44,7 +43,7 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
 	public function addTextFilter($name, $text = null, array $valueTranslates = []);
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param string|null $text
 	 * @param array $valueTranslates
 	 * @return Mesour\Filter\Date
@@ -52,14 +51,14 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
 	public function addDateFilter($name, $text = null, array $valueTranslates = []);
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param IFilterItem $filterItem
 	 * @return IFilterItem
 	 */
 	public function addCustomFilter($name, IFilterItem $filterItem);
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param array $data
 	 * @return IFilterItem
 	 */
@@ -68,7 +67,7 @@ interface IFilter extends Mesour\Components\Control\IAttributesControl
 	public function setCustomReference($column, array $data);
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @param array $data
 	 * @return Mesour\Components\Utils\Html
 	 */

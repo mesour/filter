@@ -11,6 +11,7 @@ require_once __DIR__ . '/../../vendor/mesour/sources/tests/classes/DataSourceTes
 
 class DataSourceChecker
 {
+
 	const COUNT_OF_JOHN = 2;
 	const COUNT_OF_JOHN_AND_PETER = 0;
 	const COUNT_OF_JOHN_OR_PETER = 3;
@@ -28,33 +29,28 @@ class DataSourceChecker
 	const TYPE_AND = 'and';
 	const TYPE_SIMPLE = 'simple';
 
-	static public $credentials = [
-		'user' => 'root',
-		'password' => '',
-	];
-
-	static public function matchCheckersText(IFilterSource $source, $rawClassType)
+	public static function matchCheckersText(IFilterSource $source, $rawClassType)
 	{
 		$source->applyCheckers('name', ['John'], $source::TYPE_STRING);
 
 		self::matchCounts($source, self::COUNT_OF_JOHN, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
 	}
 
-	static public function matchCheckersDate(IFilterSource $source, $rawClassType)
+	public static function matchCheckersDate(IFilterSource $source, $rawClassType)
 	{
 		$source->applyCheckers('last_login', ['2014-09-09'], $source::TYPE_DATE);
 
 		self::matchCounts($source, self::COUNT_OF_DATE_14_09_09, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
 	}
 
-	static public function matchCheckersRelated(IFilterSource $source, $rawClassType, $columnName = 'group_name')
+	public static function matchCheckersRelated(IFilterSource $source, $rawClassType, $columnName = 'group_name')
 	{
 		$source->applyCheckers($columnName, ['Group 1'], $source::TYPE_STRING);
 
 		self::matchCounts($source, self::COUNT_OF_GROUP_1, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
 	}
 
-	static public function matchCustomText(IFilterSource $source, $rawClassType)
+	public static function matchCustomText(IFilterSource $source, $rawClassType)
 	{
 		foreach ([self::TYPE_AND, self::TYPE_OR, self::TYPE_SIMPLE] as $type) {
 			if ($type === self::TYPE_OR) {
@@ -75,7 +71,7 @@ class DataSourceChecker
 		}
 	}
 
-	static public function matchCustomDate(IFilterSource $source, $rawClassType)
+	public static function matchCustomDate(IFilterSource $source, $rawClassType)
 	{
 		foreach ([self::TYPE_OR, self::TYPE_AND, self::TYPE_SIMPLE] as $type) {
 			if ($type === self::TYPE_OR) {
@@ -96,7 +92,7 @@ class DataSourceChecker
 		}
 	}
 
-	static public function matchCustomRelated(IFilterSource $source, $rawClassType, $columnName = 'group_name')
+	public static function matchCustomRelated(IFilterSource $source, $rawClassType, $columnName = 'group_name')
 	{
 		foreach ([self::TYPE_AND, self::TYPE_OR, self::TYPE_SIMPLE] as $type) {
 			if ($type === self::TYPE_OR) {
@@ -117,7 +113,7 @@ class DataSourceChecker
 		}
 	}
 
-	static protected function createCustomData($firstValue, $secondValue = null, $operator = 'and')
+	protected static function createCustomData($firstValue, $secondValue = null, $operator = 'and')
 	{
 		$out = [
 			'how1' => 'equal_to',
@@ -132,7 +128,7 @@ class DataSourceChecker
 		return $out;
 	}
 
-	static protected function matchCounts(IFilterSource $source, $filteredCount, $fullCount, $rawClassType)
+	protected static function matchCounts(IFilterSource $source, $filteredCount, $fullCount, $rawClassType)
 	{
 		static $lastRowsDescription = 'Output from fetchLastRawRows after %s';
 

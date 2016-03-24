@@ -11,9 +11,8 @@ namespace Mesour\Filter\Sources;
 
 use Mesour;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 interface IFilterSource extends Mesour\Sources\ISource
 {

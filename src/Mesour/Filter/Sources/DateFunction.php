@@ -9,33 +9,29 @@
 
 namespace Mesour\Filter\Sources;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\SqlWalker;
-use Doctrine\ORM\Query\Parser;
-
+use Doctrine\ORM\Query;
 
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
-class DateFunction extends FunctionNode
+class DateFunction extends Query\AST\Functions\FunctionNode
 {
 
 	private $arg;
 
-	public function getSql(SqlWalker $sqlWalker)
+	public function getSql(Query\SqlWalker $sqlWalker)
 	{
 		return sprintf('DATE(%s)', $this->arg->dispatch($sqlWalker));
 	}
 
-	public function parse(Parser $parser)
+	public function parse(Query\Parser $parser)
 	{
-		$parser->match(Lexer::T_IDENTIFIER);
-		$parser->match(Lexer::T_OPEN_PARENTHESIS);
+		$parser->match(Query\Lexer::T_IDENTIFIER);
+		$parser->match(Query\Lexer::T_OPEN_PARENTHESIS);
 
 		$this->arg = $parser->ArithmeticPrimary();
 
-		$parser->match(Lexer::T_CLOSE_PARENTHESIS);
+		$parser->match(Query\Lexer::T_CLOSE_PARENTHESIS);
 	}
 
 }

@@ -9,7 +9,6 @@ use Mesour\Filter\Sources\DoctrineFilterSource;
 use Mesour\Sources;
 use Nette\Database;
 
-
 abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSourceTest
 {
 
@@ -17,6 +16,8 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
 	{
 		$this->configFile = __DIR__ . '/../config.php';
 		$this->localConfigFile = __DIR__ . '/../config.local.php';
+
+		//todo: test custom date
 
 		parent::__construct();
 
@@ -61,8 +62,6 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\BaseDoctrineSo
 
 		DataSourceChecker::matchCustomText(clone $source, Sources\Tests\Entity\User::class);
 	}
-
-	//todo: here test custom date
 
 	public function testApplyCustomRelated()
 	{

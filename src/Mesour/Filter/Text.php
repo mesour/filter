@@ -11,9 +11,8 @@ namespace Mesour\Filter;
 
 use Mesour;
 
-
 /**
- * @author Matouš Němec <matous.nemec@mesour.com>
+ * @author Matouš Němec <http://mesour.com>
  */
 class Text extends FilterItem implements IFilterItem
 {
