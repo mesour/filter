@@ -1,13 +1,9 @@
 <?php
 namespace Mesour\Filter\Tests;
 
-require_once __DIR__ . '/../bootstrap.php';
-
 use Mesour\Filter\Sources\IFilterSource;
 use Mesour\Sources\ArrayHash;
 use Tester\Assert;
-
-require_once __DIR__ . '/../../vendor/mesour/sources/tests/classes/DataSourceTestCase.php';
 
 class DataSourceChecker
 {
