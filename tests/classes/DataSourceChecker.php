@@ -3,7 +3,6 @@ namespace Mesour\Filter\Tests;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-
 use Mesour\Filter\Sources\IFilterSource;
 use Mesour\Sources\ArrayHash;
 use Tester\Assert;

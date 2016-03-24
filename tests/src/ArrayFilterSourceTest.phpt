@@ -16,13 +16,6 @@ require_once __DIR__ . '/../classes/DataSourceChecker.php';
 class ArrayFilterSourceTest extends BaseArrayFilterSourceTest
 {
 
-	public function __construct()
-	{
-		self::$credentials = DataSourceChecker::$credentials;
-
-		parent::__construct();
-	}
-
 }
 
 $test = new ArrayFilterSourceTest();
