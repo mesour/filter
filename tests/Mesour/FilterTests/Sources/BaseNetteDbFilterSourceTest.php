@@ -1,6 +1,6 @@
 <?php
 
-namespace Mesour\Filter\Tests;
+namespace Mesour\FilterTests\Sources;
 
 use Mesour\Filter\Sources\NetteDbFilterSource;
 use Mesour\Sources;
@@ -12,8 +12,8 @@ abstract class BaseNetteDbFilterSourceTest extends Sources\Tests\BaseNetteDbSour
 	public function __construct($setConfigFiles = true)
 	{
 		if ($setConfigFiles) {
-			$this->configFile = __DIR__ . '/../config.php';
-			$this->localConfigFile = __DIR__ . '/../config.local.php';
+			$this->configFile = __DIR__ . '/../../../config.php';
+			$this->localConfigFile = __DIR__ . '/../../../config.local.php';
 		}
 
 		parent::__construct();

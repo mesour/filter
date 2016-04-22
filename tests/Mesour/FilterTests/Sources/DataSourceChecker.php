@@ -1,5 +1,6 @@
 <?php
-namespace Mesour\Filter\Tests;
+
+namespace Mesour\FilterTests\Sources;
 
 use Mesour\Filter\Sources\IFilterSource;
 use Mesour\Sources\ArrayHash;

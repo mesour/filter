@@ -1,6 +1,6 @@
 <?php
 
-namespace Mesour\Filter\Tests;
+namespace Mesour\FilterTests\Sources;
 
 use Mesour\Filter\Sources\ArrayFilterSource;
 use Mesour\Sources;
@@ -12,8 +12,8 @@ abstract class BaseArrayFilterSourceTest extends Sources\Tests\BaseArraySourceTe
 	public function __construct($setConfigFiles = true)
 	{
 		if ($setConfigFiles) {
-			$this->configFile = __DIR__ . '/../config.php';
-			$this->localConfigFile = __DIR__ . '/../config.local.php';
+			$this->configFile = __DIR__ . '/../../../config.php';
+			$this->localConfigFile = __DIR__ . '/../../../config.local.php';
 		}
 
 		parent::__construct();
@@ -38,10 +38,7 @@ abstract class BaseArrayFilterSourceTest extends Sources\Tests\BaseArraySourceTe
 
 	public function testApplyCheckersRelated()
 	{
-		$source = new ArrayFilterSource('users', 'id', self::$user, $this->relations);
-
-		$source->getDataStructure()
-			->addOneToOne('group_name', 'groups', 'name');
+		$source = $this->createArraySourceWithDataStructure(ArrayFilterSource::class);
 
 		$source->joinField('groups', 'group_id', 'name', 'group_name');
 
@@ -64,10 +61,7 @@ abstract class BaseArrayFilterSourceTest extends Sources\Tests\BaseArraySourceTe
 
 	public function testApplyCustomRelated()
 	{
-		$source = new ArrayFilterSource('users', 'id', self::$user, $this->relations);
-
-		$source->getDataStructure()
-			->addOneToOne('group_name', 'groups', 'name');
+		$source = $this->createArraySourceWithDataStructure(ArrayFilterSource::class);
 
 		$source->joinField('groups', 'group_id', 'name', 'group_name');
 

@@ -24,19 +24,29 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 {
 
 	const ITEMS = 'items';
+
 	const RESET_BUTTON = 'reset-button';
+
 	const WRAPPER = 'wrapper';
+
 	const HIDDEN = 'hidden';
 
 	const VALUE_TRUE = '-mesour-bool-1';
+
 	const VALUE_FALSE = '-mesour-bool-0';
+
 	const VALUE_NULL = '-mesour-null';
 
 	const ICON_ITEM_ACTIVE = 'itemIsActive';
+
 	const ICON_EDIT_CUSTOM = 'editCustom';
+
 	const ICON_REMOVE_CUSTOM = 'removeCustom';
+
 	const ICON_PLUS = 'plus';
+
 	const ICON_MINUS = 'minus';
+
 	const ICON_CALENDAR = 'calendar';
 
 	const PREDEFINED_KEY = 'predefined';
@@ -260,9 +270,12 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	public function getHiddenPrototype()
 	{
 		$attributes = $this->getOption(self::HIDDEN, 'attributes');
-		$attributes = array_merge($attributes, [
-			'data-mesour-filter' => $this->createLinkName(),
-		]);
+		$attributes = array_merge(
+			$attributes,
+			[
+				'data-mesour-filter' => $this->createLinkName(),
+			]
+		);
 
 		return $this->hidden
 			? $this->hidden
@@ -277,13 +290,19 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 	public function getResetButtonPrototype()
 	{
 		$attributes = $this->getOption(self::RESET_BUTTON, 'attributes');
-		$attributes = array_merge($attributes, [
-			'data-filter-name' => $this->createLinkName(),
-		]);
+		$attributes = array_merge(
+			$attributes,
+			[
+				'data-filter-name' => $this->createLinkName(),
+			]
+		);
 
 		return $this->resetButton
 			? $this->resetButton
-			: ($this->resetButton = Mesour\Components\Utils\Html::el($this->getOption(self::RESET_BUTTON, 'el'), $attributes)
+			: ($this->resetButton = Mesour\Components\Utils\Html::el(
+				$this->getOption(self::RESET_BUTTON, 'el'),
+				$attributes
+			)
 				->setHtml($this->getOption(self::RESET_BUTTON, 'content')));
 	}
 
@@ -356,7 +375,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		$attributes = [
 			'data-mesour-data' => Nette\Utils\Json::encode($data),
 			'value' => Nette\Utils\Json::encode($this->getValues()),
-			'data-references' => Nette\Utils\Json::encode(array_merge([self::PREDEFINED_KEY => $this->predefinedData], $referenceData)),
+			'data-references' => Nette\Utils\Json::encode(
+				array_merge([self::PREDEFINED_KEY => $this->predefinedData], $referenceData)
+			),
 			'data-mesour-date' => $this->getDateFormat(),
 			'data-icon-prefix' => $icon->getPrefix(),
 			'data-icons' => Nette\Utils\Json::encode(self::$icons),
@@ -379,11 +400,32 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		}
 		$fullData = [];
 		$source = $this->getSource(false);
-		if ($source && $source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
-			$fullData = $source->fetchFullData();
+		if ($source) {
+			if ($source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
+				$fullData = $source->fetchFullData();
+			}
+
+			$this->checkFilterItems();
 		}
 
 		return $fullData;
+	}
+
+	protected function checkFilterItems()
+	{
+		$source = $this->getSource();
+		$dataStructure = $source->getDataStructure();
+
+		foreach ($this->getComponents() as $component) {
+			if ($dataStructure->hasColumn($component->getName())) {
+				$column = $dataStructure->getColumn($component->getName());
+				if ($column instanceof BaseTableColumnStructure) {
+					throw new Mesour\NotImplementedException(
+						sprintf('Can not set filter to referenced column %s.', $component->getName())
+					);
+				}
+			}
+		}
 	}
 
 	public function create()
