@@ -25,9 +25,11 @@ class Date extends FilterItem implements IFilterItem
 			'attributes' => [
 				'data-type-first' => 'equal_to',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Time period',
 			'type' => [
 				[
@@ -38,7 +40,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{LAST_WEEK_FIRST}',
 						'data-second-value' => '{LAST_WEEK_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'This week',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -46,7 +49,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{THIS_WEEK_FIRST}',
 						'data-second-value' => '{THIS_WEEK_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'Next week',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -54,9 +58,11 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{NEXT_WEEK_FIRST}',
 						'data-second-value' => '{NEXT_WEEK_SECOND}',
 					],
-				], [
+				],
+				[
 					'type' => 'divider',
-				], [
+				],
+				[
 					'name' => 'Last month',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -64,7 +70,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{LAST_MONTH_FIRST}',
 						'data-second-value' => '{LAST_MONTH_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'This month',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -72,7 +79,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{THIS_MONTH_FIRST}',
 						'data-second-value' => '{THIS_MONTH_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'Next month',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -80,9 +88,11 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{NEXT_MONTH_FIRST}',
 						'data-second-value' => '{NEXT_MONTH_SECOND}',
 					],
-				], [
+				],
+				[
 					'type' => 'divider',
-				], [
+				],
+				[
 					'name' => 'Last quarter',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -90,7 +100,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{LAST_QUARTER_FIRST}',
 						'data-second-value' => '{LAST_QUARTER_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'This quarter',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -98,7 +109,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{THIS_QUARTER_FIRST}',
 						'data-second-value' => '{THIS_QUARTER_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'Next quarter',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -106,9 +118,11 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{NEXT_QUARTER_FIRST}',
 						'data-second-value' => '{NEXT_QUARTER_SECOND}',
 					],
-				], [
+				],
+				[
 					'type' => 'divider',
-				], [
+				],
+				[
 					'name' => 'Last year',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -116,7 +130,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{LAST_YEAR_FIRST}',
 						'data-second-value' => '{LAST_YEAR_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'This year',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -124,7 +139,8 @@ class Date extends FilterItem implements IFilterItem
 						'data-first-value' => '{THIS_YEAR_FIRST}',
 						'data-second-value' => '{THIS_YEAR_SECOND}',
 					],
-				], [
+				],
+				[
 					'name' => 'Next year',
 					'attributes' => [
 						'data-type-first' => 'bigger',
@@ -134,55 +150,67 @@ class Date extends FilterItem implements IFilterItem
 					],
 				],
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Yesterday',
 			'attributes' => [
 				'data-type-first' => 'equal_to',
 				'data-first-value' => '{YESTERDAY}',
 			],
-		], [
+		],
+		[
 			'name' => 'Today',
 			'attributes' => [
 				'data-type-first' => 'equal_to',
 				'data-first-value' => '{TODAY}',
 			],
-		], [
+		],
+		[
 			'name' => 'Tomorrow',
 			'attributes' => [
 				'data-type-first' => 'equal_to',
 				'data-first-value' => '{TOMORROW}',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Beginning of the year',
 			'attributes' => [
 				'data-type-first' => 'bigger',
 				'data-first-value' => '{THIS_YEAR_FIRST}',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Before',
 			'attributes' => [
 				'data-type-first' => 'smaller',
 			],
-		], [
+		],
+		[
 			'name' => 'After',
 			'attributes' => [
 				'data-type-first' => 'bigger',
 			],
-		], [
+		],
+		[
 			'name' => 'Between',
 			'attributes' => [
 				'data-type-first' => 'bigger',
 				'data-type-second' => 'smaller',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Custom filter',
 		],
 	];

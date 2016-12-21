@@ -23,32 +23,21 @@ use Nette;
 class Filter extends Mesour\Components\Control\AttributesControl implements Mesour\Filter\IFilter
 {
 
+	use Mesour\Icon\HasIcon;
+
 	const ITEMS = 'items';
-
 	const RESET_BUTTON = 'reset-button';
-
 	const WRAPPER = 'wrapper';
-
 	const HIDDEN = 'hidden';
-
 	const VALUE_TRUE = '-mesour-bool-1';
-
 	const VALUE_FALSE = '-mesour-bool-0';
-
 	const VALUE_NULL = '-mesour-null';
-
 	const ICON_ITEM_ACTIVE = 'itemIsActive';
-
 	const ICON_EDIT_CUSTOM = 'editCustom';
-
 	const ICON_REMOVE_CUSTOM = 'removeCustom';
-
 	const ICON_PLUS = 'plus';
-
 	const ICON_MINUS = 'minus';
-
 	const ICON_CALENDAR = 'calendar';
-
 	const PREDEFINED_KEY = 'predefined';
 
 	static public $maxCheckboxCount = 1000;

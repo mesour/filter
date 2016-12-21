@@ -17,6 +17,9 @@ use Doctrine\ORM\Query;
 class DateFunction extends Query\AST\Functions\FunctionNode
 {
 
+	/**
+	 * @var object
+	 */
 	private $arg;
 
 	public function getSql(Query\SqlWalker $sqlWalker)

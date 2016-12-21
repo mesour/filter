@@ -1,11 +1,9 @@
 <?php
 
-/**
- * @skip todo: because have to create and use data time provider
- */
-
 namespace Mesour\FilterTests\Sources;
 
+use Mesour\Components\RandomString\CapturingRandomStringGenerator;
+use Mesour\Components\RandomString\IRandomStringGenerator;
 use Mesour\Sources\Tests\DataSourceTestCase;
 use Mesour\UI\Application;
 use Nette\Caching\Storages\MemoryStorage;
@@ -16,6 +14,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 require_once __DIR__ . '/../../../vendor/mesour/sources/tests/classes/Connection.php';
 require_once __DIR__ . '/../../../vendor/mesour/sources/tests/classes/DatabaseFactory.php';
 require_once __DIR__ . '/../../../vendor/mesour/sources/tests/classes/DataSourceTestCase.php';
+require_once __DIR__ . '/MockRandomStrings/DefaultRenderTestRandomString.php';
 
 class DefaultRenderTest extends DataSourceTestCase
 {
@@ -28,6 +27,13 @@ class DefaultRenderTest extends DataSourceTestCase
 
 	/** @var \Nette\Database\Table\Selection */
 	protected $user;
+
+	protected $generateRandomString = false;
+
+	/**
+	 * @var IRandomStringGenerator|CapturingRandomStringGenerator
+	 */
+	protected $randomStringGenerator;
 
 	public function __construct($setConfigFiles = true)
 	{
@@ -53,6 +59,29 @@ class DefaultRenderTest extends DataSourceTestCase
 		$this->user = $this->context->table('users');
 	}
 
+	public function setUp()
+	{
+		parent::setUp();
+
+		if ($this->generateRandomString) {
+			$this->randomStringGenerator = new CapturingRandomStringGenerator();
+		} else {
+			$this->randomStringGenerator = new DefaultRenderTestRandomString();
+		}
+	}
+
+	public function tearDown()
+	{
+		parent::tearDown();
+
+		if ($this->generateRandomString) {
+			$this->randomStringGenerator->writeToPhpFile(
+				__DIR__ . '/MockRandomStrings/DefaultRenderTestRandomString.php',
+				DefaultRenderTestRandomString::class
+			);
+		}
+	}
+
 	public function testDefault()
 	{
 		// APPLICATION
@@ -60,6 +89,8 @@ class DefaultRenderTest extends DataSourceTestCase
 		$application = new Application();
 
 		$application->setRequest($_REQUEST);
+
+		$application->getContext()->setService($this->randomStringGenerator, IRandomStringGenerator::class);
 
 		$application->run();
 

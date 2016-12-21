@@ -25,46 +25,55 @@ class Number extends FilterItem implements IFilterItem
 			'attributes' => [
 				'data-type-first' => 'equal_to',
 			],
-		], [
+		],
+		[
 			'name' => 'Not equal to',
 			'attributes' => [
 				'data-type-first' => 'not_equal_to',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Bigger than',
 			'attributes' => [
 				'data-type-first' => 'bigger',
 			],
-		], [
+		],
+		[
 			'name' => 'Bigger than or equal',
 			'attributes' => [
 				'data-type-first' => 'bigger',
 				'data-type-second' => 'equal_to',
 				'data-operator' => 'or',
 			],
-		], [
+		],
+		[
 			'name' => 'Smaller than',
 			'attributes' => [
 				'data-type-first' => 'smaller',
 			],
-		], [
+		],
+		[
 			'name' => 'Smaller than or equal',
 			'attributes' => [
 				'data-type-first' => 'smaller',
 				'data-type-second' => 'equal_to',
 				'data-operator' => 'or',
 			],
-		], [
+		],
+		[
 			'name' => 'Between',
 			'attributes' => [
 				'data-type-first' => 'bigger',
 				'data-type-second' => 'smaller',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Custom filter',
 		],
 	];

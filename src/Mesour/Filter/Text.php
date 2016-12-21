@@ -25,38 +25,47 @@ class Text extends FilterItem implements IFilterItem
 			'attributes' => [
 				'data-type-first' => 'equal_to',
 			],
-		], [
+		],
+		[
 			'name' => 'Not equal to',
 			'attributes' => [
 				'data-type-first' => 'not_equal_to',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Contains',
 			'attributes' => [
 				'data-type-first' => 'equal',
 			],
-		], [
+		],
+		[
 			'name' => 'Not contains',
 			'attributes' => [
 				'data-type-first' => 'not_equal',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Starts with',
 			'attributes' => [
 				'data-type-first' => 'start_with',
 			],
-		], [
+		],
+		[
 			'name' => 'Ends with',
 			'attributes' => [
 				'data-type-first' => 'end_with',
 			],
-		], [
+		],
+		[
 			'type' => 'divider',
-		], [
+		],
+		[
 			'name' => 'Custom filter',
 		],
 	];

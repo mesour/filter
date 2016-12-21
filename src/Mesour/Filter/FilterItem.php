@@ -19,6 +19,10 @@ use Mesour;
 abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 {
 
+	use Mesour\Components\Localization\Translatable;
+	use Mesour\Components\RandomString\RandomString;
+	use Mesour\Icon\HasIcon;
+
 	const WRAPPER = 'wrapper';
 	const LIST_UL = 'list-ul';
 	const LIST_LI = 'list-li';
@@ -246,7 +250,10 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 			]);
 		}
 
-		$button = $this->getButtonPrototype();
+		$random = $this->getRandomStringGenerator()->generate();
+
+		$button = $this->getButtonPrototype()
+			->addAttributes(['id' => $random]);
 
 		$this->onRender($this);
 
@@ -272,7 +279,9 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
 		$wrapper->add($button);
 
-		$ul = $this->getListUlPrototype();
+		$ul = $this->getListUlPrototype([
+			'aria-labelledby' => $random,
+		]);
 
 		if ($this->hasMainFilter && count($this->filters) > 0) {
 			$subMenu = $this->getListLiPrototype([
