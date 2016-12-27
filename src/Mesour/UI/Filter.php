@@ -110,6 +110,8 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
 		$this->startPrivateSession();
 
+		$this->setUpModal();
+
 		$this->setHtmlElement(
 			Mesour\Components\Utils\Html::el(
 				$this->getOption(self::WRAPPER, 'el'),
@@ -118,12 +120,37 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		);
 	}
 
+	private function setUpModal()
+	{
+		$this->addComponent(new Modal('modal'));
+
+		$this->getModal()->getControlPrototype()
+			->class('mesour-filter-modal', true);
+
+		$this->getModal()
+			->setTitle('Custom filter')
+			->addTemplateContent('content', __DIR__ . '/../Filter/Modal/modalContent.latte');
+
+		$this->getModal()->getModalFooter()
+			->addButton('save')
+				->setText('OK')
+				->setClassName('btn btn-primary save-custom-filter');
+	}
+
 	public function attached(Mesour\Components\ComponentModel\IContainer $parent)
 	{
 		parent::attached($parent);
 		$this->startPrivateSession(true);
 
 		return $this;
+	}
+
+	/**
+	 * @return Modal
+	 */
+	public function getModal()
+	{
+		return $this['modal'];
 	}
 
 	/**
@@ -432,6 +459,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		$dataStructure = $this->getSource()->getDataStructure();
 		$hasCheckers = count($fullData) > 0;
 		foreach ($this as $name => $itemInstance) {
+			if (!$itemInstance instanceof Mesour\Filter\IFilterItem) {
+				continue;
+			}
 			/** @var Mesour\Filter\IFilterItem $itemInstance */
 			$itemInstance->setCheckers($hasCheckers);
 
@@ -457,6 +487,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		$wrapper->add($this->createResetButton());
 
 		$wrapper->add($hidden);
+		$wrapper->add($this->getModal()->create());
 
 		return $wrapper;
 	}

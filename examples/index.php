@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" href="../vendor/mesour/components/public/DateTimePicker/bootstrap-datetimepicker.min.css">
 
-<link rel="stylesheet" href="../public/src/mesour.filter.css">
+<link rel="stylesheet" href="../node_modules/mesour-filter/dist/css/mesour.filter.min.css">
 
 <?php
 
@@ -63,6 +63,10 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
 	$application->setRequest($_REQUEST);
 
+	$config = $application->getConfiguration();
+
+	$config->setTempDir(__DIR__ . '/../tmp');
+
 	$application->run();
 
 	// SELECTION
@@ -105,7 +109,8 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
 	$filter->addTextFilter('group_name', 'Group name');
 
-	$filter->addTextFilter('has_pro', 'Bool value');
+	$filter->addTextFilter('has_pro', 'Bool value')
+		->setMainFilter(false);
 
 	$filter->addDateFilter('timestamp', 'Timestamp');
 
@@ -135,9 +140,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 		crossorigin="anonymous"></script>
 
-<script src="../vendor/mesour/components/public/mesour.components.min.js"></script>
-
 <script src="../vendor/mesour/components/public/DateTimePicker/moment.min.js"></script>
 <script src="../vendor/mesour/components/public/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
 
-<script src="../public/mesour.filter.min.js"></script>
+<script src="../node_modules/mesour-filter/dist/js/mesour.filter.js"></script>
