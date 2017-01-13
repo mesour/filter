@@ -133,8 +133,8 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
 		$this->getModal()->getModalFooter()
 			->addButton('save')
-				->setText('OK')
-				->setClassName('btn btn-primary save-custom-filter');
+			->setText('OK')
+			->setClassName('btn btn-primary save-custom-filter');
 	}
 
 	public function attached(Mesour\Components\ComponentModel\IContainer $parent)
@@ -420,28 +420,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 			if ($source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
 				$fullData = $source->fetchFullData();
 			}
-
-			$this->checkFilterItems();
 		}
 
 		return $fullData;
-	}
-
-	protected function checkFilterItems()
-	{
-		$source = $this->getSource();
-		$dataStructure = $source->getDataStructure();
-
-		foreach ($this->getComponents() as $component) {
-			if ($dataStructure->hasColumn($component->getName())) {
-				$column = $dataStructure->getColumn($component->getName());
-				if ($column instanceof BaseTableColumnStructure) {
-					throw new Mesour\NotImplementedException(
-						sprintf('Can not set filter to referenced column %s.', $component->getName())
-					);
-				}
-			}
-		}
 	}
 
 	public function create()
@@ -475,7 +456,11 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 				) {
 					/** @var BaseTableColumnStructure $column */
 					$column = $dataStructure->getColumn($name);
-					$item->setReferenceSettings($column->getTableStructure()->getName());
+					$item->setReferenceSettings([
+						'table' => $column->getTableStructure()->getName(),
+						'column' => $column->getTableStructure()->getPrimaryKey(),
+						'pattern' => $column->getPattern(),
+					]);
 				} elseif (isset($this->predefinedData[$name])) {
 					$item->setReferenceSettings(self::PREDEFINED_KEY);
 				}
