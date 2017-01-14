@@ -19,9 +19,9 @@ script:
     - vendor/bin/phpcs --standard=ruleset.xml --extensions=php,phpt --encoding=utf-8 --tab-width=4 -sp src tests
 
 after_script:
-    - for i in $(find ./log -name \*.log); do echo "--- $i"; cat $i; echo; echo; done
-    - for i in $(find ./log -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
-    - for i in $(find ./log -name \*.expected); do echo "--- $i"; cat $i; echo; echo; done
+    - for i in $(find ./tests/log -name \*.log); do echo "--- $i"; cat $i; echo; echo; done
+    - for i in $(find ./tests/log -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
+    - for i in $(find ./tests/log -name \*.expected); do echo "--- $i"; cat $i; echo; echo; done
 
 services:
     - mysql
