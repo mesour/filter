@@ -2,6 +2,8 @@
 
 namespace Mesour\FilterTests\Sources;
 
+use Mesour\Components\DateTimeProvider\ConstantDateTimeProvider;
+use Mesour\Components\DateTimeProvider\IDateTimeProvider;
 use Mesour\Components\RandomString\CapturingRandomStringGenerator;
 use Mesour\Components\RandomString\IRandomStringGenerator;
 use Mesour\Sources\Tests\DataSourceTestCase;
@@ -90,7 +92,13 @@ class DefaultRenderTest extends DataSourceTestCase
 
 		$application->setRequest($_REQUEST);
 
-		$application->getContext()->setService($this->randomStringGenerator, IRandomStringGenerator::class);
+		$application->getContext()
+			->setService($this->randomStringGenerator, IRandomStringGenerator::class);
+
+		$application->getContext()
+			->setService(new ConstantDateTimeProvider(new \DateTime('2016-12-21')), IDateTimeProvider::class);
+
+		$application->getConfiguration()->setTempDir(__DIR__ . '/../tmp');
 
 		$application->run();
 

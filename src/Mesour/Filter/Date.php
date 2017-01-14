@@ -17,6 +17,8 @@ use Mesour;
 class Date extends FilterItem implements IFilterItem
 {
 
+	use Mesour\Components\DateTimeProvider\HasDateTimeProvider;
+
 	protected $filtersName = 'Date filters';
 
 	protected $filters = [
@@ -222,41 +224,46 @@ class Date extends FilterItem implements IFilterItem
 		$attributes = $this->getOption(self::WRAPPER, 'attributes');
 		$attributes['data-type'] = 'date';
 		$this->setOption(self::WRAPPER, $attributes, 'attributes');
+	}
+
+	public function attached(Mesour\Components\ComponentModel\IContainer $parent)
+	{
+		parent::attached($parent);
 
 		$oneDay = 60 * 60 * 24;
 		$quarter = $this->dateQuarter();
 		$data = [
-			'YESTERDAY' => date('Y-m-d', strtotime('yesterday midnight')),
-			'TODAY' => date('Y-m-d', strtotime('today midnight')),
-			'TOMORROW' => date('Y-m-d', strtotime('tomorrow midnight')),
+			'YESTERDAY' => date('Y-m-d', strtotime('yesterday midnight', $this->getTime())),
+			'TODAY' => date('Y-m-d', strtotime('today midnight', $this->getTime())),
+			'TOMORROW' => date('Y-m-d', strtotime('tomorrow midnight', $this->getTime())),
 			// ---
-			'LAST_WEEK_FIRST' => date('Y-m-d', ($lastWeekMonday = strtotime('monday', strtotime('last week'))) - $oneDay),
+			'LAST_WEEK_FIRST' => date('Y-m-d', ($lastWeekMonday = strtotime('monday', strtotime('last week', $this->getTime()))) - $oneDay),
 			'LAST_WEEK_SECOND' => date('Y-m-d', $lastWeekMonday + 7 * $oneDay),
-			'THIS_WEEK_FIRST' => date('Y-m-d', ($thisWeekMonday = strtotime('last monday midnight')) - $oneDay),
+			'THIS_WEEK_FIRST' => date('Y-m-d', ($thisWeekMonday = strtotime('last monday midnight', $this->getTime())) - $oneDay),
 			'THIS_WEEK_SECOND' => date('Y-m-d', $thisWeekMonday + 7 * $oneDay),
 			'NEXT_WEEK_FIRST' => date('Y-m-d', ($thisWeekMonday + 7 * $oneDay) - $oneDay),
 			'NEXT_WEEK_SECOND' => date('Y-m-d', $thisWeekMonday + 14 * $oneDay),
 			// ---
-			'LAST_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $lastMonth = strtotime('last month'))) - $oneDay),
+			'LAST_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $lastMonth = strtotime('last month', $this->getTime()))) - $oneDay),
 			'LAST_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $lastMonth)) + $oneDay),
-			'THIS_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y')) - $oneDay),
-			'THIS_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y')) + $oneDay),
-			'NEXT_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $nextMonth = strtotime('next month'))) - $oneDay),
+			'THIS_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $this->getTime())) - $oneDay),
+			'THIS_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $this->getTime())) + $oneDay),
+			'NEXT_MONTH_FIRST' => date('Y-m-d', strtotime(date('1-n-Y', $nextMonth = strtotime('next month', $this->getTime()))) - $oneDay),
 			'NEXT_MONTH_SECOND' => date('Y-m-d', strtotime(date('t-n-Y', $nextMonth)) + $oneDay),
 			// ---
-			'LAST_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) - $oneDay),
-			'LAST_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year')) : date('Y')) + $oneDay),
+			'LAST_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year', $this->getTime())) : date('Y', $this->getTime())) - $oneDay),
+			'LAST_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter - 1 < 1 ? 4 : $quarter - 1, $quarter - 1 < 1 ? date('Y', strtotime('last year', $this->getTime())) : date('Y', $this->getTime())) + $oneDay),
 			'THIS_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter) - $oneDay),
 			'THIS_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter) + $oneDay),
-			'NEXT_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) - $oneDay),
-			'NEXT_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year')) : date('Y')) + $oneDay),
+			'NEXT_QUARTER_FIRST' => date('Y-m-d', $this->getStartTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year', $this->getTime())) : date('Y', $this->getTime())) - $oneDay),
+			'NEXT_QUARTER_SECOND' => date('Y-m-d', $this->getEndTimestampForQuarter($quarter + 1 > 4 ? 1 : $quarter + 1, $quarter + 1 > 4 ? date('Y', strtotime('next year', $this->getTime())) : date('Y', $this->getTime())) + $oneDay),
 			// ---
-			'LAST_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', ($nextYear = strtotime('last year')))) - $oneDay),
+			'LAST_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', ($nextYear = strtotime('last year', $this->getTime())))) - $oneDay),
 			'LAST_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', $nextYear)) + $oneDay),
-			'THIS_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y')) - $oneDay),
-			'THIS_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y')) + $oneDay),
-			'NEXT_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', strtotime('next year'))) - $oneDay),
-			'NEXT_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', strtotime('next year'))) + $oneDay),
+			'THIS_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', $this->getTime())) - $oneDay),
+			'THIS_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', $this->getTime())) + $oneDay),
+			'NEXT_YEAR_FIRST' => date('Y-m-d', strtotime(date('1-1-Y', strtotime('next year', $this->getTime()))) - $oneDay),
+			'NEXT_YEAR_SECOND' => date('Y-m-d', strtotime(date('31-12-Y', strtotime('next year', $this->getTime()))) + $oneDay),
 		];
 		foreach ($this->filters as $currentId => $filter) {
 			if (isset($filter['type']) && is_array($filter['type'])) {
@@ -277,9 +284,14 @@ class Date extends FilterItem implements IFilterItem
 		}
 	}
 
+	private function getTime()
+	{
+		return $this->getDateTimeProvider()->getDate()->getTimestamp();
+	}
+
 	private function dateQuarter()
 	{
-		$thisMonth = (int) date('n');
+		$thisMonth = (int) date('n', $this->getTime());
 		if ($thisMonth <= 3) {
 			return 1;
 		}
@@ -294,33 +306,33 @@ class Date extends FilterItem implements IFilterItem
 
 	private function getEndTimestampForQuarter($quarter, $year = null)
 	{
-		$year = !$year ? date('Y') : $year;
+		$year = !$year ? date('Y', $this->getTime()) : $year;
 		$quarter = (int) $quarter;
 		switch ($quarter) {
 			case 1:
-				return strtotime($year . '-03-31');
+				return strtotime($year . '-03-31', $this->getTime());
 			case 2:
-				return strtotime($year . '-06-30');
+				return strtotime($year . '-06-30', $this->getTime());
 			case 3:
-				return strtotime($year . '-09-30');
+				return strtotime($year . '-09-30', $this->getTime());
 			default:
-				return strtotime($year . '-12-31');
+				return strtotime($year . '-12-31', $this->getTime());
 		}
 	}
 
 	public function getStartTimestampForQuarter($quarter, $year = null)
 	{
-		$year = !$year ? date('Y') : $year;
+		$year = !$year ? date('Y', $this->getTime()) : $year;
 		$quarter = (int) $quarter;
 		switch ($quarter) {
 			case 1:
-				return strtotime($year . '-01-01');
+				return strtotime($year . '-01-01', $this->getTime());
 			case 2:
-				return strtotime($year . '-04-01');
+				return strtotime($year . '-04-01', $this->getTime());
 			case 3:
-				return strtotime($year . '-07-01');
+				return strtotime($year . '-07-01', $this->getTime());
 			default:
-				return strtotime($year . '-10-01');
+				return strtotime($year . '-10-01', $this->getTime());
 		}
 	}
 
