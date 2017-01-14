@@ -14,7 +14,7 @@ install:
     - composer install --no-interaction --prefer-source
 
 script:
-    - vendor/bin/tester -p php $COVERAGE tests/ -s -c tests/php.ini
+    - vendor/bin/tester -p php $COVERAGE tests/ -s -c tests/php.travis.ini
     - vendor/bin/parallel-lint src tests
     - vendor/bin/phpcs --standard=ruleset.xml --extensions=php,phpt --encoding=utf-8 --tab-width=4 -sp src tests
 
