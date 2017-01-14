@@ -25,8 +25,6 @@ if (!class_exists('Tester\Assert')) {
 
 define("TEMP_DIR", __DIR__ . "/tmp/");
 
-Tester\Helpers::purge(TEMP_DIR);
-
 Tester\Environment::setup();
 
 function pdump($val)

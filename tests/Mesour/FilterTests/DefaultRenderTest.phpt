@@ -98,7 +98,7 @@ class DefaultRenderTest extends DataSourceTestCase
 		$application->getContext()
 			->setService(new ConstantDateTimeProvider(new \DateTime('2016-12-21')), IDateTimeProvider::class);
 
-		$application->getConfiguration()->setTempDir(__DIR__ . '/../tmp');
+		$application->getConfiguration()->setTempDir(__DIR__ . '/../../tmp');
 
 		$application->run();
 

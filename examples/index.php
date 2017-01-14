@@ -14,6 +14,7 @@ define('SRC_DIR', __DIR__ . '/../src/');
 require_once __DIR__ . '/../vendor/autoload.php';
 
 @mkdir(__DIR__ . '/log');
+@mkdir(__DIR__ . '/tmp');
 
 \Tracy\Debugger::enable(\Tracy\Debugger::DEVELOPMENT, __DIR__ . '/log');
 \Tracy\Debugger::$strictMode = true;
@@ -65,7 +66,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
 	$config = $application->getConfiguration();
 
-	$config->setTempDir(__DIR__ . '/../tmp');
+	$config->setTempDir(__DIR__ . '/tmp');
 
 	$application->run();
 
