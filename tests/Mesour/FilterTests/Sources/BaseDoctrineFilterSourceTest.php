@@ -11,7 +11,6 @@ use Doctrine\ORM\Tools\Setup;
 use Mesour\Filter\Sources\DateFunction;
 use Mesour\Filter\Sources\DoctrineFilterSource;
 use Mesour\Sources;
-use Nette\Database;
 
 abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\DataSourceTestCase
 {
@@ -32,6 +31,9 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\DataSourceTest
 		'group_name' => 'g.name',
 		'group_type' => 'g.type',
 		'group_date' => 'g.date',
+		'wallet_amount' => 'w.amount',
+		'company_name' => 'c.name',
+		'address_city' => 'a.city',
 	];
 
 	public function __construct($setConfigFiles = true)
@@ -78,6 +80,44 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\DataSourceTest
 			->from(Sources\Tests\Entity\User::class, 'u');
 	}
 
+	public function testApplySimple()
+	{
+		$source = $this->createDoctrineSource(Sources\Tests\Entity\User::class, $this->user);
+		DataSourceChecker::matchSimple($source, Sources\Tests\Entity\User::class);
+	}
+
+	public function testApplySimpleReference()
+	{
+		$queryBuilder = $this->createJoinedQueryBuilder();
+
+		$source = $this->createDoctrineSource(Sources\Tests\Entity\User::class, $queryBuilder);
+		DataSourceChecker::matchSimpleReference($source, Sources\Tests\Entity\User::class);
+	}
+
+	public function testApplySimpleManyToMany()
+	{
+		$queryBuilder = $this->createJoinedQueryBuilder();
+
+		$source = $this->createDoctrineSource(Sources\Tests\Entity\User::class, $queryBuilder);
+		DataSourceChecker::matchSimpleManyToMany($source, Sources\Tests\Entity\User::class);
+	}
+
+	public function testApplySimpleManyToOne()
+	{
+		$queryBuilder = $this->createJoinedQueryBuilder();
+
+		$source = $this->createDoctrineSource(Sources\Tests\Entity\User::class, $queryBuilder);
+		DataSourceChecker::matchSimpleManyToOne($source, Sources\Tests\Entity\User::class);
+	}
+
+	public function testApplySimpleOneToMany()
+	{
+		$queryBuilder = $this->createJoinedQueryBuilder();
+
+		$source = $this->createDoctrineSource(Sources\Tests\Entity\User::class, $queryBuilder);
+		DataSourceChecker::matchSimpleOneToMany($source, Sources\Tests\Entity\User::class);
+	}
+
 	public function testApplyCustomDate()
 	{
 		$source = $this->createDoctrineSource(Sources\Tests\Entity\User::class, $this->user);
@@ -118,12 +158,9 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\DataSourceTest
 
 	public function testApplyCustomRelated()
 	{
-		$queryBuilder = clone $this->user;
-		$queryBuilder
-			->join(Sources\Tests\Entity\Group::class, 'g', Join::WITH, 'u.group = g.id');
+		$queryBuilder = $this->createJoinedQueryBuilder();
 
 		$source = $this->createDoctrineSource(Sources\Tests\Entity\User::class, $queryBuilder);
-
 		DataSourceChecker::matchCustomRelated(clone $source, Sources\Tests\Entity\User::class, 'group_name');
 	}
 
@@ -135,6 +172,17 @@ abstract class BaseDoctrineFilterSourceTest extends Sources\Tests\DataSourceTest
 			$queryBuilder,
 			$this->columnMapping
 		);
+	}
+
+	protected function createJoinedQueryBuilder()
+	{
+		$queryBuilder = clone $this->user;
+		$queryBuilder
+			->join(Sources\Tests\Entity\Group::class, 'g', Join::WITH, 'u.group = g.id')
+			->leftJoin('u.companies', 'c', Join::WITH)
+			->leftJoin('u.addresses', 'a', Join::WITH)
+			->leftJoin('u.wallet', 'w', Join::WITH);
+		return $queryBuilder;
 	}
 
 }

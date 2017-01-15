@@ -18,6 +18,31 @@ use Mesour;
 class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFilterSource
 {
 
+	public function applySimple($query, array $allowedColumns)
+	{
+		if (!$allowedColumns) {
+			return;
+		}
+
+		$patterns = Mesour\Filter\Sources\Search\SearchPatternsHelper::getPatterns($query);
+		$expr = $this->getQueryBuilder()->expr();
+		foreach ($patterns as $index => $pattern) {
+			$parameter = ':likePattern' . $index;
+			$arguments = [];
+
+			foreach ($allowedColumns as $allowedColumn) {
+				$arguments[] = $expr->like($this->prefixColumn($allowedColumn), $parameter);
+			}
+
+			$this->where(
+				call_user_func_array([$expr, 'orX'], $arguments),
+				[
+					$parameter => '%' . $pattern . '%'
+				]
+			);
+		}
+	}
+
 	public function applyCustom($columnName, array $custom, $type)
 	{
 		$values = [];

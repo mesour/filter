@@ -18,6 +18,43 @@ use Nette;
 class NetteDbFilterSource extends Mesour\Sources\NetteDbTableSource implements IFilterSource
 {
 
+	public function getSelection($limit = true, $where = true)
+	{
+		return parent::getSelection($limit, $where);
+	}
+
+	public function applySimple($query, array $allowedColumns)
+	{
+		if (!$allowedColumns) {
+			return;
+		}
+
+		$sql = [];
+		$arguments = [];
+
+		$patterns = Mesour\Filter\Sources\Search\SearchPatternsHelper::getPatterns($query);
+		foreach ($patterns as $index => $pattern) {
+			$sqlArr = [];
+
+			foreach ($allowedColumns as $allowedColumn) {
+				$sqlArr[] = $this->prefixColumn($allowedColumn) . ' LIKE ?';
+				$arguments[] = '%' . $pattern . '%';
+			}
+
+			$sql[] = '(' . implode(' OR ', $sqlArr) . ')';
+		}
+
+		if (count($sql) > 0) {
+			$sql = sprintf('(%s)', implode(' AND ', $sql));
+			$parameters = array_merge([
+				$sql
+			], [$arguments]);
+			call_user_func_array([$this, 'where'], $parameters);
+		}
+
+		return $this;
+	}
+
 	public function applyCustom($columnName, array $custom, $type)
 	{
 		$values = [];

@@ -27,6 +27,11 @@ class ArrayFilterSource extends Mesour\Sources\ArraySource implements IFilterSou
 		return $this;
 	}
 
+	public function applySimple($query, array $allowedColumns)
+	{
+		throw new Mesour\NotImplementedException();
+	}
+
 	public function applyCustom($columnName, array $custom, $type)
 	{
 		$values = [];

@@ -89,6 +89,92 @@ class DataSourceChecker
 		}
 	}
 
+	public static function matchSimple(IFilterSource $source, $rawClassType)
+	{
+		$filteredCount = 1;
+
+		$allowedColumns = [
+			'id',
+			'name',
+		];
+
+		$currentSource = clone $source;
+		$currentSource->applySimple('10', $allowedColumns);
+
+		self::matchCounts($currentSource, $filteredCount, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
+	}
+
+	public static function matchSimpleReference(IFilterSource $source, $rawClassType)
+	{
+		$filteredCount = 1;
+
+		$allowedColumns = [
+			'id',
+			'name',
+			'wallet_amount',
+		];
+
+		$currentSource = clone $source;
+		$currentSource->applySimple(153.85, $allowedColumns);
+
+		self::matchCounts($currentSource, $filteredCount, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
+	}
+
+	public static function matchSimpleManyToMany(IFilterSource $source, $rawClassType)
+	{
+		$filteredCount = 4;
+
+		$allowedColumns = [
+			'id',
+			'name',
+			'wallet_amount',
+			'company_name',
+		];
+
+		$currentSource = clone $source;
+		$currentSource->applySimple('Google', $allowedColumns);
+
+		self::matchCounts($currentSource, $filteredCount, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
+	}
+
+	public static function matchSimpleOneToMany(IFilterSource $source, $rawClassType)
+	{
+		$filteredCount = 1;
+
+		$allowedColumns = [
+			'id',
+			'name',
+			'wallet_amount',
+			'address_city',
+			'company_name',
+		];
+
+		$currentSource = clone $source;
+		$currentSource->applySimple('Hehehov', $allowedColumns);
+
+		self::matchCounts($currentSource, $filteredCount, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
+	}
+
+	public static function matchSimpleManyToOne(IFilterSource $source, $rawClassType)
+	{
+		$filteredCount = 7;
+
+		$allowedColumns = [
+			'id',
+			'name',
+			'wallet_amount',
+			'address_city',
+			'group_name',
+			'group_type',
+			'company_name',
+		];
+
+		$currentSource = clone $source;
+		$currentSource->applySimple('first', $allowedColumns);
+
+		self::matchCounts($currentSource, $filteredCount, \Mesour\Sources\Tests\DataSourceTestCase::FULL_USER_COUNT, $rawClassType);
+	}
+
 	public static function matchCustomRelated(IFilterSource $source, $rawClassType, $columnName = 'group_name')
 	{
 		foreach ([self::TYPE_AND, self::TYPE_OR, self::TYPE_SIMPLE] as $type) {

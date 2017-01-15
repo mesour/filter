@@ -30,4 +30,11 @@ interface IFilterSource extends Mesour\Sources\ISource
 
 	public function applyCustom($columnName, array $custom, $type);
 
+	/**
+	 * @param string $query
+	 * @param array $allowedColumns
+	 * @return mixed
+	 */
+	public function applySimple($query, array $allowedColumns);
+
 }

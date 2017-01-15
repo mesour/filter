@@ -3,12 +3,15 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 require_once __DIR__ . '/../src/Mesour/Filter/IFilter.php';
+require_once __DIR__ . '/../src/Mesour/Filter/ISimpleFilter.php';
 require_once __DIR__ . '/../src/Mesour/Filter/IFilterItem.php';
 require_once __DIR__ . '/../src/Mesour/UI/Filter.php';
+require_once __DIR__ . '/../src/Mesour/UI/SimpleFilter.php';
 require_once __DIR__ . '/../src/Mesour/Filter/FilterItem.php';
 require_once __DIR__ . '/../src/Mesour/Filter/Text.php';
 require_once __DIR__ . '/../src/Mesour/Filter/Date.php';
 require_once __DIR__ . '/../src/Mesour/Filter/Number.php';
+require_once __DIR__ . '/../src/Mesour/Filter/Sources/Search/SearchPatternsHelper.php';
 require_once __DIR__ . '/../src/Mesour/Filter/Sources/IFilterSource.php';
 require_once __DIR__ . '/../src/Mesour/Filter/Sources/ArrayFilterSource.php';
 require_once __DIR__ . '/../src/Mesour/Filter/Sources/DoctrineFilterSource.php';
