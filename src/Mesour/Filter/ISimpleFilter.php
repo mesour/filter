@@ -42,4 +42,10 @@ interface ISimpleFilter extends Mesour\Components\Control\IAttributesControl
 	 */
 	public function addColumn($name);
 
+	/**
+	 * @param string[] $allowedColumns
+	 * @return static
+	 */
+	public function setAllowedColumns(array $allowedColumns);
+
 }

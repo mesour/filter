@@ -93,6 +93,16 @@ class SimpleFilter extends Mesour\Components\Control\AttributesControl implement
 	}
 
 	/**
+	 * @param string[] $allowedColumns
+	 * @return static
+	 */
+	public function setAllowedColumns(array $allowedColumns)
+	{
+		$this->allowedColumns = $allowedColumns;
+		return $this;
+	}
+
+	/**
 	 * @param Mesour\Filter\Sources\IFilterSource $source
 	 * @return $this
 	 * @throws Mesour\InvalidStateException
