@@ -14,9 +14,8 @@ use Mesour;
 /**
  * @author Matouš Němec <http://mesour.com>
  *
- * @method null onFilter(Filter $filter)
- * @method null onRender(Filter $filter)
- * @method Mesour\Filter\IFilterItem current()
+ * @method null onFilter(SimpleFilter $simpleFilter)
+ * @method null onRender(SimpleFilter $simpleFilter)
  */
 class SimpleFilter extends Mesour\Components\Control\AttributesControl implements Mesour\Filter\ISimpleFilter
 {
