@@ -46,9 +46,7 @@ class NetteDbFilterSource extends Mesour\Sources\NetteDbTableSource implements I
 
 		if (count($sql) > 0) {
 			$sql = sprintf('(%s)', implode(' AND ', $sql));
-			$parameters = array_merge([
-				$sql
-			], [$arguments]);
+			$parameters = array_merge([$sql], [$arguments]);
 			call_user_func_array([$this, 'where'], $parameters);
 		}
 

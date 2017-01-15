@@ -36,9 +36,7 @@ class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFil
 
 			$this->where(
 				call_user_func_array([$expr, 'orX'], $arguments),
-				[
-					$parameter => '%' . $pattern . '%'
-				]
+				[$parameter => '%' . $pattern . '%']
 			);
 		}
 	}
