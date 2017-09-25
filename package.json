@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "mesour-filter": "^0.1.0",
+    "mesour-simple-filter": "^0.1.0"
+  }
+}

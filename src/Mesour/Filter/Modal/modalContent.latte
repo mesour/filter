@@ -1,0 +1,50 @@
+{define selectOptions}
+	<option></option>
+	<option value="equal_to">{='Equal to'|translate}</option>
+	<option value="not_equal_to">{='Not equal to'|translate}</option>
+	<option value="bigger">{='Is greater than'|translate}</option>
+	<option value="not_bigger">{='Is no greater than'|translate}</option>
+	<option value="smaller">{='Is smaller than'|translate}</option>
+	<option value="not_smaller">{='Is no smaller than'|translate}</option>
+	<option value="start_with">{='Starts with'|translate}</option>
+	<option value="not_start_with">{='Not starts with'|translate}</option>
+	<option value="end_with">{='Ends with'|translate}</option>
+	<option value="not_end_with">{='Not ends with'|translate}</option>
+	<option value="equal">{='Contains'|translate}</option>
+	<option value="not_equal">{='Not contains'|translate}</option>
+{/define}
+
+<form class="form-inline" novalidate="">
+	<p>{='Show rows where:'|translate}</p>
+	<div class="form-group">
+		<label class="sr-only"></label>
+		<select class="form-control filter-how-1">
+			{include selectOptions}
+		</select>
+	</div>
+	<div class="form-group">
+		<label class="sr-only">{='Value'|translate}</label>
+		<div class="input-group date filter-datepicker1">
+			<input type="text" class="form-control filter-value-1" data-date-format="" placeholder="{='Value'|translate}">
+			<span class="input-group-addon" style="display: none;"> <span data-icon="calendar"></span> </span>
+		</div>
+	</div>
+	<br>
+	<div class="form-group grid-operators">
+		<input type="radio" name="operator" class="filter-operator-and" value="and" checked="checked">
+		<label>{='and'|translate}</label>
+		<input type="radio" name="operator" class="filter-operator-or" value="or">
+		<label>{='or'|translate}</label></div>
+	<br>
+	<div class="form-group"><label class="sr-only"></label>
+		<select class="form-control filter-how-2">
+			{include selectOptions}
+		</select></div>
+	<div class="form-group"><label class="sr-only">{='Value'|translate}</label>
+		<div class="input-group date filter-datepicker2">
+			<input type="text" class="form-control filter-value-2" data-date-format="" placeholder="{='Value'|translate}">
+			<span class="input-group-addon" style="display: none;"> <span data-icon="calendar"></span> </span>
+		</div>
+	</div>
+	<input type="hidden" data-name="" value="">
+</form>

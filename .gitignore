@@ -1,8 +1,11 @@
 .idea
 /vendor
+/node_modules
 /composer.lock
-/tests/tmp
 /tests/Mesour/tmp
 /tests/config.local.php
+/tests/Mesour/FilterTests/output
+/tests/tmp
 /tests/log
 /examples/log
+/examples/tmp

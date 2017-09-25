@@ -3,10 +3,6 @@
 	  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-<link rel="stylesheet" href="../vendor/mesour/components/public/DateTimePicker/bootstrap-datetimepicker.min.css">
-
-<link rel="stylesheet" href="../node_modules/mesour-filter/dist/css/mesour.filter.min.css">
-
 <?php
 
 define('SRC_DIR', __DIR__ . '/../src/');
@@ -20,12 +16,15 @@ require_once __DIR__ . '/../vendor/autoload.php';
 \Tracy\Debugger::$strictMode = true;
 
 require_once SRC_DIR . 'Mesour/Filter/IFilter.php';
+require_once SRC_DIR . 'Mesour/Filter/ISimpleFilter.php';
 require_once SRC_DIR . 'Mesour/Filter/IFilterItem.php';
 require_once SRC_DIR . 'Mesour/UI/Filter.php';
+require_once SRC_DIR . 'Mesour/UI/SimpleFilter.php';
 require_once SRC_DIR . 'Mesour/Filter/FilterItem.php';
 require_once SRC_DIR . 'Mesour/Filter/Text.php';
 require_once SRC_DIR . 'Mesour/Filter/Date.php';
 require_once SRC_DIR . 'Mesour/Filter/Number.php';
+require_once SRC_DIR . 'Mesour/Filter/Sources/Search/SearchPatternsHelper.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/IFilterSource.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/ArrayFilterSource.php';
 require_once SRC_DIR . 'Mesour/Filter/Sources/DoctrineFilterSource.php';
@@ -37,7 +36,7 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 
 <hr>
 
-<div class="container">
+<div class="container" id="m_snippet-page">
 	<h2>Basic functionality</h2>
 
 	<hr>
@@ -81,52 +80,31 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 	// SOURCE
 
 	$source = new \Mesour\Filter\Sources\NetteDbFilterSource('users', 'id', $selection, $context, [
+		'id' => 'users.id',
+		'name' => 'users.name',
+		'wallet_amount' => 'wallet.amount',
+		'company_name' => ':user_companies.company.name',
+		'companies' => ':user_companies.company.id',
+		'address_city' => ':addresses.city',
+		'groups' => 'group.id',
+		'user_addresses' => ':addresses.id',
 		'group_name' => 'group.name',
 		'group_type' => 'group.type',
 		'group_date' => 'group.date',
 	]);
 
 	// FILTER
-
-	$filter = new \Mesour\UI\Filter('test', $application);
+	$filter = new \Mesour\UI\SimpleFilter('test', $application);
 
 	$filter->setSource($source);
 
-	$filter->addTextFilter('action', 'Status', [
-		0 => 'Inactive',
-		1 => 'Active',
-	])->setMainFilter(false);
+	$createdFilter = $filter->create();
 
-	$filter->setCustomReference('action', [
-		0 => 'Inactive',
-		1 => 'Active',
-	]);
+	$source->applySimple($filter->getQuery(), $filter->getAllowedColumns());
 
-	$filter->addTextFilter('name', 'Name');
+	dump($source->fetchAll());
 
-	$filter->addNumberFilter('amount', 'Amount');
-
-	$filter->addDateFilter('last_login', 'Last login');
-
-	$filter->addTextFilter('group_name', 'Group name');
-
-	$filter->addTextFilter('has_pro', 'Bool value')
-		->setMainFilter(false);
-
-	$filter->addDateFilter('timestamp', 'Timestamp');
-
-	$filter->onRender[] = function (Mesour\UI\Filter $_filter) use ($source) {
-		foreach ($_filter->getValues() as $name => $value) {
-			if (isset($value['checkers'])) {
-				$source->applyCheckers($name, $value['checkers'], $value['type']);
-			}
-			if (isset($value['custom'])) {
-				$source->applyCustom($name, $value['custom'], $value['type']);
-			}
-		}
-	};
-
-	echo $filter->render();
+	echo $createdFilter;
 
 	?>
 </div>
@@ -141,7 +119,4 @@ require_once SRC_DIR . 'Mesour/Filter/Sources/DateFunction.php';
 		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 		crossorigin="anonymous"></script>
 
-<script src="../vendor/mesour/components/public/DateTimePicker/moment.min.js"></script>
-<script src="../vendor/mesour/components/public/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
-
-<script src="../node_modules/mesour-filter/dist/js/mesour.filter.js"></script>
+<script src="../node_modules/mesour-simple-filter/dist/mesour.simple-filter.min.js"></script>

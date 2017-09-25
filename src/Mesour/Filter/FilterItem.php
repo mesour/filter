@@ -2,7 +2,7 @@
 /**
  * This file is part of the Mesour Filter (http://components.mesour.com/component/filter)
  *
- * Copyright (c) 2015-2016 Matouš Němec (http://mesour.com)
+ * Copyright (c) 2017 Matouš Němec (http://mesour.com)
  *
  * For full licence and copyright please view the file licence.md in root of this project
  */
@@ -18,6 +18,10 @@ use Mesour;
  */
 abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 {
+
+	use Mesour\Components\Localization\Translatable;
+	use Mesour\Components\RandomString\RandomString;
+	use Mesour\Icon\HasIcon;
 
 	const WRAPPER = 'wrapper';
 	const LIST_UL = 'list-ul';
@@ -246,7 +250,10 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 			]);
 		}
 
-		$button = $this->getButtonPrototype();
+		$random = $this->getRandomStringGenerator()->generate();
+
+		$button = $this->getButtonPrototype()
+			->addAttributes(['id' => $random]);
 
 		$this->onRender($this);
 
@@ -272,7 +279,9 @@ abstract class FilterItem extends Mesour\Components\Control\AttributesControl
 
 		$wrapper->add($button);
 
-		$ul = $this->getListUlPrototype();
+		$ul = $this->getListUlPrototype([
+			'aria-labelledby' => $random,
+		]);
 
 		if ($this->hasMainFilter && count($this->filters) > 0) {
 			$subMenu = $this->getListLiPrototype([

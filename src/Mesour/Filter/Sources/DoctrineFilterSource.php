@@ -2,7 +2,7 @@
 /**
  * This file is part of the Mesour Filter (http://components.mesour.com/component/filter)
  *
- * Copyright (c) 2015-2016 Matouš Němec (http://mesour.com)
+ * Copyright (c) 2017 Matouš Němec (http://mesour.com)
  *
  * For full licence and copyright please view the file licence.md in root of this project
  */
@@ -17,6 +17,29 @@ use Mesour;
  */
 class DoctrineFilterSource extends Mesour\Sources\DoctrineSource implements IFilterSource
 {
+
+	public function applySimple($query, array $allowedColumns)
+	{
+		if (!$allowedColumns) {
+			return;
+		}
+
+		$patterns = Mesour\Filter\Sources\Search\SearchPatternsHelper::getPatterns($query);
+		$expr = $this->getQueryBuilder()->expr();
+		foreach ($patterns as $index => $pattern) {
+			$parameter = ':likePattern' . $index;
+			$arguments = [];
+
+			foreach ($allowedColumns as $allowedColumn) {
+				$arguments[] = $expr->like($this->prefixColumn($allowedColumn), $parameter);
+			}
+
+			$this->where(
+				call_user_func_array([$expr, 'orX'], $arguments),
+				[$parameter => '%' . $pattern . '%']
+			);
+		}
+	}
 
 	public function applyCustom($columnName, array $custom, $type)
 	{

@@ -2,7 +2,7 @@
 /**
  * This file is part of the Mesour Filter (http://components.mesour.com/component/filter)
  *
- * Copyright (c) 2015-2016 Matouš Němec (http://mesour.com)
+ * Copyright (c) 2017 Matouš Němec (http://mesour.com)
  *
  * For full licence and copyright please view the file licence.md in root of this project
  */
@@ -23,32 +23,21 @@ use Nette;
 class Filter extends Mesour\Components\Control\AttributesControl implements Mesour\Filter\IFilter
 {
 
+	use Mesour\Icon\HasIcon;
+
 	const ITEMS = 'items';
-
 	const RESET_BUTTON = 'reset-button';
-
 	const WRAPPER = 'wrapper';
-
 	const HIDDEN = 'hidden';
-
 	const VALUE_TRUE = '-mesour-bool-1';
-
 	const VALUE_FALSE = '-mesour-bool-0';
-
 	const VALUE_NULL = '-mesour-null';
-
 	const ICON_ITEM_ACTIVE = 'itemIsActive';
-
 	const ICON_EDIT_CUSTOM = 'editCustom';
-
 	const ICON_REMOVE_CUSTOM = 'removeCustom';
-
 	const ICON_PLUS = 'plus';
-
 	const ICON_MINUS = 'minus';
-
 	const ICON_CALENDAR = 'calendar';
-
 	const PREDEFINED_KEY = 'predefined';
 
 	static public $maxCheckboxCount = 1000;
@@ -121,6 +110,8 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 
 		$this->startPrivateSession();
 
+		$this->setUpModal();
+
 		$this->setHtmlElement(
 			Mesour\Components\Utils\Html::el(
 				$this->getOption(self::WRAPPER, 'el'),
@@ -129,12 +120,37 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		);
 	}
 
+	private function setUpModal()
+	{
+		$this->addComponent(new Modal('modal'));
+
+		$this->getModal()->getControlPrototype()
+			->class('mesour-filter-modal', true);
+
+		$this->getModal()
+			->setTitle('Custom filter')
+			->addTemplateContent('content', __DIR__ . '/../Filter/Modal/modalContent.latte');
+
+		$this->getModal()->getModalFooter()
+			->addButton('save')
+			->setText('OK')
+			->setClassName('btn btn-primary save-custom-filter');
+	}
+
 	public function attached(Mesour\Components\ComponentModel\IContainer $parent)
 	{
 		parent::attached($parent);
 		$this->startPrivateSession(true);
 
 		return $this;
+	}
+
+	/**
+	 * @return Modal
+	 */
+	public function getModal()
+	{
+		return $this['modal'];
 	}
 
 	/**
@@ -404,28 +420,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 			if ($source->getTotalCount() > 0 && $source->getTotalCount() < self::$maxCheckboxCount) {
 				$fullData = $source->fetchFullData();
 			}
-
-			$this->checkFilterItems();
 		}
 
 		return $fullData;
-	}
-
-	protected function checkFilterItems()
-	{
-		$source = $this->getSource();
-		$dataStructure = $source->getDataStructure();
-
-		foreach ($this->getComponents() as $component) {
-			if ($dataStructure->hasColumn($component->getName())) {
-				$column = $dataStructure->getColumn($component->getName());
-				if ($column instanceof BaseTableColumnStructure) {
-					throw new Mesour\NotImplementedException(
-						sprintf('Can not set filter to referenced column %s.', $component->getName())
-					);
-				}
-			}
-		}
 	}
 
 	public function create()
@@ -443,6 +440,9 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		$dataStructure = $this->getSource()->getDataStructure();
 		$hasCheckers = count($fullData) > 0;
 		foreach ($this as $name => $itemInstance) {
+			if (!$itemInstance instanceof Mesour\Filter\IFilterItem) {
+				continue;
+			}
 			/** @var Mesour\Filter\IFilterItem $itemInstance */
 			$itemInstance->setCheckers($hasCheckers);
 
@@ -456,7 +456,11 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 				) {
 					/** @var BaseTableColumnStructure $column */
 					$column = $dataStructure->getColumn($name);
-					$item->setReferenceSettings($column->getTableStructure()->getName());
+					$item->setReferenceSettings([
+						'table' => $column->getTableStructure()->getName(),
+						'column' => $column->getTableStructure()->getPrimaryKey(),
+						'pattern' => $column->getPattern(),
+					]);
 				} elseif (isset($this->predefinedData[$name])) {
 					$item->setReferenceSettings(self::PREDEFINED_KEY);
 				}
@@ -468,6 +472,7 @@ class Filter extends Mesour\Components\Control\AttributesControl implements Meso
 		$wrapper->add($this->createResetButton());
 
 		$wrapper->add($hidden);
+		$wrapper->add($this->getModal()->create());
 
 		return $wrapper;
 	}

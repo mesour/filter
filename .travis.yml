@@ -3,6 +3,7 @@ language: php
 php:
     - 5.6
     - 7.0
+    - 7.1
     - hhvm
 
 matrix:
@@ -13,9 +14,14 @@ install:
     - composer install --no-interaction --prefer-source
 
 script:
-    - vendor/bin/tester -p php $COVERAGE tests/ -s -c tests/php.ini
+    - vendor/bin/tester -p php $COVERAGE tests/ -s -c tests/php.travis.ini
     - vendor/bin/parallel-lint src tests
     - vendor/bin/phpcs --standard=ruleset.xml --extensions=php,phpt --encoding=utf-8 --tab-width=4 -sp src tests
+
+after_script:
+    - for i in $(find ./tests/log -name \*.log); do echo "--- $i"; cat $i; echo; echo; done
+    - for i in $(find ./tests/Mesour -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
+    - for i in $(find ./tests/Mesour -name \*.expected); do echo "--- $i"; cat $i; echo; echo; done
 
 services:
     - mysql
